@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as format;
+import 'package:sql_test/Utilities/colors.dart';
 
 import '../../../Utilities/Style.dart';
+import 'Widget/AddButton.dart';
+import 'Widget/BagsContent.dart';
 import 'Widget/CustomTextField.dart';
 import 'Widget/DropDownWithSearch.dart';
+import 'Widget/EmployeeWithCar.dart';
+import 'Widget/ReceiverData.dart';
+import 'Widget/SenderData.dart';
 
 class DeliveryDataScreen extends StatefulWidget {
-  const DeliveryDataScreen({super.key});
+  final bool isReciever;
+  const DeliveryDataScreen(this.isReciever, {super.key});
 
   @override
   State<DeliveryDataScreen> createState() => _DeliveryDataScreenState();
@@ -13,71 +21,175 @@ class DeliveryDataScreen extends StatefulWidget {
 
 class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
   List<String> list = <String>[
-    'One',
-    'Two',
-    'Three',
-    'Four',
+    'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight',
   ];
   List<String> listFilter = [];
   String? searchText;
   String? text;
+  int numberOfBags = 1;
+  int numberOfRiders = 2;
+  late String arriveTime, leaveTime;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     listFilter = list;
+    arriveTime = format.DateFormat('h:mm:ssa').format(DateTime.now());
+    leaveTime = format.DateFormat('h:mm:ssa').format(DateTime.now());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text(widget.isReciever? "استلام" : "تسليم") , centerTitle: true, backgroundColor: mainBlue,),
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Column(
-          children: [
-            const SizedBox(
-              height: 100,
-            ),
-            Row(
-              textDirection: TextDirection.rtl,
               children: [
-                const Text(
-                  "كود الايصال",
-                  style: cartExpensesPriceTextStyle,
+                const SizedBox(
+                  height: 100,
                 ),
-                DropDownWithSearch(list, onSearchChange, onItemChange, text)
-              ],
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Row(
-              textDirection: TextDirection.rtl,
-              children: [
-                const Text(
-                  "كود العميل",
-                  style: cartExpensesPriceTextStyle,
+                Row(
+                  textDirection: TextDirection.rtl,
+                  children: [
+                    const Text(
+                      "كود الايصال",
+                      style: cartExpensesPriceTextStyle,
+                    ),
+                    DropDownWithSearch(list, onSearchChange, onItemChange, text)
+                  ],
                 ),
-                DropDownWithSearch(list, onSearchChange, onItemChange, text)
-              ],
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Row(
-              textDirection: TextDirection.rtl,
-              children: [
-                const Text(
-                  "بيـان",
-                  style: cartExpensesPriceTextStyle,
+                const SizedBox(
+                  height: 15,
                 ),
-                CustomTextField((da, value) {}),
+                Row(
+                  textDirection: TextDirection.rtl,
+                  children: [
+                    const Text(
+                      "كود العميل",
+                      style: cartExpensesPriceTextStyle,
+                    ),
+                    DropDownWithSearch(list, onSearchChange, onItemChange, text)
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  textDirection: TextDirection.rtl,
+                  children: [
+                    const Text(
+                      " كود الايصال الدفترى",
+                      style: cartExpensesPriceTextStyle,
+                    ),
+                    DropDownWithSearch(list, onSearchChange, onItemChange, text)
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  textDirection: TextDirection.rtl,
+                  children: [
+                    const Text(
+                      "بيـان",
+                      style: cartExpensesPriceTextStyle,
+                    ),
+                    CustomTextField((da, value) {}),
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  textDirection: TextDirection.rtl,
+                  children: [
+                    const Text(
+                      "ملاحظات",
+                      style: cartExpensesPriceTextStyle,
+                    ),
+                    CustomTextField((da, value) {}),
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+
+                EmployeeWithCar(list, onSearchChange, onItemChange, text , numberOfRiders),
+                const SizedBox(height: 10,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  textDirection: TextDirection.rtl,
+                  children: [
+                    AddButton("اضافة مرافق", () => addAndRemoveRider(true)),
+                    AddButton("حذف مرافق", () => addAndRemoveRider(false))
+                  ],
+                ),
+
+                for (int i = 0; i < numberOfBags; i++)
+                  BagsContent(list, onSearchChange, onItemChange, text),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  textDirection: TextDirection.rtl,
+                  children: [
+                    AddButton("اضافة شنطة", () => addAndRemoveFunction(true)),
+                    AddButton("حذف شنطة", () => addAndRemoveFunction(false))
+                  ],
+                ),
+                widget.isReciever ?  ReceiverData(list, onSearchChange, onItemChange, text) : SenderData(list, onSearchChange, onItemChange, text) ,
+                // ---------------------------------------------------------------->>>>>
+                Row(
+                  textDirection: TextDirection.rtl,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        const Text(
+                          "معاد الوصول",
+                          style: cartExpensesPriceTextStyle,
+                        ),
+                        RawMaterialButton(
+                          onPressed: () {},
+                          child: Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: dropDownDecoration,
+                            child: Text(
+                              arriveTime,
+                              style: cartExpensesPriceTextStyle,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        const Text(
+                          "معاد المغادرة",
+                          style: cartExpensesPriceTextStyle,
+                        ),
+                        RawMaterialButton(
+                          onPressed: () {},
+                          child: Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: dropDownDecoration,
+                            child: Text(
+                              arriveTime,
+                              style: cartExpensesPriceTextStyle,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+                // ---------------------------------------------------------------->>>>>
               ],
-            ),
-          ],
-        )),
+            )),
       ),
     );
   }
@@ -98,5 +210,27 @@ class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
       }
     }
     return filter;
+  }
+
+  addAndRemoveFunction(bool isAdding) {
+    if (isAdding) {
+      numberOfBags++;
+      setState(() {});
+    } else {
+      if (numberOfBags > 1) numberOfBags--;
+
+      setState(() {});
+    }
+  }
+
+    addAndRemoveRider(bool isAdding) {
+    if (isAdding) {
+      if (numberOfRiders < 6) numberOfRiders++;
+      setState(() {});
+    } else {
+      if (numberOfRiders > 1) numberOfRiders--;
+
+      setState(() {});
+    }
   }
 }

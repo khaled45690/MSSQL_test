@@ -6,16 +6,17 @@ import '../../../../Utilities/colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hint = "";
+  final bool isNumber;
   final Function(String variableName, String value) onChange;
 
-  const CustomTextField(this.onChange);
+  const CustomTextField(this.onChange, {super.key , this.isNumber = false});
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
-        width: context.width() - 150,
+        width: context.width() - 180,
         height: 40,
         child: TextField(
 
@@ -25,6 +26,7 @@ class CustomTextField extends StatelessWidget {
             showCursor: true,
             enabled: true,
             textAlignVertical: TextAlignVertical.bottom,
+            keyboardType: isNumber ? TextInputType.number : TextInputType.text,
             decoration: InputDecoration(
               
               focusedBorder:

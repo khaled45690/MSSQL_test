@@ -132,3 +132,15 @@ const TextStyle cartExpensesPriceTextStyle = TextStyle(
   color: Colors.lightBlueAccent.withOpacity(0.2),
 
 );
+
+
+  BoxDecoration BagsContentDecoration = BoxDecoration(
+
+  borderRadius: const BorderRadius.all( Radius.circular(10) ),
+                   border: Border.all(
+                    color: Colors.black,
+                    width: 1,
+                  ),
+  color: Colors.transparent,
+
+);

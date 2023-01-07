@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sql_conn/sql_conn.dart';
-import 'package:sql_conn/sql_conn.dart';
+import 'package:sql_test/src/Feature/StarterScreen/StarterScreen.dart';
 
-import 'src/Feature/DeliveryData/DeliveryDataScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,8 +17,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        
       ),
-      home: const DeliveryDataScreen(),
+      home: StarterScreen(),
     );
   }
 }
