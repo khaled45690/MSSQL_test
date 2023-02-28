@@ -29,9 +29,11 @@ class EmployeeWithCar extends StatelessWidget {
                 children: [
                   Text(
                     "المرافق $i",
-                    style: cartExpensesPriceTextStyle,
+                    style: size19BlackTextStyle,
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   DropDownWithSearch(list, onSearchChange, onItemChange, text)
                 ],
               ),

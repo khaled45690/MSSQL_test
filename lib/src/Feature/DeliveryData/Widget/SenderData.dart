@@ -26,7 +26,7 @@ class SenderData extends StatelessWidget {
           children: [
             const Text(
               "التاريخ",
-              style: cartExpensesPriceTextStyle,
+              style: size19BlackTextStyle,
             ),
             const SizedBox(
               width: 15,
@@ -38,7 +38,7 @@ class SenderData extends StatelessWidget {
                 decoration: dropDownDecoration,
                 child: Text(
                   date,
-                  style: cartExpensesPriceTextStyle,
+                  style: size19BlackTextStyle,
                 ),
               ),
             ),
@@ -52,7 +52,7 @@ class SenderData extends StatelessWidget {
           children: [
             const Text(
               "مرسل الى البنك",
-              style: cartExpensesPriceTextStyle,
+              style: size19BlackTextStyle,
             ),
             DropDownWithSearch(list, onTextChange, onItemChange, text)
           ],
@@ -65,7 +65,7 @@ class SenderData extends StatelessWidget {
           children: [
             const Text(
               "كود الفرع",
-              style: cartExpensesPriceTextStyle,
+              style: size19BlackTextStyle,
             ),
             DropDownWithSearch(list, onTextChange, onItemChange, text)
           ],

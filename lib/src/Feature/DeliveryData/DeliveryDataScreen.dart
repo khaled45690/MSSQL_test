@@ -21,7 +21,14 @@ class DeliveryDataScreen extends StatefulWidget {
 
 class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
   List<String> list = <String>[
-    'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight',
+    'one',
+    'two',
+    'three',
+    'four',
+    'five',
+    'six',
+    'seven',
+    'eight',
   ];
   List<String> listFilter = [];
   String? searchText;
@@ -42,7 +49,11 @@ class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.isReciever? "استلام" : "تسليم") , centerTitle: true, backgroundColor: mainBlue,),
+      appBar: AppBar(
+        title: Text(widget.isReciever ? "استلام" : "تسليم"),
+        centerTitle: true,
+        backgroundColor: mainBlue,
+      ),
       body: SingleChildScrollView(
         child: Container(
             padding: const EdgeInsets.all(20),
@@ -56,7 +67,7 @@ class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
                   children: [
                     const Text(
                       "كود الايصال",
-                      style: cartExpensesPriceTextStyle,
+                      style: size19BlackTextStyle,
                     ),
                     DropDownWithSearch(list, onSearchChange, onItemChange, text)
                   ],
@@ -69,7 +80,7 @@ class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
                   children: [
                     const Text(
                       "كود العميل",
-                      style: cartExpensesPriceTextStyle,
+                      style: size19BlackTextStyle,
                     ),
                     DropDownWithSearch(list, onSearchChange, onItemChange, text)
                   ],
@@ -82,7 +93,7 @@ class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
                   children: [
                     const Text(
                       " كود الايصال الدفترى",
-                      style: cartExpensesPriceTextStyle,
+                      style: size19BlackTextStyle,
                     ),
                     DropDownWithSearch(list, onSearchChange, onItemChange, text)
                   ],
@@ -95,7 +106,7 @@ class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
                   children: [
                     const Text(
                       "بيـان",
-                      style: cartExpensesPriceTextStyle,
+                      style: size19BlackTextStyle,
                     ),
                     CustomTextField((da, value) {}),
                   ],
@@ -108,7 +119,7 @@ class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
                   children: [
                     const Text(
                       "ملاحظات",
-                      style: cartExpensesPriceTextStyle,
+                      style: size19BlackTextStyle,
                     ),
                     CustomTextField((da, value) {}),
                   ],
@@ -117,8 +128,11 @@ class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
                   height: 15,
                 ),
 
-                EmployeeWithCar(list, onSearchChange, onItemChange, text , numberOfRiders),
-                const SizedBox(height: 10,),
+                EmployeeWithCar(
+                    list, onSearchChange, onItemChange, text, numberOfRiders),
+                const SizedBox(
+                  height: 10,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   textDirection: TextDirection.rtl,
@@ -141,7 +155,9 @@ class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
                     AddButton("حذف شنطة", () => addAndRemoveFunction(false))
                   ],
                 ),
-                widget.isReciever ?  ReceiverData(list, onSearchChange, onItemChange, text) : SenderData(list, onSearchChange, onItemChange, text) ,
+                widget.isReciever
+                    ? ReceiverData(list, onSearchChange, onItemChange, text)
+                    : SenderData(list, onSearchChange, onItemChange, text),
                 // ---------------------------------------------------------------->>>>>
                 Row(
                   textDirection: TextDirection.rtl,
@@ -151,7 +167,7 @@ class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
                       children: [
                         const Text(
                           "معاد الوصول",
-                          style: cartExpensesPriceTextStyle,
+                          style: size19BlackTextStyle,
                         ),
                         RawMaterialButton(
                           onPressed: () {},
@@ -160,7 +176,7 @@ class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
                             decoration: dropDownDecoration,
                             child: Text(
                               arriveTime,
-                              style: cartExpensesPriceTextStyle,
+                              style: size19BlackTextStyle,
                             ),
                           ),
                         ),
@@ -170,7 +186,7 @@ class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
                       children: [
                         const Text(
                           "معاد المغادرة",
-                          style: cartExpensesPriceTextStyle,
+                          style: size19BlackTextStyle,
                         ),
                         RawMaterialButton(
                           onPressed: () {},
@@ -179,7 +195,7 @@ class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
                             decoration: dropDownDecoration,
                             child: Text(
                               arriveTime,
-                              style: cartExpensesPriceTextStyle,
+                              style: size19BlackTextStyle,
                             ),
                           ),
                         ),
@@ -223,7 +239,7 @@ class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
     }
   }
 
-    addAndRemoveRider(bool isAdding) {
+  addAndRemoveRider(bool isAdding) {
     if (isAdding) {
       if (numberOfRiders < 6) numberOfRiders++;
       setState(() {});

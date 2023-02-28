@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sql_test/Utilities/Extentions.dart';
 
-import '../../../../Utilities/Style.dart';
-import '../../../../Utilities/colors.dart';
+import '../Utilities/Style.dart';
+import '../Utilities/colors.dart';
 
 class SearchTextField extends StatelessWidget {
   final String hint = "";

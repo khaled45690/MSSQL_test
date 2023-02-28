@@ -24,7 +24,7 @@ class ReceiverData extends StatelessWidget {
           children: [
             const Text(
               "كود المستلم",
-              style: cartExpensesPriceTextStyle,
+              style: size19BlackTextStyle,
             ),
             DropDownWithSearch(list, onTextChange, onItemChange, text)
           ],
@@ -37,7 +37,7 @@ class ReceiverData extends StatelessWidget {
           children: [
             const Text(
               "كود البنك",
-              style: cartExpensesPriceTextStyle,
+              style: size19BlackTextStyle,
             ),
             DropDownWithSearch(list, onTextChange, onItemChange, text)
           ],
@@ -50,7 +50,7 @@ class ReceiverData extends StatelessWidget {
           children: [
             const Text(
               "كود الفرع",
-              style: cartExpensesPriceTextStyle,
+              style: size19BlackTextStyle,
             ),
             DropDownWithSearch(list, onTextChange, onItemChange, text)
           ],

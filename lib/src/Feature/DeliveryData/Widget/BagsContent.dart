@@ -16,7 +16,9 @@ class BagsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 20,),
+      margin: const EdgeInsets.only(
+        top: 20,
+      ),
       padding: const EdgeInsets.only(bottom: 20, top: 20, left: 10, right: 10),
       decoration: BagsContentDecoration,
       child: Column(
@@ -24,7 +26,7 @@ class BagsContent extends StatelessWidget {
           const Center(
             child: Text(
               "محتوى الشنطة",
-              style: cartExpensesPriceTextStyle,
+              style: size19BlackTextStyle,
             ),
           ),
           const SizedBox(
@@ -35,7 +37,7 @@ class BagsContent extends StatelessWidget {
             children: [
               const Text(
                 "القيمة بالمصرى",
-                style: cartExpensesPriceTextStyle,
+                style: size19BlackTextStyle,
               ),
               CustomTextField((da, value) {}, isNumber: true),
             ],
@@ -48,7 +50,7 @@ class BagsContent extends StatelessWidget {
             children: [
               const Text(
                 "الوحدة",
-                style: cartExpensesPriceTextStyle,
+                style: size19BlackTextStyle,
               ),
               DropDownWithSearch(list, onSearchChange, onItemChange, text)
             ],
@@ -61,7 +63,7 @@ class BagsContent extends StatelessWidget {
             children: [
               const Text(
                 "العملة",
-                style: cartExpensesPriceTextStyle,
+                style: size19BlackTextStyle,
               ),
               DropDownWithSearch(list, onSearchChange, onItemChange, text)
             ],
@@ -74,7 +76,7 @@ class BagsContent extends StatelessWidget {
             children: [
               const Text(
                 "عدد الباكو",
-                style: cartExpensesPriceTextStyle,
+                style: size19BlackTextStyle,
               ),
               CustomTextField((da, value) {}, isNumber: true),
             ],
@@ -87,7 +89,7 @@ class BagsContent extends StatelessWidget {
             children: [
               const Text(
                 "الفئة",
-                style: cartExpensesPriceTextStyle,
+                style: size19BlackTextStyle,
               ),
               DropDownWithSearch(list, onSearchChange, onItemChange, text)
             ],
@@ -100,7 +102,7 @@ class BagsContent extends StatelessWidget {
             children: [
               const Text(
                 "عدد الاوراق",
-                style: cartExpensesPriceTextStyle,
+                style: size19BlackTextStyle,
               ),
               CustomTextField((da, value) {}, isNumber: true),
             ],
@@ -113,7 +115,7 @@ class BagsContent extends StatelessWidget {
             children: [
               const Text(
                 "عدد الكراتين",
-                style: cartExpensesPriceTextStyle,
+                style: size19BlackTextStyle,
               ),
               CustomTextField((da, value) {}, isNumber: true),
             ],
@@ -126,7 +128,7 @@ class BagsContent extends StatelessWidget {
             children: [
               const Text(
                 "قيمة الكرتونة",
-                style: cartExpensesPriceTextStyle,
+                style: size19BlackTextStyle,
               ),
               CustomTextField((da, value) {}, isNumber: true),
             ],
@@ -139,7 +141,7 @@ class BagsContent extends StatelessWidget {
             children: [
               const Text(
                 "القيمة",
-                style: cartExpensesPriceTextStyle,
+                style: size19BlackTextStyle,
               ),
               CustomTextField((da, value) {}, isNumber: true),
             ],

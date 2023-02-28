@@ -1,3 +1,4 @@
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 
@@ -10,12 +11,55 @@ extension customContext on BuildContext {
         this,
         MaterialPageRoute(builder: (context) => destination),
       );
+  popupAndNavigateTo(Widget destination) {
+    Navigator.pop(this);
+    Navigator.push(
+      this,
+      MaterialPageRoute(builder: (context) => destination),
+    );
+  }
 
-  snackBar(text) => ScaffoldMessenger.of(this).showSnackBar(
+  popupAllAndNavigateTo(String destinationName) {
+    Timer(const Duration(milliseconds: 50), () {
+      Navigator.popUntil(this, ModalRoute.withName('/JourneyScreen'));
+    });
+
+    Timer(const Duration(milliseconds: 50), () {
+      Navigator.pop(
+        this,
+      );
+    });
+    Timer(const Duration(milliseconds: 50), () {
+      Navigator.pushNamed(
+        this,
+        destinationName,
+      );
+    });
+  }
+
+  popupAndNavigateToWithName(String destinationName) {
+    Navigator.pop(this);
+    Navigator.pushNamed(
+      this,
+      destinationName,
+    );
+  }
+
+  snackBar(text, {Color color = Colors.black54}) =>
+      ScaffoldMessenger.of(this).showSnackBar(
         SnackBar(
-          content: Text(
-            text,
-            style: TextStyle(fontSize: 18),
+          duration: const Duration(milliseconds: 6000),
+          backgroundColor: color,
+          padding: const EdgeInsets.all(20),
+          elevation: 3,
+          showCloseIcon: true,
+          closeIconColor: Colors.red,
+          content: Center(
+            child: Text(
+              text,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 18),
+            ),
           ),
         ),
       );
