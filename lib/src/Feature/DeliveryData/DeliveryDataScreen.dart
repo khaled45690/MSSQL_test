@@ -39,7 +39,6 @@ class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     listFilter = list;
     arriveTime = format.DateFormat('h:mm:ssa').format(DateTime.now());

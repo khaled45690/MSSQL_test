@@ -14,11 +14,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends LoginScreenController {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 // user 2021
 // password 2021
   @override

@@ -5,6 +5,7 @@ import '../../../../MainWidgets/CustomButton.dart';
 import '../../../../StateManagement/JourneyData/Journey.dart';
 import '../../../../Utilities/Strings.dart';
 import '../../../../Utilities/Style.dart';
+import '../../TaskScreen/TaskScreen.dart';
 
 class JourneyCard extends StatelessWidget {
   final Journey journey;
@@ -15,7 +16,7 @@ class JourneyCard extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime startTime = DateTime.parse(journey.F_Sdate);
     return InkWell(
-      // onTap: () => context.navigateTo(TaskScreen()),
+      onTap: () => context.navigateTo(TaskScreen()),
       child: Container(
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.only(bottom: 30),

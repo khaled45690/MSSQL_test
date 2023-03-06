@@ -12,6 +12,11 @@ import '../../Utilities/Prefs.dart';
 import '../../Utilities/Strings.dart';
 import '../UserData/User.dart';
 
+
+bool? isssssssConnected ;
+  setConnectionssss(bool internetConnectionState) {
+    isssssssConnected = internetConnectionState;
+  }
 //BlocStateListener  BlocStateType
 class InternetConnectionCubit extends Cubit<bool> {
   // pass the initial value with super
@@ -24,7 +29,6 @@ class InternetConnectionCubit extends Cubit<bool> {
 
   setConnection(bool internetConnectionState) {
     isConnected = internetConnectionState;
-    debugPrint(isConnected.toString());
     isConnectedToInternet.sink.add(internetConnectionState);
     emit(isConnected);
   }
@@ -32,14 +36,14 @@ class InternetConnectionCubit extends Cubit<bool> {
   connectionCheckerInitializer() {
     listener = InternetConnectionChecker().onStatusChange.listen(
       (InternetConnectionStatus status) {
-        debugPrint((status == InternetConnectionStatus.connected).toString());
         switch (status) {
           case InternetConnectionStatus.connected:
             if (!SqlConn.isConnected) {
+
               SqlConn.connect(
                       ip: "196.218.142.75",
                       port: "1455",
-                      databaseName: "SWAT_2023",
+                      databaseName: "SWAT_${DateTime.now().year}",
                       username: "sa",
                       password: "bbs66666")
                   .then((value) => _connected());

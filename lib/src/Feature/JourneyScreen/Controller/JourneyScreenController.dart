@@ -43,10 +43,6 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
   }
 
   outDatedLoginCheacker() {
-    debugPrint(DateTime.now()
-        .difference(DateTime.parse(user!.dateOfLogin!))
-        .inMinutes
-        .toString());
     bool isOutdatedLogin = DateTime.now()
             .difference(DateTime.parse(user!.dateOfLogin!))
             .inMinutes >
@@ -136,7 +132,7 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
     latestJourney.isFinished = false;
     jouernies[jouernies.length - 1] = latestJourney;
     context.read<JourneyCubit>().setjourneyDataWithSharedPrefrence(jouernies);
-    if(SqlConn.isConnected) _updateDataBase();
+    if (SqlConn.isConnected) _updateDataBase();
     isEndEnabled = true;
     setState(() {});
   }
@@ -170,7 +166,7 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
 
   _getUserJourniesFromInternet() async {
     String jouerniesDataString = await SqlConn.readData(
-        "SELECT * from dbo.T_DAY WHERE F_Emp_Id = ${user!.F_EmpID}");
+        "SELECT * from dbo.T_DAY WHERE F_Emp_Id = ${user!.F_EmpID} ORDER BY F_Id ASC");
     try {
       List<Journey> jouernies =
           Journey.fromJsonStringListToJourneyList(jouerniesDataString);
@@ -236,7 +232,6 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
       int localJouerniesLength = localJouernies.length;
       String jouerniesDataString = await SqlConn.readData(
           "SELECT * from dbo.T_DAY WHERE F_Emp_Id = ${user!.F_EmpID} AND F_Id >= ${localJouernies[0].F_Id} ORDER BY F_Id ASC");
-      debugPrint(jouerniesDataString);
       List<Journey> onlineJouernies =
           Journey.fromJsonStringListToJourneyList(jouerniesDataString);
 
@@ -247,7 +242,8 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
       } else {
         Journey journey = localJouernies[0];
         await _updateQuery(journey);
-        if (localJouerniesLength > 1) await _insertQuery(localJouernies.sublist(1));
+        if (localJouerniesLength > 1)
+          await _insertQuery(localJouernies.sublist(1));
       }
 
       context.snackBar(dataHasBeenUpdated, color: Colors.green.shade900);
@@ -257,15 +253,15 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
   }
 
   _insertQuery(List<Journey> localJouernies) async {
+    String query = "";
     for (Journey journey in localJouernies) {
-      String query =
-          "INSERT INTO dbo.T_DAY (F_Id, F_Sdate, F_Stime, F_Edate , F_Etime , F_Emp_Id) "
+      query +=
+          " INSERT INTO dbo.T_DAY (F_Id, F_Sdate, F_Stime, F_Edate , F_Etime , F_Emp_Id) "
           "VALUES (${journey.F_Id} , CAST('${journey.F_Sdate}' AS DATETIME2) ,CAST('${journey.F_Stime}' AS DATETIME2) ,"
           "${journey.F_Edate == null ? null : "CAST('${journey.F_Edate}' AS DATETIME2)"} ,"
           "${journey.F_Etime == null ? null : "CAST('${journey.F_Etime}' AS DATETIME2)"} ,${journey.F_Emp_Id})";
-
-      await SqlConn.writeData(query);
     }
+    await SqlConn.writeData(query);
     // after updating the data, Iam keeping the last Journey to know where we stopped
     // when we are offline and recoonected again
     // you will understand in the next condition handling

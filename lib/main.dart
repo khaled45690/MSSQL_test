@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sql_conn/sql_conn.dart';
 import 'package:sql_test/StateManagement/InternetState/InternetStateHandler.dart';
+import 'package:sql_test/StateManagement/JourneyData/Journey.dart';
 import 'package:sql_test/StateManagement/JourneyData/JourneyData.dart';
 import 'package:sql_test/Utilities/Prefs.dart';
 import 'package:sql_test/src/Feature/JourneyScreen/JourneyScreen.dart';
@@ -42,7 +43,17 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     user = context.read<UserCubit>().getUserDataFromPref();
-
+    
+    Prefs.staticName = "staticUser";
+    debugPrint("Prefs().name.toString()");
+    debugPrint(Prefs().name.toString());
+    debugPrint(Prefs.staticName);
+    isssssssConnected = true;
+    debugPrint("Prefs().name.toString()ss");
+    debugPrint(isssssssConnected.toString());
+     setConnectionssss(false);
+    debugPrint(isssssssConnected.toString());
+    debugPrint("Prefs().name.toString()ss");
     if (user != null) {
       bool isOutdatedLogin = DateTime.now()
               .difference(DateTime.parse(user!.dateOfLogin!))
@@ -59,31 +70,16 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-        textDirection: TextDirection.rtl,
-        child: MaterialApp(
-          title: "Don't know yet",
-          theme: ThemeData(),
-          initialRoute: user == null ? '/LoginScreen' : '/JourneyScreen',
-          routes: {
-            '/LoginScreen': (context) => const LoginScreen(),
-            '/JourneyScreen': (context) => const JourneyScreen(),
-          },
-        ));
+      textDirection: TextDirection.rtl,
+      child: MaterialApp(
+        title: "Don't know yet",
+        theme: ThemeData(),
+        initialRoute: user == null ? '/LoginScreen' : '/JourneyScreen',
+        routes: {
+          '/LoginScreen': (context) => const LoginScreen(),
+          '/JourneyScreen': (context) => const JourneyScreen(),
+        },
+      ),
+    );
   }
-}
-
-void connectToDataBase() async {
-  await SqlConn.connect(
-      ip: "196.218.142.75",
-      port: "1455",
-      databaseName: "SWAT_2023",
-      username: "sa",
-      password: "bbs66666");
-
-  String res = await SqlConn.readData(
-      "SELECT * from dbo.T_Employee WHERE F_Prevlage = 3");
-  // await SqlConn.writeData("Insert ${res.length},10 from dbo.. WHERE F_Prevlage = ${res.length}");
-  String x = jsonEncode(res);
-  List<User> userList = User.fromJsonStringListToUserList(res);
-  await SqlConn.disconnect();
 }

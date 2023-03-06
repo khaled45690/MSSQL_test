@@ -85,7 +85,7 @@ class Journey {
     return listOfUsers;
   }
 
-    static fromJourneyListToJsonListString(List<Journey> ListOfUsers) {
+  static fromJourneyListToJsonListString(List<Journey> ListOfUsers) {
     List listOfUsers = [];
 
     for (var element in ListOfUsers) {

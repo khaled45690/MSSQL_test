@@ -54,10 +54,13 @@ class _DeliverScreenState extends DeliverScreenController {
                       "وقت التحرك", "اختر من هنا", () => selectTime(context)),
                   CustomElementSelector(
                       "وقت الوصول", "اختر من هنا", () => selectTime(context)),
-const SizedBox(height: 20,),
-                      CustomButton("تسليم", 200, () => null),
-                      const SizedBox(height: 80,),
-
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomButton("تسليم", 200, () => null),
+                  const SizedBox(
+                    height: 80,
+                  ),
                 ],
               ),
             ),
