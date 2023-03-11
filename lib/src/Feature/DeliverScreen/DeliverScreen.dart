@@ -9,12 +9,12 @@ import 'package:sql_test/Utilities/colors.dart';
 
 import '../../../MainWidgets/CustomElementSelector.dart';
 import '../../../MainWidgets/QRCodeDetection.dart';
-import '../../../MainWidgets/SearchButtonSheet.dart';
+import '../../../MainWidgets/SearchButtonSheetForCustomer.dart';
 import '../../../Utilities/Style.dart';
 import 'Controller/DeliverScreenController.dart';
-import 'Widgets/AddEmployeeByWriting.dart';
+import '../TaskScreen/src/ReceiveScreen/Widgets/AddEmployeeByWriting.dart';
 import 'Widgets/AddingCheckHeaderAndButton.dart';
-import 'Widgets/ShowAddedEmployee.dart';
+import '../TaskScreen/src/ReceiveScreen/Widgets/CustomListView.dart';
 
 class DeliverScreen extends StatefulWidget {
   const DeliverScreen({super.key});
@@ -41,15 +41,15 @@ class _DeliverScreenState extends DeliverScreenController {
                 children: [
                   const Text("الطاقم", style: size22BlackTextStyle),
                   addingEmployeeButton(),
-                  QRCodeDetection(height, cameraController),
-                  const AddEmployeeByWriting(false),
-                  CustomListView(employees),
-                  AddingCheckHeaderAndButton(false, addChecks),
-                  CustomListView(employees),
-                  CustomElementSelector("اسم العميل", "اختر من هنا",
-                      () => searchButtonSheet(context)),
-                  CustomElementSelector("اسم الفـرع", "اختر من هنا",
-                      () => searchButtonSheet(context)),
+                  // QRCodeDetection(height, cameraController),
+                  // const AddEmployeeByWriting(false),
+                  // CustomListView(employees),
+                  // AddingCheckHeaderAndButton(false, addChecks),
+                  // CustomListView(employees),
+                  // CustomElementSelector("اسم العميل", "اختر من هنا",
+                  //     () => searchButtonSheet(context)),
+                  // CustomElementSelector("اسم الفـرع", "اختر من هنا",
+                  //     () => searchButtonSheet(context)),
                   CustomElementSelector(
                       "وقت التحرك", "اختر من هنا", () => selectTime(context)),
                   CustomElementSelector(

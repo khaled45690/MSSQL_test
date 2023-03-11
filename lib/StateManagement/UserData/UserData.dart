@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sql_test/Utilities/Strings.dart';
 
 import '../../Utilities/Prefs.dart';
-import 'User.dart';
+import '../../DataTypes/User.dart';
 
 //BlocStateListener  BlocStateType
 class UserCubit extends Cubit<User?> {

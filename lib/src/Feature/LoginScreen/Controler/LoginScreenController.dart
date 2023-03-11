@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:sql_test/Utilities/Extentions.dart';
 
-import '../../../../StateManagement/UserData/User.dart';
+import '../../../../DataTypes/User.dart';
 import '../../../../Utilities/Prefs.dart';
 import '../../../../Utilities/Strings.dart';
 import '../../JourneyScreen/JourneyScreen.dart';

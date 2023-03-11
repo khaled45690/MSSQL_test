@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../../../../MainWidgets/CustomTextField.dart';
-import '../../../../Utilities/Style.dart';
+import '../../../../../../MainWidgets/CustomTextField.dart';
+import '../../../../../../Utilities/Style.dart';
 
 class AddEmployeeByWriting extends StatelessWidget {
-  final bool isLoading;
-  const AddEmployeeByWriting( this.isLoading , {super.key});
+  final bool isLoading , isEnabled;
+    final Function( String value) onChange;
+    final Function()? onTap;
+  const AddEmployeeByWriting( this.isLoading , this.isEnabled ,this.onChange, {super.key , this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +15,14 @@ class AddEmployeeByWriting extends StatelessWidget {
       margin: const EdgeInsets.only(top: 10, bottom: 10, right: 10),
       child: Row(
         children: [
-          CustomTextField((da, dasda) {}, 250),
+          CustomTextField(onChange, 250 , isNumber: true,),
           InkWell(
+            onTap: isEnabled ? onTap : null,
             child: Container(
               margin: const EdgeInsets.only(right: 10, bottom: 10),
-              decoration: isLoading
-                  ? greyColor50RadiusWithShadowDecoration
-                  : mainBlueColor50RadiusWithShadowDecoration,
+              decoration: isEnabled
+                  ? mainBlueColor50RadiusWithShadowDecoration
+                  : greyColor50RadiusWithShadowDecoration,
               child: const Icon(Icons.add, color: Colors.white, size: 30),
             ),
           ),

@@ -102,15 +102,14 @@ const TextStyle size19BlackTextStyle = TextStyle(
     fontSize: 19,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.4);
-    
- TextStyle size19RedTextStyle = TextStyle(
+
+TextStyle size19RedTextStyle = TextStyle(
     color: Colors.red.shade900,
     fontSize: 19,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.4);
 
-    
- TextStyle size19GreenTextStyle = TextStyle(
+TextStyle size19GreenTextStyle = TextStyle(
     color: Colors.green.shade900,
     fontSize: 19,
     fontWeight: FontWeight.w600,
@@ -120,12 +119,11 @@ const TextStyle size22BlackTextStyle = TextStyle(
     fontSize: 22,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.4);
-    const TextStyle size25BlackTextStyle = TextStyle(
+const TextStyle size25BlackTextStyle = TextStyle(
     color: Colors.black,
     fontSize: 25,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.4);
-
 
 // Decoration Style------------------------->>>>>>>>>>>>>>>>>
 
@@ -141,8 +139,7 @@ const BoxDecoration noColor50RadiusWithShadowDecoration = BoxDecoration(
   borderRadius: BorderRadius.all(Radius.circular(50)),
 );
 
-
- BoxDecoration mainColor50RadiusWithShadowDecoration = BoxDecoration(
+BoxDecoration mainColor50RadiusWithShadowDecoration = BoxDecoration(
   boxShadow: const [
     BoxShadow(
       color: Colors.black,
@@ -152,7 +149,8 @@ const BoxDecoration noColor50RadiusWithShadowDecoration = BoxDecoration(
     ),
   ],
   color: mainBlue.withOpacity(0.3),
-  borderRadius: const BorderRadius.only(topLeft: Radius.circular(50) , topRight: Radius.circular(50)),
+  borderRadius: const BorderRadius.only(
+      topLeft: Radius.circular(50), topRight: Radius.circular(50)),
 );
 
 const BoxDecoration mainBlueColor50RadiusWithShadowDecoration = BoxDecoration(
@@ -167,7 +165,6 @@ const BoxDecoration mainBlueColor50RadiusWithShadowDecoration = BoxDecoration(
   color: mainBlue,
   borderRadius: BorderRadius.all(Radius.circular(50)),
 );
-
 
 const BoxDecoration greyColor50RadiusWithShadowDecoration = BoxDecoration(
   boxShadow: [
@@ -201,6 +198,14 @@ BoxDecoration lightBlueAccent20percentageWithRadius10Decoration = BoxDecoration(
     color: Colors.black,
     width: 1,
   ),
+  boxShadow: [
+    BoxShadow(
+      color: Colors.lightBlueAccent.withOpacity(0.5),
+      spreadRadius: 3,
+      blurRadius: 3,
+      offset: Offset(0, 3), // changes position of shadow
+    ),
+  ],
   color: Colors.lightBlueAccent.withOpacity(0.2),
 );
 BoxDecoration BagsContentDecoration = BoxDecoration(
@@ -209,5 +214,22 @@ BoxDecoration BagsContentDecoration = BoxDecoration(
     color: Colors.black,
     width: 1,
   ),
+  color: mainBlue.withOpacity(0.4),
+);
+
+BoxDecoration taskContentDecoration = BoxDecoration(
+  borderRadius: const BorderRadius.all(Radius.circular(10)),
+  border: Border.all(
+    color: Colors.black,
+    width: 1,
+  ),
+  boxShadow: [
+    BoxShadow(
+      color: Colors.grey.withOpacity(0.5),
+      spreadRadius: 5,
+      blurRadius: 7,
+      offset: Offset(0, 3), // changes position of shadow
+    ),
+  ],
   color: mainBlue.withOpacity(0.4),
 );

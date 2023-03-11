@@ -4,8 +4,9 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 class QRCodeDetection extends StatelessWidget {
   final MobileScannerController cameraController;
   final double height;
+  final Function(BarcodeCapture capture) onCapture ;
 
-  const QRCodeDetection(this.height, this.cameraController, {super.key});
+  const QRCodeDetection(this.height, this.onCapture,this.cameraController, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +21,7 @@ class QRCodeDetection extends StatelessWidget {
           // fit: BoxFit.contain,
 
           controller: cameraController,
-          onDetect: (capture) {
-            final List<Barcode> barcodes = capture.barcodes;
-            for (final barcode in barcodes) {
-              debugPrint('Barcode found! ${barcode.rawValue}');
-            }
-          },
+          onDetect: (barCodes) => onCapture(barCodes),
         ),
       ),
     );

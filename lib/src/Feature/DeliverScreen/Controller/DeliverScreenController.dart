@@ -4,7 +4,7 @@ import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../../../MainWidgets/CustomButton.dart';
-import '../../../../MainWidgets/SearchButtonSheet.dart';
+import '../../../../MainWidgets/SearchButtonSheetForCustomer.dart';
 import '../DeliverScreen.dart';
 
 abstract class DeliverScreenController extends State<DeliverScreen> {
@@ -32,7 +32,7 @@ abstract class DeliverScreenController extends State<DeliverScreen> {
   }
 
   addChecks(BuildContext context) {
-    searchButtonSheet(context);
+    // searchButtonSheet(context);
   }
 
   selectTime(BuildContext context) {

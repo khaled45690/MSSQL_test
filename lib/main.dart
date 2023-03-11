@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sql_conn/sql_conn.dart';
 import 'package:sql_test/StateManagement/InternetState/InternetStateHandler.dart';
-import 'package:sql_test/StateManagement/JourneyData/Journey.dart';
+import 'package:sql_test/DataTypes/Journey.dart';
 import 'package:sql_test/StateManagement/JourneyData/JourneyData.dart';
 import 'package:sql_test/Utilities/Prefs.dart';
 import 'package:sql_test/src/Feature/JourneyScreen/JourneyScreen.dart';
 
-import 'StateManagement/UserData/User.dart';
+import 'DataTypes/User.dart';
 import 'StateManagement/UserData/UserData.dart';
 import 'src/Feature/LoginScreen/LoginScreen.dart';
 
@@ -43,17 +43,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     user = context.read<UserCubit>().getUserDataFromPref();
-    
-    Prefs.staticName = "staticUser";
-    debugPrint("Prefs().name.toString()");
-    debugPrint(Prefs().name.toString());
-    debugPrint(Prefs.staticName);
-    isssssssConnected = true;
-    debugPrint("Prefs().name.toString()ss");
-    debugPrint(isssssssConnected.toString());
-     setConnectionssss(false);
-    debugPrint(isssssssConnected.toString());
-    debugPrint("Prefs().name.toString()ss");
+  
     if (user != null) {
       bool isOutdatedLogin = DateTime.now()
               .difference(DateTime.parse(user!.dateOfLogin!))

@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sql_test/Utilities/Strings.dart';
 
 import '../../Utilities/Prefs.dart';
-import 'Journey.dart';
+import '../../DataTypes/Journey.dart';
 
 //BlocStateListener  BlocStateType
 class JourneyCubit extends Cubit<List<Journey>> {

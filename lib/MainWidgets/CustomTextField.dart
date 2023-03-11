@@ -7,7 +7,7 @@ class CustomTextField extends StatelessWidget {
   final String hint = "";
   final bool isNumber;
   final double width;
-  final Function(String variableName, String value) onChange;
+  final Function(String value) onChange;
 
   const CustomTextField(this.onChange, this.width , {super.key , this.isNumber = false});
 
@@ -22,7 +22,7 @@ class CustomTextField extends StatelessWidget {
 
 
             cursorColor: mainBlue,
-            onChanged: (value) => onChange(hint, value),
+            onChanged: (value) => onChange(value),
             showCursor: true,
             enabled: true,
             textAlignVertical: TextAlignVertical.bottom,

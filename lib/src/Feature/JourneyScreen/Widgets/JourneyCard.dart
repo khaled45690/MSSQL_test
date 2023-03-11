@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sql_test/Utilities/Extentions.dart';
 
 import '../../../../MainWidgets/CustomButton.dart';
-import '../../../../StateManagement/JourneyData/Journey.dart';
+import '../../../../DataTypes/Journey.dart';
 import '../../../../Utilities/Strings.dart';
 import '../../../../Utilities/Style.dart';
 import '../../TaskScreen/TaskScreen.dart';
@@ -16,7 +16,7 @@ class JourneyCard extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime startTime = DateTime.parse(journey.F_Sdate);
     return InkWell(
-      onTap: () => context.navigateTo(TaskScreen()),
+      onTap: () => context.navigateTo(TaskScreen(journey)),
       child: Container(
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.only(bottom: 30),

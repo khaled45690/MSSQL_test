@@ -1,6 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 import 'dart:convert';
 
+import 'Receipt.dart';
+
 class Journey {
   int F_Id;
   String F_Sdate;
@@ -9,6 +11,7 @@ class Journey {
   String? F_Edate;
   String? F_Etime;
   bool isFinished;
+  List<Receipt> receiptList = [];
   Journey({
     required this.F_Id,
     required this.F_Sdate,
