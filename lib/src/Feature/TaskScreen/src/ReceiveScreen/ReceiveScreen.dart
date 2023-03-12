@@ -9,6 +9,7 @@ import '../../../../../DataTypes/Receipt.dart';
 import 'Controller/ReceiveScreenController.dart';
 import 'Widgets/AddEmployeeByWriting.dart';
 import 'Widgets/CustomListView.dart';
+import 'Widgets/TextFieldWithName.dart';
 
 class ReceiveScreen extends StatefulWidget {
   final Receipt receipt;
@@ -47,21 +48,47 @@ class _ReceiveScreenState extends ReceiveScreenController {
                 AddEmployeeByWriting(isAddingEmployee, canWeAddMoreEmp,
                     (value) => onTextChange("AddEmpByText", value),
                     onTap: addEmpByTextFunc),
-                CustomListView(widget.receipt.CrewIdList , removeEMp),
+                CustomListView(widget.receipt.CrewIdList, removeEMp),
                 CustomElementSelector(
-                    "اسم العميل",
-                    widget.receipt.F_Cust == null
-                        ? "اختر من هنا"
-                        : widget.receipt.F_Cust!.CustName,
-                    () => searchButtonSheetForCustomer(key.currentContext!,
-                        customerList, onSelectCustomerFunc)),
-                isCustomerSelected
-                    ? CustomElementSelector(
-                        "اسم الفـرع",
-                        widget.receipt.F_Branch_D == null ? "اختر من هنا" : widget.receipt.F_Branch_D!.F_Branch_Name,
-                        () => searchButtonSheetForBranch(key.currentContext!,
-                            customerBranchList, onSelectCustomerBranchFunc))
-                    : const SizedBox(),
+                  text: "اسم العميل",
+                  selectedElementText: widget.receipt.F_Cust == null
+                      ? "اختر من هنا"
+                      : widget.receipt.F_Cust!.CustName,
+                  onTap: () => searchButtonSheetForCustomer(
+                      key.currentContext!, customerList, onSelectCustomerFunc , false),
+                ),
+                CustomElementSelector(
+                  text: "اسم الفـرع",
+                  selectedElementText: widget.receipt.F_Branch_D == null
+                      ? "اختر من هنا"
+                      : widget.receipt.F_Branch_D!.F_Branch_Name,
+                  onTap: () => searchButtonSheetForBranch(key.currentContext!,
+                      customerBranchList, onSelectCustomerBranchFunc , false),
+                  isvisible: isCustomerSelected,
+                ),
+                TextFieldWithName("بيـــــان",
+                    onTextChangeFunction: (String value) =>
+                        onTextChange("AddNote", value)),
+                TextFieldWithName("ملاحظات",
+                    onTextChangeFunction: (String value) =>
+                        onTextChange("AddNote1", value)),
+                CustomElementSelector(
+                  text: "اسم العميل المرسل اليه",
+                  selectedElementText: widget.receipt.F_Cust_R == null
+                      ? "اختر من هنا"
+                      : widget.receipt.F_Cust_R!.CustName,
+                  onTap: () => searchButtonSheetForCustomer(
+                      key.currentContext!, customerList, onSelectCustomerFunc , true),
+                ),
+                CustomElementSelector(
+                  text: " اسم الفـرع المرسل اليه",
+                  selectedElementText: widget.receipt.F_Branch_R == null
+                      ? "اختر من هنا"
+                      : widget.receipt.F_Branch_R!.F_Branch_Name,
+                  onTap: () => searchButtonSheetForBranch(key.currentContext!,
+                      customerBranchList, onSelectCustomerBranchFunc , true),
+                  isvisible: isCustomerSelected,
+                ),
               ],
             ),
           ),

@@ -34,13 +34,14 @@ class _TaskScreenState extends TaskScreenController {
                   radioGroupValue: radioGroupValue,
                   onRadioChangeCallback: onRadioChangeCallback),
               const SizedBox(height: 30),
-              TaskList(widget.journey.receiptList , saveTempReceipt),
+              TaskList(widget.journey.receiptList, saveTempReceipt),
               isAddingNewReceipt
-                  ? ReceiptCard(receipt, false , parsedFunction: saveTempReceipt)
+                  ? ReceiptCard(receipt, false, parsedFunction: saveTempReceipt)
                   : const SizedBox(),
               const SizedBox(height: 30),
               CustomButton("اضف وصل", 250, addNewReceipt,
                   isEnabled: !isAddingNewReceipt),
+
             ],
           ),
         ),

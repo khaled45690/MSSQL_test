@@ -50,10 +50,10 @@ class _DeliverScreenState extends DeliverScreenController {
                   //     () => searchButtonSheet(context)),
                   // CustomElementSelector("اسم الفـرع", "اختر من هنا",
                   //     () => searchButtonSheet(context)),
-                  CustomElementSelector(
-                      "وقت التحرك", "اختر من هنا", () => selectTime(context)),
-                  CustomElementSelector(
-                      "وقت الوصول", "اختر من هنا", () => selectTime(context)),
+                  // CustomElementSelector(
+                  //     "وقت التحرك", "اختر من هنا", () => selectTime(context)),
+                  // CustomElementSelector(
+                  //     "وقت الوصول", "اختر من هنا", () => selectTime(context)),
                   const SizedBox(
                     height: 20,
                   ),

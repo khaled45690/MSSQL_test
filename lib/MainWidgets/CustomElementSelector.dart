@@ -5,12 +5,13 @@ import '../Utilities/Style.dart';
 class CustomElementSelector extends StatelessWidget {
   final String text;
   final String selectedElementText;
+  final bool isvisible , isDeliveredTo;
   final Function() onTap;
-  const CustomElementSelector(this.text, this.selectedElementText,this.onTap, {super.key});
+  const CustomElementSelector({super.key, required this.text, required this.selectedElementText,required this.onTap,this.isvisible = true ,this.isDeliveredTo = true});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return isvisible ? Container(
       margin: const EdgeInsets.all(10),
       child: Row(
         children: [
@@ -29,6 +30,6 @@ class CustomElementSelector extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ) : const SizedBox();
   }
 }

@@ -104,7 +104,7 @@ class _DeliveryDataScreenState extends State<DeliveryDataScreen> {
                   textDirection: TextDirection.rtl,
                   children: [
                     const Text(
-                      "بيـان",
+                      "بيــــــان",
                       style: size19BlackTextStyle,
                     ),
                     CustomTextField((da, value) {}),

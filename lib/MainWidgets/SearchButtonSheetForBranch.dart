@@ -14,22 +14,23 @@ Map<int, Color> color = {
 };
 
 searchButtonSheetForBranch(BuildContext context, List<CustomerBranch> customerBranchList,
-    Function(CustomerBranch customerBranch) onSelectCustomerFunc) {
+    Function(CustomerBranch customerBranch , bool isDeliveredTo) onSelectCustomerFunc , bool isDeliveredTo) {
   Scaffold.of(context).showBottomSheet<void>(
     clipBehavior: Clip.antiAlias,
     elevation: 3,
     enableDrag: false,
     (BuildContext context) {
-      return CustomSearchWithFilterWidget(customerBranchList, onSelectCustomerFunc);
+      return CustomSearchWithFilterWidget(customerBranchList, onSelectCustomerFunc , isDeliveredTo);
     },
   );
 }
 
 class CustomSearchWithFilterWidget extends StatefulWidget {
   final List<CustomerBranch> customerBranchList;
-  final Function(CustomerBranch customerBranch) onSelectCustomerFunc;
+  final Function(CustomerBranch customerBranch, bool isDeliveredTo) onSelectCustomerFunc;
+  final bool isDeliveredTo;
   const CustomSearchWithFilterWidget(
-      this.customerBranchList, this.onSelectCustomerFunc,
+      this.customerBranchList, this.onSelectCustomerFunc,this.isDeliveredTo,
       {super.key});
 
   @override
@@ -139,7 +140,7 @@ class _CustomSearchWithFilterWidgetState
                         splashColor: Colors.lightBlue.withOpacity(.7),
                         onPressed: () {
                           Navigator.pop(context);
-                          widget.onSelectCustomerFunc(customerList[index]);
+                          widget.onSelectCustomerFunc(customerList[index] , widget.isDeliveredTo);
                         },
                         child: Container(
                             margin: const EdgeInsets.only(bottom: 20),

@@ -23,6 +23,7 @@ class Receipt {
   CustomerBranch? F_Branch_D;
   String? F_Arrival_Time_D;
   String? F_Leaving_Time_D;
+  int? F_Branch_Internal_D;
   int? Userid_Save_ID;
   String Date_Save = DateTime.now().toString();
   String Time_Save = DateTime.now().toString();
@@ -37,7 +38,8 @@ class Receipt {
   int F_Reviewd = 0;
   double F_totalAmount_EGP = 0;
   double F_totalFees_Amount = 0;
-  int? F_Branch_Internal_D;
+  Customer? F_Cust_R;
+  CustomerBranch? F_Branch_R;
   int? F_Branch_Internal_R;
   int F_Recipt_Type = 0;
   List<CrewMember> CrewIdList = [];

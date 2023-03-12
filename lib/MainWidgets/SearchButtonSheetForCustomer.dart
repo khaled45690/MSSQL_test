@@ -13,22 +13,23 @@ Map<int, Color> color = {
 };
 
 searchButtonSheetForCustomer(BuildContext context, List<Customer> customerList,
-    Function(Customer customer) onSelectCustomerFunc) {
+    Function(Customer customer , bool isDeliveredTo) onSelectCustomerFunc , bool isDeliveredTo) {
   Scaffold.of(context).showBottomSheet<void>(
     clipBehavior: Clip.antiAlias,
     elevation: 3,
     enableDrag: false,
     (BuildContext context) {
-      return CustomSearchWithFilterWidget(customerList, onSelectCustomerFunc);
+      return CustomSearchWithFilterWidget(customerList, onSelectCustomerFunc , isDeliveredTo);
     },
   );
 }
 
 class CustomSearchWithFilterWidget extends StatefulWidget {
   final List<Customer> customerList;
-  final Function(Customer customer) onSelectCustomerFunc;
+  final Function(Customer customer , bool isDeliveredTo) onSelectCustomerFunc;
+  final bool isDeliveredTo;
   const CustomSearchWithFilterWidget(
-      this.customerList, this.onSelectCustomerFunc,
+      this.customerList, this.onSelectCustomerFunc,this.isDeliveredTo,
       {super.key});
 
   @override
@@ -138,7 +139,7 @@ class _CustomSearchWithFilterWidgetState
                         splashColor: Colors.lightBlue.withOpacity(.7),
                         onPressed: () {
                           Navigator.pop(context);
-                          widget.onSelectCustomerFunc(customerList[index]);
+                          widget.onSelectCustomerFunc(customerList[index] , widget.isDeliveredTo);
                         },
                         child: Container(
                             margin: const EdgeInsets.only(bottom: 20),

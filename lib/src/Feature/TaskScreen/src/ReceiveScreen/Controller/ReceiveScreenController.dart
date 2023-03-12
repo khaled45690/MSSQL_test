@@ -27,6 +27,7 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
   String empIdFromTextField = "";
   List<Customer> customerList = [];
   List<CustomerBranch> customerBranchList = [];
+  List<CustomerBranch> customerBranchList_R = [];
 
   @override
   void initState() {
@@ -83,8 +84,15 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
       case "AddEmpByText":
         empIdFromTextField = value;
         break;
+      case "AddNote":
+        widget.receipt.F_Note = value;
+        break;
+      case "AddNote1":
+        widget.receipt.F_Note1 = value;
+        break;
       default:
     }
+    widget.parsedFunction(widget.receipt);
     setState(() {});
   }
 
@@ -92,18 +100,31 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
     _addEmpByCam(empIdFromTextField, false);
   }
 
-  onSelectCustomerFunc(Customer customer) {
-    widget.receipt.F_Cust = customer;
-    isCustomerSelected = true;
-    widget.parsedFunction(widget.receipt);
-    customerBranchList = customer.CustomerBranches;
+  onSelectCustomerFunc(Customer customer, bool isDeliveredTo) {
+    if (isDeliveredTo) {
+      widget.receipt.F_Cust_R = customer;
+      isCustomerSelected = true;
+      widget.parsedFunction(widget.receipt);
+      customerBranchList_R = customer.CustomerBranches;
+    } else {
+      widget.receipt.F_Cust = customer;
+      isCustomerSelected = true;
+      widget.parsedFunction(widget.receipt);
+      customerBranchList = customer.CustomerBranches;
+    }
     setState(() {});
   }
 
-  onSelectCustomerBranchFunc(CustomerBranch customerBranch) {
-    widget.receipt.F_Branch_Internal_D = customerBranch.F_Branch_Internal;
-    widget.receipt.F_Branch_D = customerBranch;
-    widget.parsedFunction(widget.receipt);
+  onSelectCustomerBranchFunc(CustomerBranch customerBranch , bool isDeliveredTo) {
+    if (isDeliveredTo) {
+      widget.receipt.F_Branch_Internal_R = customerBranch.F_Branch_Internal;
+      widget.receipt.F_Branch_R = customerBranch;
+      widget.parsedFunction(widget.receipt);
+    } else {
+      widget.receipt.F_Branch_Internal_D = customerBranch.F_Branch_Internal;
+      widget.receipt.F_Branch_D = customerBranch;
+      widget.parsedFunction(widget.receipt);
+    }
     setState(() {});
   }
 
