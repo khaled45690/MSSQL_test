@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:sql_test/MainWidgets/SearchButtonSheetForBranch.dart';
+import 'package:sql_test/MainWidgets/CustomButton.dart';
 import 'package:sql_test/Utilities/Extentions.dart';
 
+import '../../../../../MainWidgets/BottonSheets/SearchButtonSheetForBranch.dart';
+import '../../../../../MainWidgets/BottonSheets/SearchButtonSheetForCustomer.dart';
+import '../../../../../MainWidgets/BottonSheets/searchButtonSheetForReceiptType.dart';
 import '../../../../../MainWidgets/CustomElementSelector.dart';
 import '../../../../../MainWidgets/QRCodeDetection.dart';
-import '../../../../../MainWidgets/SearchButtonSheetForCustomer.dart';
 import '../../../../../DataTypes/Receipt.dart';
 import 'Controller/ReceiveScreenController.dart';
 import 'Widgets/AddEmployeeByWriting.dart';
+import 'Widgets/AddImageToReceipt.dart';
 import 'Widgets/CustomListView.dart';
+import 'Widgets/CustomViewListForReceipts.dart';
+import 'Widgets/DatePickerWidget.dart';
 import 'Widgets/TextFieldWithName.dart';
 
 class ReceiveScreen extends StatefulWidget {
   final Receipt receipt;
-  final Function(Receipt receiptParameter) parsedFunction;
-  const ReceiveScreen(this.receipt, this.parsedFunction, {super.key});
+  final Function(Receipt receiptParameter) parsedFunction , saveReceiptInJouerny;
+  const ReceiveScreen(this.receipt, this.parsedFunction, this.saveReceiptInJouerny,{super.key});
 
   @override
   State<ReceiveScreen> createState() => _ReceiveScreenState();
@@ -25,7 +30,6 @@ class _ReceiveScreenState extends ReceiveScreenController {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     key = GlobalKey();
   }
@@ -54,8 +58,8 @@ class _ReceiveScreenState extends ReceiveScreenController {
                   selectedElementText: widget.receipt.F_Cust == null
                       ? "اختر من هنا"
                       : widget.receipt.F_Cust!.CustName,
-                  onTap: () => searchButtonSheetForCustomer(
-                      key.currentContext!, customerList, onSelectCustomerFunc , false),
+                  onTap: () => searchButtonSheetForCustomer(key.currentContext!,
+                      customerList, onSelectCustomerFunc, false),
                 ),
                 CustomElementSelector(
                   text: "اسم الفـرع",
@@ -63,9 +67,13 @@ class _ReceiveScreenState extends ReceiveScreenController {
                       ? "اختر من هنا"
                       : widget.receipt.F_Branch_D!.F_Branch_Name,
                   onTap: () => searchButtonSheetForBranch(key.currentContext!,
-                      customerBranchList, onSelectCustomerBranchFunc , false),
+                      customerBranchList, onSelectCustomerBranchFunc, false),
                   isvisible: isCustomerSelected,
                 ),
+                TextFieldWithName("رقم الايصال",
+                    onTextChangeFunction: (String value) =>
+                        onTextChange("F_Paper_No", value),
+                    isNumber: true),
                 TextFieldWithName("بيـــــان",
                     onTextChangeFunction: (String value) =>
                         onTextChange("AddNote", value)),
@@ -77,8 +85,8 @@ class _ReceiveScreenState extends ReceiveScreenController {
                   selectedElementText: widget.receipt.F_Cust_R == null
                       ? "اختر من هنا"
                       : widget.receipt.F_Cust_R!.CustName,
-                  onTap: () => searchButtonSheetForCustomer(
-                      key.currentContext!, customerList, onSelectCustomerFunc , true),
+                  onTap: () => searchButtonSheetForCustomer(key.currentContext!,
+                      customerList, onSelectCustomerFunc, true),
                 ),
                 CustomElementSelector(
                   text: " اسم الفـرع المرسل اليه",
@@ -86,9 +94,30 @@ class _ReceiveScreenState extends ReceiveScreenController {
                       ? "اختر من هنا"
                       : widget.receipt.F_Branch_R!.F_Branch_Name,
                   onTap: () => searchButtonSheetForBranch(key.currentContext!,
-                      customerBranchList, onSelectCustomerBranchFunc , true),
-                  isvisible: isCustomerSelected,
+                      customerBranchListR, onSelectCustomerBranchFunc, true),
+                  isvisible: isCustomerRSelected,
                 ),
+                CustomElementSelector(
+                  text: "اختر نوع الوصل",
+                  selectedElementText:
+                      widget.receipt.F_Recipt_Type.receiptTypeName,
+                  onTap: () => searchButtonSheetForReceiptType(
+                      key.currentContext!,
+                      receiptTypeList,
+                      onSelectreceiptTypeFunc),
+                ),
+                CustomButton("اضف صور الوصل", 200, takeReciptPicture),
+                AddImageToReceipt(receiptImageList, removeReciptPicture),
+                const SizedBox(height: 20),
+                CustomButton("اضف تفاصيل الوصل", 200, goToRecieveDetailsScreen),
+                CustomViewListForReceipts(widget.receipt.ReceiptDetailsList , deleteReciept),
+                const SizedBox(height: 20),
+                DatePickerWidget(
+                    arrivalDate: widget.receipt.F_Arrival_Time_D,
+                    leavingDate: widget.receipt.F_Leaving_Time_D,
+                    pickDate: pickDate),
+                CustomButton("حفظ الوصل", 200, saveReceipt),
+                const SizedBox(height: 100)
               ],
             ),
           ),

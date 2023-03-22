@@ -1,20 +1,24 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:sql_test/DataTypes/CrewMember.dart';
 import 'package:sql_test/DataTypes/Customer.dart';
 import 'package:sql_test/DataTypes/CustomerBranch.dart';
-import 'package:sql_test/StateManagement/UserData/UserData.dart';
 import 'package:sql_test/Utilities/Extentions.dart';
-
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import '../../../../../../DataTypes/ReceiptDetails.dart';
+import '../../../../../../DataTypes/ReceiptType.dart';
 import '../../../../../../DataTypes/User.dart';
 import '../../../../../../MainWidgets/CustomButton.dart';
 import '../../../../../../Utilities/Prefs.dart';
 import '../../../../../../Utilities/Strings.dart';
 import '../ReceiveScreen.dart';
+import '../src/ReceiveDetailsScreen.dart';
 
 abstract class ReceiveScreenController extends State<ReceiveScreen> {
   MobileScannerController cameraController =
@@ -23,17 +27,25 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
   bool isAddingEmployee = false,
       isSearchingForEmploy = false,
       canWeAddMoreEmp = true,
-      isCustomerSelected = false;
+      isCustomerSelected = false,
+      isCustomerRSelected = false;
   String empIdFromTextField = "";
   List<Customer> customerList = [];
   List<CustomerBranch> customerBranchList = [];
-  List<CustomerBranch> customerBranchList_R = [];
+  List<CustomerBranch> customerBranchListR = [];
+  final ImagePicker _picker = ImagePicker();
+  List<Uint8List> receiptImageList = [];
+  List<ReceiptType> receiptTypeList = [
+    ReceiptType(receiptTypeNumber: 0, receiptTypeName: 'تسليم'),
+    ReceiptType(receiptTypeNumber: 1, receiptTypeName: 'فرز'),
+    ReceiptType(receiptTypeNumber: 2, receiptTypeName: 'محصنة')
+  ];
 
   @override
   void initState() {
     super.initState();
+    _initFunction();
     _setCustomerList();
-    _setCrewMembers();
     _setCustomerBranches();
     _stopCameraAtStart();
   }
@@ -90,9 +102,39 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
       case "AddNote1":
         widget.receipt.F_Note1 = value;
         break;
+      case "F_Paper_No":
+        widget.receipt.F_Paper_No = value;
+        break;
       default:
     }
     widget.parsedFunction(widget.receipt);
+    setState(() {});
+  }
+
+  takeReciptPicture() async {
+    final XFile? pickedFile = await _picker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 40,
+      maxHeight: 600,
+    );
+    if (pickedFile == null) return;
+
+    Uint8List readAsString = await pickedFile.readAsBytes();
+
+    receiptImageList.add(readAsString);
+
+    setState(() {});
+  }
+
+  removeReciptPicture(int imageIndex) {
+    List<Uint8List> filter = [];
+    for (var i = 0; i < receiptImageList.length; i++) {
+      if (i != imageIndex) {
+        filter.add(receiptImageList[i]);
+      }
+    }
+
+    receiptImageList = filter;
     setState(() {});
   }
 
@@ -103,9 +145,9 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
   onSelectCustomerFunc(Customer customer, bool isDeliveredTo) {
     if (isDeliveredTo) {
       widget.receipt.F_Cust_R = customer;
-      isCustomerSelected = true;
+      isCustomerRSelected = true;
       widget.parsedFunction(widget.receipt);
-      customerBranchList_R = customer.CustomerBranches;
+      customerBranchListR = customer.CustomerBranches;
     } else {
       widget.receipt.F_Cust = customer;
       isCustomerSelected = true;
@@ -115,7 +157,8 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
     setState(() {});
   }
 
-  onSelectCustomerBranchFunc(CustomerBranch customerBranch , bool isDeliveredTo) {
+  onSelectCustomerBranchFunc(
+      CustomerBranch customerBranch, bool isDeliveredTo) {
     if (isDeliveredTo) {
       widget.receipt.F_Branch_Internal_R = customerBranch.F_Branch_Internal;
       widget.receipt.F_Branch_R = customerBranch;
@@ -125,6 +168,12 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
       widget.receipt.F_Branch_D = customerBranch;
       widget.parsedFunction(widget.receipt);
     }
+    setState(() {});
+  }
+
+  onSelectreceiptTypeFunc(ReceiptType receiptType) {
+    widget.receipt.F_Recipt_Type = receiptType;
+    widget.parsedFunction(widget.receipt);
     setState(() {});
   }
 
@@ -141,6 +190,133 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
     setState(() {});
   }
 
+  pickDate(bool isArriveTime) async {
+    Navigator.of(context).push(showPicker(
+      context: context,
+      value:
+          TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute),
+      onChange: (onTimeChanged) => _onTimeSelected(onTimeChanged, isArriveTime),
+    ));
+  }
+
+  _onTimeSelected(TimeOfDay timeParameter, isArrivingTime) {
+    String time = timeParameter.hourOfPeriod < 10
+        ? "0${timeParameter.hourOfPeriod}"
+        : timeParameter.hourOfPeriod.toString();
+
+    time +=
+        ":${timeParameter.minute < 10 ? "0${timeParameter.minute}" : timeParameter.minute == 0 ? "00" : timeParameter.minute}";
+    time += timeParameter.period.name;
+    if (isArrivingTime) {
+      widget.receipt.F_Arrival_Time_D = time;
+    } else {
+      widget.receipt.F_Leaving_Time_D = time;
+    }
+    widget.parsedFunction(widget.receipt);
+    setState(() {});
+  }
+
+  goToRecieveDetailsScreen() {
+    context.navigateTo(ReceiveDetailsScreen(
+        _addReceiptDetails,
+        widget.receipt.F_Recipt_No,
+        widget.receipt.ReceiptDetailsList.length + 1));
+    setState(() {});
+  }
+
+  saveReceipt() async {
+    if (_customAndCustomerRAndPaperNoCheck()) return;
+    if (_branchAndBranchRCheck()) return;
+    if (_receiptDetailsCheck()) return;
+    if (_receiptDateCheck()) return;
+
+    widget.receipt.Time_Save = DateTime.now().toString();
+    widget.receipt.imagesAsPDF = await _convertImagesToPDF();
+    widget.saveReceiptInJouerny(widget.receipt);
+    // ignore: use_build_context_synchronously
+    context.popUp();
+  }
+
+  bool _receiptDateCheck() {
+    bool check = false;
+    if (widget.receipt.F_Arrival_Time_D == null ||
+        widget.receipt.F_Leaving_Time_D == null) {
+      check = true;
+      context.snackBar(arrivalAndLeavingDateNotEntered, color: Colors.red);
+    }
+    return check;
+  }
+
+  deleteReciept(int index) {
+    List<ReceiptDetails> filter = [];
+    for (int i = 0; i < widget.receipt.ReceiptDetailsList.length; i++) {
+      if (i != index) {
+        filter.add(widget.receipt.ReceiptDetailsList[i]);
+      }
+    }
+
+    widget.receipt.ReceiptDetailsList = filter;
+    widget.parsedFunction(widget.receipt);
+    setState(() {});
+  }
+
+  bool _customAndCustomerRAndPaperNoCheck() {
+    bool check = false;
+
+    if (widget.receipt.F_Cust == null ||
+        widget.receipt.F_Paper_No == null ||
+        widget.receipt.F_Cust_R == null) {
+      debugPrint(widget.receipt.F_Cust?.toPrintableString());
+      debugPrint(widget.receipt.F_Paper_No);
+      debugPrint(widget.receipt.F_Cust_R?.toPrintableString());
+      check = true;
+      context.snackBar(customerAndPaperNoAndCustomerRNotEntered,
+          color: Colors.red);
+    }
+    return check;
+  }
+
+  bool _branchAndBranchRCheck() {
+    bool check = false;
+    if (widget.receipt.F_Branch_D == null ||
+        widget.receipt.F_Branch_R == null ||
+        receiptImageList.isEmpty) {
+      check = true;
+      context.snackBar(branchAndBranchRandImagesNotEntered, color: Colors.red);
+    }
+    return check;
+  }
+
+  bool _receiptDetailsCheck() {
+    bool check = false;
+    if (widget.receipt.ReceiptDetailsList.isEmpty) {
+      check = true;
+      context.snackBar(receiptDetailsNotEntered, color: Colors.red);
+    }
+    return check;
+  }
+
+  _initFunction() {}
+  _addReceiptDetails(ReceiptDetails receiptDetails) {
+    widget.receipt.ReceiptDetailsList.add(receiptDetails);
+    widget.parsedFunction(widget.receipt);
+    setState(() {});
+  }
+
+  Future<Uint8List> _convertImagesToPDF() {
+    pw.Document pdf = pw.Document();
+    pdf.addPage(pw.MultiPage(
+        pageFormat: PdfPageFormat.a6,
+        build: (pw.Context context) {
+          return [
+            for (var image in receiptImageList)
+              pw.Container(height: 481, child: pw.Image(pw.MemoryImage(image)))
+          ];
+        })); // Page
+
+    return pdf.save();
+  }
+
   _addEmpByCam(String empIdString, bool isCam) {
     isAddingEmployee = true;
     if (isCam) cameraController.stop();
@@ -154,7 +330,6 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
     }
     List<User> allUsers = User.fromJsonStringListToUserList(
         Prefs.getString(allUsersFromLocaleDataBase)!);
-    debugPrint(Prefs.getString(allUsersFromLocaleDataBase)!);
     for (User user in allUsers) {
       if (user.F_EmpID == empId) {
         bool doesThisEmpAddedBefore = false;
@@ -245,16 +420,9 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
       isCustomerSelected = true;
       customerBranchList = widget.receipt.F_Cust!.CustomerBranches;
     }
-  }
-
-  _setCrewMembers() {
-    User userData = context.read<UserCubit>().state!;
-    CrewMember crewLeader =
-        CrewMember(F_EmpID: userData.F_EmpID, F_EmpName: userData.F_EmpName);
-
-    if (widget.receipt.CrewIdList.isEmpty) {
-      widget.receipt.CrewIdList.add(crewLeader);
-      widget.parsedFunction(widget.receipt);
+    if (widget.receipt.F_Cust_R != null) {
+      isCustomerRSelected = true;
+      customerBranchList = widget.receipt.F_Cust_R!.CustomerBranches;
     }
   }
 

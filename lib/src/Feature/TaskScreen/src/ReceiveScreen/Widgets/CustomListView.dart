@@ -21,13 +21,13 @@ class CustomListView extends StatelessWidget {
             padding: const EdgeInsets.only(right: 10, bottom: 30),
             decoration: lightBlueAccent20percentageWithRadius10Decoration,
             child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: employees.length,
               itemBuilder: (context, index) {
                 String textString =
                     "${index + 1}) ${employees[index].F_EmpName}";
                 return Container(
-
                   margin: const EdgeInsets.all(5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

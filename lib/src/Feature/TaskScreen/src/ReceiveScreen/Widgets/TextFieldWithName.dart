@@ -6,8 +6,10 @@ import '../../../../../../Utilities/Style.dart';
 class TextFieldWithName extends StatelessWidget {
   final String text;
   final Function(String value) onTextChangeFunction;
+  final bool isNumber;
+   final TextEditingController? textEditingController;
   const TextFieldWithName(this.text,
-      {super.key, required this.onTextChangeFunction});
+      {super.key, required this.onTextChangeFunction , this.isNumber = false , this.textEditingController});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class TextFieldWithName extends StatelessWidget {
             text,
             style: size19BlackTextStyle,
           ),
-          CustomTextField(onTextChangeFunction, 250),
+          CustomTextField(onTextChangeFunction, 200 , isNumber: isNumber , textEditingController: textEditingController),
         ],
       ),
     );

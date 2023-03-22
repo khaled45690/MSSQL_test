@@ -37,11 +37,11 @@ const TextStyle itemViewerPriceTextStyle = TextStyle(
     fontWeight: FontWeight.w600,
     letterSpacing: 0.6,
     color: mainBlue);
-const TextStyle categoryTextStyle = TextStyle(
+const TextStyle moneyWarningTextStyle = TextStyle(
     fontSize: 35,
     fontWeight: FontWeight.w600,
     letterSpacing: 1.5,
-    color: Colors.white);
+    color: mainBlue);
 const TextStyle favoriteDescriptionTextStyle = TextStyle(
     fontSize: 22,
     fontWeight: FontWeight.w500,
@@ -232,4 +232,13 @@ BoxDecoration taskContentDecoration = BoxDecoration(
     ),
   ],
   color: mainBlue.withOpacity(0.4),
+);
+
+
+BoxDecoration decorationWithBorder = BoxDecoration(
+  borderRadius: const BorderRadius.all(Radius.circular(10)),
+  border: Border.all(
+    color: Colors.black,
+    width: 1,
+  ),
 );

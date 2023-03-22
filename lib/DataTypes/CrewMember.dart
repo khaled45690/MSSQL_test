@@ -13,7 +13,7 @@ class CrewMember {
 
   factory CrewMember.fromJson(Map json) {
     return CrewMember(
-      F_EmpID: json['F_CURRANCY_ID'],
+      F_EmpID: json['F_EmpID'],
       F_EmpName: json['F_EmpName'],
     );
   }
@@ -43,6 +43,15 @@ class CrewMember {
   static List<CrewMember> fromJsonStringListToCrewMemberList(
       String ListOfJsonString) {
     List listOfJson = jsonDecode(ListOfJsonString);
+    List<CrewMember> listOfUsers = [];
+
+    for (var element in listOfJson) {
+        listOfUsers.add(CrewMember.fromJson(element));
+    }
+    return listOfUsers;
+  }
+    static List<CrewMember> fromJsonListToCrewMemberList(
+      List listOfJson) {
     List<CrewMember> listOfUsers = [];
 
     for (var element in listOfJson) {

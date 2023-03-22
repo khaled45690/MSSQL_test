@@ -8,8 +8,9 @@ class CustomTextField extends StatelessWidget {
   final bool isNumber;
   final double width;
   final Function(String value) onChange;
+  final TextEditingController? textEditingController;
 
-  const CustomTextField(this.onChange, this.width , {super.key , this.isNumber = false});
+  const CustomTextField(this.onChange, this.width , {super.key , this.isNumber = false , this.textEditingController});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +20,7 @@ class CustomTextField extends StatelessWidget {
         width: width,
         height: 35,
         child: TextField(
-
-
+          controller: textEditingController,
             cursorColor: mainBlue,
             onChanged: (value) => onChange(value),
             showCursor: true,
@@ -28,7 +28,6 @@ class CustomTextField extends StatelessWidget {
             textAlignVertical: TextAlignVertical.bottom,
             keyboardType: isNumber ? TextInputType.number : TextInputType.text,
             decoration: InputDecoration(
-              
               focusedBorder:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(10) ,borderSide: BorderSide(width: 1.5, color: mainBlue)),
               filled: true,

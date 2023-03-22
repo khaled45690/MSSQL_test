@@ -11,7 +11,7 @@ class Journey {
   String? F_Edate;
   String? F_Etime;
   bool isFinished;
-  List<Receipt> receiptList = [];
+  List<Receipt> receiptList;
   Journey({
     required this.F_Id,
     required this.F_Sdate,
@@ -20,6 +20,7 @@ class Journey {
     this.F_Edate,
     this.F_Etime,
     required this.isFinished,
+    required this.receiptList,
   });
 
   factory Journey.fromJson(Map json) {
@@ -31,6 +32,9 @@ class Journey {
       F_Edate: json['F_Edate'],
       F_Etime: json['F_Etime'],
       isFinished: json['F_Edate'] == null ? false : true,
+      receiptList: json['receiptList'] == null
+          ? []
+          : Receipt.fromJsonListToReceiptList(json['receiptList']),
     );
   }
 
@@ -42,6 +46,7 @@ class Journey {
       "F_Emp_Id": F_Emp_Id,
       "F_Edate": F_Edate,
       "F_Etime": F_Etime,
+      "receiptList": Receipt.fromReceiptListToJsonList(receiptList),
     };
   }
 
@@ -53,6 +58,7 @@ class Journey {
       "F_Emp_Id": F_Emp_Id,
       "F_Edate": F_Edate,
       "F_Etime": F_Etime,
+      "receiptList": Receipt.fromReceiptListToJsonList(receiptList),
     });
   }
 
@@ -65,6 +71,7 @@ class Journey {
         " F_Edate: $F_Edate,"
         " F_Etime: $F_Etime"
         " isFinished: $isFinished"
+        " receiptList: ${Receipt.fromReceiptListtoPrintableString(receiptList)}"
         "}";
   }
 

@@ -62,6 +62,17 @@ class Customer {
     return listOfUsers;
   }
 
+
+    static List<Customer> fromJsonListToCustomerList(
+       List listOfJson) {
+    List<Customer> listOfUsers = [];
+
+    for (var element in listOfJson) {
+        listOfUsers.add(Customer.fromJson(element));
+    }
+    return listOfUsers;
+  }
+
   static fromCustomerListToJsonList(List<Customer> ListOfCustomer) {
     List listOfUsers = [];
 

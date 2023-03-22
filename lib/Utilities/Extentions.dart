@@ -37,6 +37,12 @@ extension customContext on BuildContext {
     });
   }
 
+  popUp() {
+    Navigator.pop(
+      this,
+    );
+  }
+
   popupAndNavigateToWithName(String destinationName) {
     Navigator.pop(this);
     Navigator.pushNamed(

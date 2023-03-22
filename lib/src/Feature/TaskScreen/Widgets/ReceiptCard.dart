@@ -8,14 +8,14 @@ import '../../../../Utilities/Style.dart';
 class ReceiptCard extends StatelessWidget {
   final Receipt receipt;
   final bool isDone;
-  final Function(Receipt receiptParameter) parsedFunction;
+  final Function(Receipt receiptParameter) parsedFunction , saveReceiptInJouerny;
   const ReceiptCard(this.receipt, this.isDone,
-      {super.key, required this.parsedFunction});
+      {super.key, required this.parsedFunction ,required this.saveReceiptInJouerny});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.navigateTo(ReceiveScreen(receipt , parsedFunction)),
+      onTap: () => isDone ? null : context.navigateTo(ReceiveScreen(receipt , parsedFunction, saveReceiptInJouerny)),
       child: Container(
         padding: const EdgeInsets.all(5),
         margin: const EdgeInsets.only(bottom: 20),
@@ -24,7 +24,7 @@ class ReceiptCard extends StatelessWidget {
         child: Column(
           children: [
             Text(
-               "وصل ${receipt.F_Recipt_No?? "فارغ"}",
+               "وصل ${receipt.F_Paper_No?? "فارغ"}",
               style: size22BlackTextStyle,
             ),
             const SizedBox(

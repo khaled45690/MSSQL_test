@@ -6,11 +6,13 @@ import '../../../../DataTypes/Receipt.dart';
 
 class TaskList extends StatelessWidget {
   final List<Receipt> reciepts;
-  final Function(Receipt receiptParameter) parsedFunction;
-  const TaskList(this.reciepts, this.parsedFunction ,{super.key});
+  final Function(Receipt receiptParameter) parsedFunction, saveReceiptInJouerny;
+  const TaskList(this.reciepts, this.parsedFunction, this.saveReceiptInJouerny,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(reciepts.length.toString());
     return SizedBox(
       width: context.width() - 40,
       child: ListView.builder(
@@ -18,7 +20,12 @@ class TaskList extends StatelessWidget {
         shrinkWrap: true,
         itemCount: reciepts.length,
         itemBuilder: (BuildContext context, int i) {
-          return ReceiptCard(reciepts[i], true ,parsedFunction: parsedFunction,);
+          return ReceiptCard(
+            reciepts[i],
+            true,
+            parsedFunction: parsedFunction,
+            saveReceiptInJouerny: saveReceiptInJouerny,
+          );
         },
       ),
     );

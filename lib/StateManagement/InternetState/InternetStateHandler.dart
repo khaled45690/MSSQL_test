@@ -32,7 +32,7 @@ class InternetConnectionCubit extends Cubit<bool> {
 
   setConnection(bool internetConnectionState) {
     isConnected = internetConnectionState;
-    isConnectedToInternet.sink.add(internetConnectionState);
+    isConnectedToInternet.sink.add(internetConnectionState); 
     emit(isConnected);
   }
 

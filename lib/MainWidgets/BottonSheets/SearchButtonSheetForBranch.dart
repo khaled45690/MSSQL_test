@@ -4,8 +4,9 @@ import 'package:sql_test/DataTypes/CustomerBranch.dart';
 import 'package:sql_test/Utilities/Extentions.dart';
 import 'package:sql_test/Utilities/colors.dart';
 
-import '../Utilities/Style.dart';
-import 'SearchTextField.dart';
+import '../../Utilities/Style.dart';
+import '../SearchTextField.dart';
+
 
 Map<int, Color> color = {
   50: Colors.white,

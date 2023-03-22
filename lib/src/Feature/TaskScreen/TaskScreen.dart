@@ -22,27 +22,29 @@ class _TaskScreenState extends TaskScreenController {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(backgroundColor: mainBlue),
-      body: Directionality(
-        textDirection: TextDirection.rtl,
-        child: SizedBox(
-          width: context.width(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 50),
-              ReceiveAndDeliverRadioGroup(
-                  radioGroupValue: radioGroupValue,
-                  onRadioChangeCallback: onRadioChangeCallback),
-              const SizedBox(height: 30),
-              TaskList(widget.journey.receiptList, saveTempReceipt),
-              isAddingNewReceipt
-                  ? ReceiptCard(receipt, false, parsedFunction: saveTempReceipt)
-                  : const SizedBox(),
-              const SizedBox(height: 30),
-              CustomButton("اضف وصل", 250, addNewReceipt,
-                  isEnabled: !isAddingNewReceipt),
-
-            ],
+      body: SingleChildScrollView(
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: SizedBox(
+            width: context.width(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 50),
+                ReceiveAndDeliverRadioGroup(
+                    radioGroupValue: radioGroupValue,
+                    onRadioChangeCallback: onRadioChangeCallback),
+                const SizedBox(height: 30),
+                TaskList(widget.journey.receiptList, saveTempReceipt, saveReceiptInJouerny),
+                isAddingNewReceipt
+                    ? ReceiptCard(receipt, false, parsedFunction: saveTempReceipt , saveReceiptInJouerny: saveReceiptInJouerny,)
+                    : const SizedBox(),
+                const SizedBox(height: 30),
+                CustomButton("اضف وصل", 250, addNewReceipt,
+                    isEnabled: !isAddingNewReceipt),
+      
+              ],
+            ),
           ),
         ),
       ),

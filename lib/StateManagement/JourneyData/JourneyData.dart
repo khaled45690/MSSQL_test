@@ -30,7 +30,7 @@ class JourneyCubit extends Cubit<List<Journey>> {
     emit([]);
     _journeyData = journeyData;
     emit(_journeyData);
-    Prefs.setString(userJouernies, jsonEncode(_journeyData));
+    Prefs.setString(userJouernies, Journey.fromJourneyListToJsonListString(_journeyData));
   }
 
   List<Journey> getJourneyDataFromPref() {
