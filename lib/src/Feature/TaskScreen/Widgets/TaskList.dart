@@ -5,26 +5,25 @@ import 'package:sql_test/src/Feature/TaskScreen/Widgets/ReceiptCard.dart';
 import '../../../../DataTypes/Receipt.dart';
 
 class TaskList extends StatelessWidget {
-  final List<Receipt> reciepts;
-  final Function(Receipt receiptParameter) parsedFunction, saveReceiptInJouerny;
-  const TaskList(this.reciepts, this.parsedFunction, this.saveReceiptInJouerny,
+  final List<Receipt> receipts;
+  final Function(Receipt receiptParameter , int receiptIndex) parsedFunction;
+  const TaskList(this.receipts, this.parsedFunction,
       {super.key});
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(reciepts.length.toString());
     return SizedBox(
       width: context.width() - 40,
       child: ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemCount: reciepts.length,
+        itemCount: receipts.length,
         itemBuilder: (BuildContext context, int i) {
           return ReceiptCard(
-            reciepts[i],
+            receipts[i],
             true,
-            parsedFunction: parsedFunction,
-            saveReceiptInJouerny: saveReceiptInJouerny,
+            parsedFunction: (receipt) => parsedFunction(receipt , i),
+            saveReceiptInJouerny: (receipt) => parsedFunction(receipt , i),
           );
         },
       ),

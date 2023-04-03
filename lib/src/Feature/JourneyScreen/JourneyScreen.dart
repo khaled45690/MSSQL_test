@@ -32,7 +32,7 @@ class _JourneyScreenState extends JourneyScreenController {
                       isEndEnabled: isEndEnabled,
                       endTheJourney: endTheJourney),
                   const SizedBox(height: 30),
-                  JourneiesList(reOpenLastJourney: reOpenLastJourney),
+                  JourneiesList(reOpenLastJourney: reOpenLastJourney , updateDataBase: updateDataBase),
                   const SizedBox(height: 100),
                 ],
               ),

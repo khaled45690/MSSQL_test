@@ -27,6 +27,10 @@ const String branchAndBranchRandImagesNotEntered = "من فضلك تاكد من 
 const String receiptDetailsNotEntered = "من فضلك تاكد من على الاقل بيانة واحدة للوصل";
 const String pleaseEnterNumber= "من فضلك ادخل  ارقام فقد";
 const String pleaseEnterDouble= "من فضلك ادخل  ارقام عشرية فقد";
+const String pleaseConnectToInternet= "من فضلك قم بالتوصيل بالانترنت";
+const String receiptDeliverDataMissing= "من فضلك قم بالتاكد من ادخال تاريخ الوصول او تاريخ المغادرة او الوصلات التى سيتم تسليمها";
+const String receiptDeliverImageMissing= "من فضلك قم بالتاكد صور للوصلات الممضية";
+const String receiptDeliverCanBeDeliverd= "يمكنك التسليم الان";
 
 ////////////////////////////////////////////////////////////////--------------------------
 const String driversFromLocaleDataBase = "DriversData";

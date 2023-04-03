@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sql_conn/sql_conn.dart';
 import 'package:sql_test/DataTypes/CrewMember.dart';
 import 'package:sql_test/DataTypes/Journey.dart';
 import 'package:sql_test/StateManagement/JourneyData/JourneyData.dart';
@@ -15,6 +16,8 @@ abstract class TaskScreenController extends State<TaskScreen> {
   @override
   void initState() {
     super.initState();
+
+    // saveReceiptInJouerny(null);
   }
 
   bool isAddingNewReceipt = false;
@@ -28,13 +31,24 @@ abstract class TaskScreenController extends State<TaskScreen> {
   }
 
   saveReceiptInJouerny(Receipt receiptParameter) {
-    widget.journey.receiptList.add(receiptParameter);
+      widget.journey.receiptList.add(receiptParameter);
     List<Journey> journeyList = context.read<JourneyCubit>().state;
     journeyList[journeyList.length - 1] = widget.journey;
     context.read<JourneyCubit>().setjourneyDataWithSharedPrefrence(journeyList);
     isAddingNewReceipt = false;
     setState(() {});
     receipt = Receipt.fromJson({});
+
+    if(SqlConn.isConnected) widget.updateDataBase();
+  }
+
+  editReceiptInJouerny(Receipt receiptParameter , int receiptIndex) {
+      widget.journey.receiptList[receiptIndex] = receiptParameter ;
+    List<Journey> journeyList = context.read<JourneyCubit>().state;
+    journeyList[journeyList.length - 1] = widget.journey;
+    context.read<JourneyCubit>().setjourneyDataWithSharedPrefrence(journeyList);
+    setState(() {});
+    if(SqlConn.isConnected) widget.updateDataBase();
   }
 
   addNewReceipt() {

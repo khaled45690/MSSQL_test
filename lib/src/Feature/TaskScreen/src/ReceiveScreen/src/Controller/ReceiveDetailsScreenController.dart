@@ -15,6 +15,7 @@ abstract class ReceiveDetailsScreenController
   late List<Currency> currencyList;
   bool isCoins = false;
   TextEditingController sealTotextEditingController = TextEditingController();
+ 
   @override
   void initState() {
     super.initState();
@@ -23,6 +24,7 @@ abstract class ReceiveDetailsScreenController
     currencyList = Currency.fromJsonStringListToCurrencyList(currencyData);
     receiptDetails.F_Recipt_No = widget.receiptNo;
     receiptDetails.F_RowNo = widget.receiptRowNo;
+
   }
 
   bool isAddingNewReceipt = false;
@@ -57,6 +59,7 @@ abstract class ReceiveDetailsScreenController
       case "F_Seal_No_From":
         sealTotextEditingController.text = value;
         receiptDetails.F_Seal_No_From = value;
+        receiptDetails.F_Seal_No_To = value;
         break;
       case "F_Seal_No_To":
         receiptDetails.F_Seal_No_To = value;
@@ -155,12 +158,10 @@ abstract class ReceiveDetailsScreenController
   bool _handleCoinInfoBeforeSave() {
     bool check = false;
     if (receiptDetails.F_Bags_No == 0 ||
-        receiptDetails.F_BankNote_Class == null ||
-        receiptDetails.F_total_val == 0) {
+        receiptDetails.F_BankNote_Class == null) {
       check = true;
       context.snackBar(noBagsOrBankClassOrEGPNotEntered, color: Colors.red);
     }
-    receiptDetails.F_EGP_Amount = receiptDetails.F_total_val.toDouble();
     return check;
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sql_test/DataTypes/Journey.dart';
 import 'package:sql_test/Utilities/Extentions.dart';
+import 'package:sql_test/src/Feature/TaskScreen/src/DeliverTaskScreen/DeliverTaskScreen.dart';
 
 import '../../../MainWidgets/CustomButton.dart';
 import '../../../Utilities/Colors.dart';
@@ -11,7 +12,8 @@ import 'Widgets/TaskList.dart';
 
 class TaskScreen extends StatefulWidget {
   final Journey journey;
-  const TaskScreen(this.journey, {super.key});
+  final Function() updateDataBase;
+  const TaskScreen(this.journey, this.updateDataBase, {super.key});
 
   @override
   State<TaskScreen> createState() => _TaskScreenState();
@@ -35,14 +37,24 @@ class _TaskScreenState extends TaskScreenController {
                     radioGroupValue: radioGroupValue,
                     onRadioChangeCallback: onRadioChangeCallback),
                 const SizedBox(height: 30),
-                TaskList(widget.journey.receiptList, saveTempReceipt, saveReceiptInJouerny),
-                isAddingNewReceipt
-                    ? ReceiptCard(receipt, false, parsedFunction: saveTempReceipt , saveReceiptInJouerny: saveReceiptInJouerny,)
-                    : const SizedBox(),
-                const SizedBox(height: 30),
-                CustomButton("اضف وصل", 250, addNewReceipt,
-                    isEnabled: !isAddingNewReceipt),
-      
+                radioGroupValue == "Receive"
+                    ? Column(
+                        children: [
+                          TaskList(widget.journey.receiptList, editReceiptInJouerny),
+                          isAddingNewReceipt
+                              ? ReceiptCard(
+                                  receipt,
+                                  false,
+                                  parsedFunction: saveTempReceipt,
+                                  saveReceiptInJouerny: saveReceiptInJouerny,
+                                )
+                              : const SizedBox(),
+                          const SizedBox(height: 30),
+                          CustomButton("اضف وصل", 250, addNewReceipt,
+                              isEnabled: !isAddingNewReceipt),
+                        ],
+                      )
+                    : DeliverTaskScreen(widget.journey),
               ],
             ),
           ),

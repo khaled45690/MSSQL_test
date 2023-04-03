@@ -45,7 +45,7 @@ class Receipt {
   List<CrewMember> CrewIdList;
   List<ReceiptDetails> ReceiptDetailsList;
   Uint8List? imagesAsPDF;
-// ReceiptType(receiptTypeNumber: 0, receiptTypeName: "تسليم")
+  bool isSavedInDatabase;
   Receipt({
     required this.F_Id,
     required this.F_Recipt_No,
@@ -77,6 +77,7 @@ class Receipt {
     required this.F_Recipt_Type,
     required this.CrewIdList,
     required this.ReceiptDetailsList,
+    required this.isSavedInDatabase,
     this.imagesAsPDF,
   });
   factory Receipt.fromJson(Map json) {
@@ -126,6 +127,7 @@ class Receipt {
       imagesAsPDF: json['imagesAsPDF'] == null
           ? null
           : Uint8List.fromList(json['imagesAsPDF'].cast<int>()),
+      isSavedInDatabase: json['isSavedInDatabase']?? false,
     );
   }
 
@@ -163,6 +165,7 @@ class Receipt {
       "ReceiptDetailsList":
           ReceiptDetails.fromReceiptDetailsListToJsonList(ReceiptDetailsList),
       "imagesAsPDF": imagesAsPDF,
+      "isSavedInDatabase": isSavedInDatabase,
     };
   }
 
@@ -200,6 +203,7 @@ class Receipt {
       "ReceiptDetailsList":
           ReceiptDetails.fromReceiptDetailsListToJsonList(ReceiptDetailsList),
       "imagesAsPDF": imagesAsPDF,
+      "isSavedInDatabase": isSavedInDatabase,
     });
   }
 
@@ -236,6 +240,7 @@ class Receipt {
         "CrewIdList: ${CrewMember.fromCrewMemberListtoPrintableString(CrewIdList)},"
         "ReceiptDetailsList: ${ReceiptDetails.fromReceiptDetailsListtoPrintableString(ReceiptDetailsList)},"
         "imagesAsPDF: $imagesAsPDF,"
+        "isSavedInDatabase: $isSavedInDatabase"
         "}";
   }
 

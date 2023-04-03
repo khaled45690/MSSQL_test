@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
+import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -11,6 +12,7 @@ import 'package:sql_test/DataTypes/CustomerBranch.dart';
 import 'package:sql_test/Utilities/Extentions.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:sql_test/Utilities/VariableCodes.dart';
 import '../../../../../../DataTypes/ReceiptDetails.dart';
 import '../../../../../../DataTypes/ReceiptType.dart';
 import '../../../../../../DataTypes/User.dart';
@@ -40,14 +42,14 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
     ReceiptType(receiptTypeNumber: 1, receiptTypeName: 'فرز'),
     ReceiptType(receiptTypeNumber: 2, receiptTypeName: 'محصنة')
   ];
-
+  TextEditingController receiptNOController = TextEditingController();
   @override
   void initState() {
     super.initState();
-    _initFunction();
     _setCustomerList();
     _setCustomerBranches();
     _stopCameraAtStart();
+    receiptNOController.text = widget.receipt.F_Paper_No?? '';
   }
 
   addingEmployeeButton() {
@@ -114,7 +116,7 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
   takeReciptPicture() async {
     final XFile? pickedFile = await _picker.pickImage(
       source: ImageSource.camera,
-      imageQuality: 40,
+      imageQuality: 70,
       maxHeight: 600,
     );
     if (pickedFile == null) return;
@@ -131,7 +133,7 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
     for (var i = 0; i < receiptImageList.length; i++) {
       if (i != imageIndex) {
         filter.add(receiptImageList[i]);
-      }
+      } else if (i == imageIndex) {}
     }
 
     receiptImageList = filter;
@@ -193,28 +195,11 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
   pickDate(bool isArriveTime) async {
     Navigator.of(context).push(showPicker(
       context: context,
-      value:
-          TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute),
+      value:Time(hour: DateTime.now().hour, minute: DateTime.now().minute),
       onChange: (onTimeChanged) => _onTimeSelected(onTimeChanged, isArriveTime),
     ));
   }
 
-  _onTimeSelected(TimeOfDay timeParameter, isArrivingTime) {
-    String time = timeParameter.hourOfPeriod < 10
-        ? "0${timeParameter.hourOfPeriod}"
-        : timeParameter.hourOfPeriod.toString();
-
-    time +=
-        ":${timeParameter.minute < 10 ? "0${timeParameter.minute}" : timeParameter.minute == 0 ? "00" : timeParameter.minute}";
-    time += timeParameter.period.name;
-    if (isArrivingTime) {
-      widget.receipt.F_Arrival_Time_D = time;
-    } else {
-      widget.receipt.F_Leaving_Time_D = time;
-    }
-    widget.parsedFunction(widget.receipt);
-    setState(() {});
-  }
 
   goToRecieveDetailsScreen() {
     context.navigateTo(ReceiveDetailsScreen(
@@ -231,7 +216,7 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
     if (_receiptDateCheck()) return;
 
     widget.receipt.Time_Save = DateTime.now().toString();
-    widget.receipt.imagesAsPDF = await _convertImagesToPDF();
+     if(receiptImageList.isNotEmpty) widget.receipt.imagesAsPDF = await _convertImagesToPDF();
     widget.saveReceiptInJouerny(widget.receipt);
     // ignore: use_build_context_synchronously
     context.popUp();
@@ -252,13 +237,38 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
     for (int i = 0; i < widget.receipt.ReceiptDetailsList.length; i++) {
       if (i != index) {
         filter.add(widget.receipt.ReceiptDetailsList[i]);
+      } else if (i == index) {
+        if (widget.receipt.ReceiptDetailsList[i].F_Currency_Type ==
+            LocalCurrency) {
+          widget.receipt.F_Local_Tot -=
+              widget.receipt.ReceiptDetailsList[i].F_EGP_Amount;
+        } else if (widget.receipt.ReceiptDetailsList[i].F_Currency_Type ==
+            ForeignCurrency) {
+          widget.receipt.F_Global_Tot -=
+              widget.receipt.ReceiptDetailsList[i].F_total_val;
+        }
+        widget.receipt.F_totalAmount_EGP -=
+            widget.receipt.ReceiptDetailsList[i].F_EGP_Amount;
+        widget.parsedFunction(widget.receipt);
       }
     }
-
     widget.receipt.ReceiptDetailsList = filter;
     widget.parsedFunction(widget.receipt);
     setState(() {});
   }
+
+  ///////////////////////////////////////////////////////////////////////////
+  //                                                                       //
+  //                                                                       //
+  //                                                                       //
+  //  the seperator between the Main function and their helpers functions  //
+  //                                                                       //
+  //                                                                       //
+  //                                                                       //
+  ///////////////////////////////////////////////////////////////////////////
+  
+
+
 
   bool _customAndCustomerRAndPaperNoCheck() {
     bool check = false;
@@ -266,9 +276,6 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
     if (widget.receipt.F_Cust == null ||
         widget.receipt.F_Paper_No == null ||
         widget.receipt.F_Cust_R == null) {
-      debugPrint(widget.receipt.F_Cust?.toPrintableString());
-      debugPrint(widget.receipt.F_Paper_No);
-      debugPrint(widget.receipt.F_Cust_R?.toPrintableString());
       check = true;
       context.snackBar(customerAndPaperNoAndCustomerRNotEntered,
           color: Colors.red);
@@ -278,6 +285,7 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
 
   bool _branchAndBranchRCheck() {
     bool check = false;
+     if (widget.isEdit) return check;
     if (widget.receipt.F_Branch_D == null ||
         widget.receipt.F_Branch_R == null ||
         receiptImageList.isEmpty) {
@@ -296,14 +304,19 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
     return check;
   }
 
-  _initFunction() {}
   _addReceiptDetails(ReceiptDetails receiptDetails) {
     widget.receipt.ReceiptDetailsList.add(receiptDetails);
+    if (receiptDetails.F_Currency_Type == LocalCurrency) {
+      widget.receipt.F_Local_Tot += receiptDetails.F_EGP_Amount;
+    } else if (receiptDetails.F_Currency_Type == ForeignCurrency) {
+      widget.receipt.F_Global_Tot += receiptDetails.F_total_val;
+    }
+    widget.receipt.F_totalAmount_EGP += receiptDetails.F_EGP_Amount;
     widget.parsedFunction(widget.receipt);
     setState(() {});
   }
 
-  Future<Uint8List> _convertImagesToPDF() {
+  Future<Uint8List> _convertImagesToPDF() async {
     pw.Document pdf = pw.Document();
     pdf.addPage(pw.MultiPage(
         pageFormat: PdfPageFormat.a6,
@@ -313,8 +326,7 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
               pw.Container(height: 481, child: pw.Image(pw.MemoryImage(image)))
           ];
         })); // Page
-
-    return pdf.save();
+    return await pdf.save();
   }
 
   _addEmpByCam(String empIdString, bool isCam) {
@@ -428,5 +440,23 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
 
   _stopCameraAtStart() {
     Timer(const Duration(milliseconds: 500), () => {cameraController.stop()});
+  }
+
+  
+  _onTimeSelected(Time timeParameter, isArrivingTime) {
+    String time = timeParameter.hourOfPeriod < 10
+        ? "0${timeParameter.hourOfPeriod}"
+        : timeParameter.hourOfPeriod.toString();
+
+    time +=
+        ":${timeParameter.minute < 10 ? "0${timeParameter.minute}" : timeParameter.minute == 0 ? "00" : timeParameter.minute}";
+    time += timeParameter.period.name;
+    if (isArrivingTime) {
+      widget.receipt.F_Arrival_Time_D = time;
+    } else {
+      widget.receipt.F_Leaving_Time_D = time;
+    }
+    widget.parsedFunction(widget.receipt);
+    setState(() {});
   }
 }

@@ -32,7 +32,7 @@ class InternetConnectionCubit extends Cubit<bool> {
 
   setConnection(bool internetConnectionState) {
     isConnected = internetConnectionState;
-    isConnectedToInternet.sink.add(internetConnectionState); 
+    isConnectedToInternet.sink.add(internetConnectionState);
     emit(isConnected);
   }
 
@@ -66,12 +66,14 @@ class InternetConnectionCubit extends Cubit<bool> {
     );
   }
 
-  _connected() {
+  _connected() async {
     debugPrint("Connected");
     setConnection(true);
     _updateUsers();
     _updateCustomers();
     _updateCurrency();
+
+ 
   }
 
   _disconnected() {
@@ -119,8 +121,8 @@ class InternetConnectionCubit extends Cubit<bool> {
   }
 
   _updateCurrency() async {
-    String currencyData =
-        await SqlConn.readData("SELECT F_CURRANCY_ID , F_CURRANCY_NAM from dbo.T_CURRANCY ORDER BY F_CURRANCY_ID ASC");
+    String currencyData = await SqlConn.readData(
+        "SELECT F_CURRANCY_ID , F_CURRANCY_NAM from dbo.T_CURRANCY ORDER BY F_CURRANCY_ID ASC");
     List<Currency> currency =
         Currency.fromJsonStringListToCurrencyList(currencyData);
 
@@ -128,9 +130,9 @@ class InternetConnectionCubit extends Cubit<bool> {
         currencyInfo, Currency.fromCurrencyListToJsonListString(currency));
   }
 
-    _updateBank() async {
-    String currencyData =
-        await SqlConn.readData("SELECT F_CURRANCY_ID , F_CURRANCY_NAM from dbo.T_CURRANCY ORDER BY F_CURRANCY_ID ASC");
+  _updateBank() async {
+    String currencyData = await SqlConn.readData(
+        "SELECT F_CURRANCY_ID , F_CURRANCY_NAM from dbo.T_CURRANCY ORDER BY F_CURRANCY_ID ASC");
     List<Currency> currency =
         Currency.fromJsonStringListToCurrencyList(currencyData);
 

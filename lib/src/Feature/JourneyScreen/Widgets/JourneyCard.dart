@@ -10,13 +10,14 @@ import '../../TaskScreen/TaskScreen.dart';
 class JourneyCard extends StatelessWidget {
   final Journey journey;
   final Function()? reOpenLastJourney;
-  const JourneyCard(this.journey, this.reOpenLastJourney, {super.key});
+  final Function() updateDataBase;
+  const JourneyCard(this.journey, this.reOpenLastJourney, this.updateDataBase,{super.key});
 
   @override
   Widget build(BuildContext context) {
     DateTime startTime = DateTime.parse(journey.F_Sdate);
     return InkWell(
-      onTap: () => context.navigateTo(TaskScreen(journey)),
+      onTap: () => context.navigateTo(TaskScreen(journey , updateDataBase)),
       child: Container(
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.only(bottom: 30),

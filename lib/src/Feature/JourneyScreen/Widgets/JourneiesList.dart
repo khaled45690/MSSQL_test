@@ -7,7 +7,8 @@ import 'JourneyCard.dart';
 
 class JourneiesList extends StatelessWidget {
   final Function() reOpenLastJourney;
-  const JourneiesList({super.key, required this.reOpenLastJourney});
+  final Function() updateDataBase;
+  const JourneiesList({super.key, required this.reOpenLastJourney , required this.updateDataBase});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class JourneiesList extends StatelessWidget {
               context.watch<JourneyCubit>().state.length - 1 == i &&
                   context.watch<JourneyCubit>().state[i].isFinished;
           return JourneyCard(context.watch<JourneyCubit>().state[i],
-              isLastJourneyClosed ? reOpenLastJourney : null);
+              isLastJourneyClosed ? reOpenLastJourney : null , updateDataBase);
         },
       ),
     );

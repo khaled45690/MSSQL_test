@@ -19,7 +19,8 @@ import 'Widgets/TextFieldWithName.dart';
 class ReceiveScreen extends StatefulWidget {
   final Receipt receipt;
   final Function(Receipt receiptParameter) parsedFunction , saveReceiptInJouerny;
-  const ReceiveScreen(this.receipt, this.parsedFunction, this.saveReceiptInJouerny,{super.key});
+  final bool isEdit;
+  const ReceiveScreen(this.receipt, this.parsedFunction, this.saveReceiptInJouerny,this.isEdit,{super.key});
 
   @override
   State<ReceiveScreen> createState() => _ReceiveScreenState();
@@ -73,7 +74,7 @@ class _ReceiveScreenState extends ReceiveScreenController {
                 TextFieldWithName("رقم الايصال",
                     onTextChangeFunction: (String value) =>
                         onTextChange("F_Paper_No", value),
-                    isNumber: true),
+                    isNumber: true, textEditingController: receiptNOController ),
                 TextFieldWithName("بيـــــان",
                     onTextChangeFunction: (String value) =>
                         onTextChange("AddNote", value)),

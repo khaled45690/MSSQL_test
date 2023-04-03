@@ -15,7 +15,7 @@ class ReceiptCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => isDone ? null : context.navigateTo(ReceiveScreen(receipt , parsedFunction, saveReceiptInJouerny)),
+      onTap: () => context.navigateTo(ReceiveScreen(receipt , parsedFunction, saveReceiptInJouerny ,isDone)),
       child: Container(
         padding: const EdgeInsets.all(5),
         margin: const EdgeInsets.only(bottom: 20),
