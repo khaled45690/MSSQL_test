@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sql_test/Utilities/Extentions.dart';
 
+import '../../../../../../MainWidgets/ImageViewer.dart';
+
 class AddImageToReceipt extends StatelessWidget {
   final List<Uint8List> reciptImageList;
   final Function(int imageIndex) removeReciptPicture;
@@ -21,13 +23,16 @@ class AddImageToReceipt extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return Stack(
               children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 10, top: 5),
-                  width: 300,
-                  height: 400,
-                  child: Image.memory(
-                    reciptImageList[index],
-                    fit: BoxFit.fill,
+                InkWell(
+                  onTap: ()=> context.navigateTo(ImageViewer(reciptImageList[index])),
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 10, top: 5),
+                    width: 300,
+                    height: 400,
+                    child: Image.memory(
+                      reciptImageList[index],
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
                 Positioned(

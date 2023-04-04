@@ -43,13 +43,22 @@ abstract class DeliverTaskController extends State<DeliverTaskScreen> {
       isSearchingForEmploy = false,
       canWeAddMoreEmp = true;
   double height = 0;
-  late StreamSubscription<bool> internetConnectionListenerForRetrevingData;
-  late StreamSubscription<bool> internetConnectionListener;
+  StreamSubscription<bool>? internetConnectionListenerForRetrevingData;
+  StreamSubscription<bool>? internetConnectionListener;
   @override
   void initState() {
     super.initState();
     _setCustomerList();
     _setCrewlist();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (internetConnectionListenerForRetrevingData != null)
+      internetConnectionListenerForRetrevingData!.cancel();
+    if (internetConnectionListener != null)
+      internetConnectionListener!.cancel();
   }
 
   addingEmployeeButton() {
@@ -297,7 +306,9 @@ abstract class DeliverTaskController extends State<DeliverTaskScreen> {
   _internetConnectionListenerForRetrevingData(bool isConnected) {
     if (isConnected && SqlConn.isConnected) {
       _getRecieptData();
-      internetConnectionListenerForRetrevingData.cancel();
+      internetConnectionListenerForRetrevingData!.cancel();
+      internetConnectionListenerForRetrevingData = null;
+
     }
   }
 
@@ -305,7 +316,8 @@ abstract class DeliverTaskController extends State<DeliverTaskScreen> {
     if (isConnected && SqlConn.isConnected) {
       context.snackBar(receiptDeliverCanBeDeliverd,
           color: Colors.green.shade900);
-      internetConnectionListener.cancel();
+      internetConnectionListener!.cancel();
+      internetConnectionListener = null;
     }
   }
 
