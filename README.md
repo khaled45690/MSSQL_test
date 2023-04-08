@@ -1,10 +1,32 @@
-# sql_test
+# MSSQL_test
 
-A new Flutter project.
+## this is a project to test connection between MSSQL and flutter app directly
+
+## as it will be the sample for a freelance project in the future
+
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+this project follows the Feature first approach
+which means I split the project folder into Feature folder each folder contain 
+- Controllers
+- UI(Views widgets)
+- Models
+
+there is the same structure for the whole application as there are some widgets are shared across the whole application
+
+
+## DataTypes Folder
+Consist of all the classes that represent custom datatypes that used through the whole application
+
+
+## Feature Folder
+Consist of all the Features in the application like
+- ### JourneyScreen
+-- which contains the UI screen of creating and deleting a Journey and all it's Functionality as
+- Controllers
+- UI(Views widgets)
+- Models
 
 A few resources to get you started if this is your first Flutter project:
 

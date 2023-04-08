@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 
-import '../../../../StateManagement/JourneyData/JourneyData.dart';
+import '../../../StateManagement/JourneyData/JourneyData.dart';
 import 'JourneyCard.dart';
 
 class JourneiesList extends StatelessWidget {

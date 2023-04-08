@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../../../../DataTypes/ReceiptDetails.dart';
-import '../../../../../../MainWidgets/BottonSheets/searchButtonSheetForCurrency.dart';
-import '../../../../../../MainWidgets/CustomButton.dart';
-import '../../../../../../MainWidgets/CustomElementSelector.dart';
+import '../../../../../DataTypes/ReceiptDetails.dart';
+import '../../../../../MainWidgets/BottonSheets/searchButtonSheetForCurrency.dart';
+import '../../../../../MainWidgets/CustomButton.dart';
+import '../../../../../MainWidgets/CustomElementSelector.dart';
 import 'Controller/ReceiveDetailsScreenController.dart';
 import 'Widgets/OperationTypeRadioGroup.dart';
 import 'Widgets/ReceiptDetailsInfo.dart';

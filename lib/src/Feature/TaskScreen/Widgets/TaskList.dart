@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 import 'package:sql_test/src/Feature/TaskScreen/Widgets/ReceiptCard.dart';
 
-import '../../../../DataTypes/Receipt.dart';
+import '../../../DataTypes/Receipt.dart';
 
 class TaskList extends StatelessWidget {
   final List<Receipt> receipts;

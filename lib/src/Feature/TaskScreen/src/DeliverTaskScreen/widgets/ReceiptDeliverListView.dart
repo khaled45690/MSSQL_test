@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sql_test/DataTypes/CrewMember.dart';
-import 'package:sql_test/DataTypes/ReceiptDeliver.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
+import 'package:sql_test/src/DataTypes/CrewMember.dart';
+import 'package:sql_test/src/DataTypes/ReceiptDeliver.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 
-import '../../../../../../Utilities/Style.dart';
+import '../../../../../Utilities/Style.dart';
 
 class ReceiptDeliverListView extends StatelessWidget {
   final List<ReceiptDeliver> receiptDeliver;

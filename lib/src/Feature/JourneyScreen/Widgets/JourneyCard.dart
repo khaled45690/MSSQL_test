@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 
-import '../../../../MainWidgets/CustomButton.dart';
-import '../../../../DataTypes/Journey.dart';
-import '../../../../Utilities/Strings.dart';
-import '../../../../Utilities/Style.dart';
+import '../../../MainWidgets/CustomButton.dart';
+import '../../../DataTypes/Journey.dart';
+import '../../../Utilities/Strings.dart';
+import '../../../Utilities/Style.dart';
 import '../../TaskScreen/TaskScreen.dart';
 
 class JourneyCard extends StatelessWidget {

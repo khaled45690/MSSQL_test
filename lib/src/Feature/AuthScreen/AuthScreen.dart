@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 
-import '../../../Utilities/Style.dart';
-import '../../../MainWidgets/CustomButton.dart';
-import 'Controler/LoginScreenController.dart';
+import '../../Utilities/Style.dart';
+import '../../MainWidgets/CustomButton.dart';
+import './Controler/AuthScreenController.dart';
 import 'Widgets/LoginTextField.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class AuthScreen extends StatefulWidget {
+  const AuthScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => LoginScreenState();
+  State<AuthScreen> createState() => AuthScreenState();
 }
 
-class LoginScreenState extends LoginScreenController {
+class AuthScreenState extends AuthScreenController {
 // user 2021
 // password 2021
   @override
@@ -35,7 +35,7 @@ class LoginScreenState extends LoginScreenController {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text("اسم المستخدم", style: size19BlackTextStyle),
-                LoginTextField(onChange , "user" , errorloginInfo["user"]),
+                LoginTextField(onChange, "user", errorloginInfo["user"]),
               ],
             ),
             const SizedBox(
@@ -45,13 +45,20 @@ class LoginScreenState extends LoginScreenController {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text("كلمة سر المستخدم", style: size19BlackTextStyle),
-                LoginTextField(onChange ,"password" , errorloginInfo["password"]),
+                LoginTextField(
+                    onChange, "password", errorloginInfo["password"]),
               ],
             ),
             const SizedBox(
               height: 30,
             ),
-            CustomButton("تسجيل الدخول", 200 , login , isLoading: isLoading, isEnabled: !isLoading,),
+            CustomButton(
+              "تسجيل الدخول",
+              200,
+              login,
+              isLoading: isLoading,
+              isEnabled: !isLoading,
+            ),
           ],
         ),
       ),

@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:sql_conn/sql_conn.dart';
-import 'package:sql_test/DataTypes/Currency.dart';
-import 'package:sql_test/DataTypes/Customer.dart';
-import 'package:sql_test/DataTypes/CustomerBranch.dart';
+import 'package:sql_test/src/DataTypes/Currency.dart';
+import 'package:sql_test/src/DataTypes/Customer.dart';
+import 'package:sql_test/src/DataTypes/CustomerBranch.dart';
 
 import '../../Utilities/Prefs.dart';
 import '../../Utilities/Strings.dart';

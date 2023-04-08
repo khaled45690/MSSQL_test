@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:sql_test/Utilities/VariableCodes.dart';
+import 'package:sql_test/src/Utilities/VariableCodes.dart';
 
 import 'Currency.dart';
 

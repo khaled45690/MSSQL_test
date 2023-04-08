@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sql_test/MainWidgets/CustomButton.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
+import 'package:sql_test/src/MainWidgets/CustomButton.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 
-import '../../../../../../Utilities/Style.dart';
+import '../../../../../Utilities/Style.dart';
 
 class DatePickerWidget extends StatelessWidget {
   final String? arrivalDate, leavingDate;

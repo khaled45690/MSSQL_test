@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sql_conn/sql_conn.dart';
-import 'package:sql_test/DataTypes/CrewMember.dart';
-import 'package:sql_test/DataTypes/Journey.dart';
-import 'package:sql_test/StateManagement/JourneyData/JourneyData.dart';
+import 'package:sql_test/src/DataTypes/CrewMember.dart';
+import 'package:sql_test/src/DataTypes/Journey.dart';
+import 'package:sql_test/src/StateManagement/JourneyData/JourneyData.dart';
 
-import '../../../../DataTypes/Receipt.dart';
-import '../../../../DataTypes/User.dart';
-import '../../../../StateManagement/UserData/UserData.dart';
+import '../../../DataTypes/Receipt.dart';
+import '../../../DataTypes/User.dart';
+import '../../../StateManagement/UserData/UserData.dart';
 import '../TaskScreen.dart';
 
 abstract class TaskScreenController extends State<TaskScreen> {

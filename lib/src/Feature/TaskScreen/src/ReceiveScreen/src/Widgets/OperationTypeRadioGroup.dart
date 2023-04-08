@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sql_test/Utilities/VariableCodes.dart';
+import 'package:sql_test/src/Utilities/VariableCodes.dart';
 
-import '../../../../../../../Utilities/Style.dart';
+import '../../../../../../Utilities/Style.dart';
 
 
 class OperationTypeRadioGroup extends StatelessWidget {

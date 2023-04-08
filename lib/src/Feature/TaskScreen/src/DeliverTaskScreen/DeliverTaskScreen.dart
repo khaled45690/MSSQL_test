@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 import 'package:sql_test/src/Feature/TaskScreen/src/DeliverTaskScreen/widgets/ReceiptDeliverListView.dart';
 
-import '../../../../../DataTypes/Journey.dart';
-import '../../../../../MainWidgets/BottonSheets/SearchButtonSheetForBranch.dart';
-import '../../../../../MainWidgets/BottonSheets/SearchButtonSheetForCustomer.dart';
-import '../../../../../MainWidgets/BottonSheets/searchButtonSheetForReceiptDeliverType.dart';
-import '../../../../../MainWidgets/CustomButton.dart';
-import '../../../../../MainWidgets/CustomElementSelector.dart';
-import '../../../../../MainWidgets/QRCodeDetection.dart';
+import '../../../../DataTypes/Journey.dart';
+import '../../../../MainWidgets/BottonSheets/SearchButtonSheetForBranch.dart';
+import '../../../../MainWidgets/BottonSheets/SearchButtonSheetForCustomer.dart';
+import '../../../../MainWidgets/BottonSheets/searchButtonSheetForReceiptDeliverType.dart';
+import '../../../../MainWidgets/CustomButton.dart';
+import '../../../../MainWidgets/CustomElementSelector.dart';
+import '../../../../MainWidgets/QRCodeDetection.dart';
 import '../ReceiveScreen/Widgets/AddEmployeeByWriting.dart';
 import '../ReceiveScreen/Widgets/AddImageToReceipt.dart';
 import '../ReceiveScreen/Widgets/CustomListView.dart';

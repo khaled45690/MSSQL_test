@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart' show BuildContext, Center, Colors, Container, Image, StatelessWidget, Widget;
-import 'package:sql_test/Utilities/Extentions.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 
 
 class LoadingWidget extends StatelessWidget {

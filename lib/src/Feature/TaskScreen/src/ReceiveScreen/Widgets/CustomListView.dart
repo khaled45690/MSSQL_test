@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sql_test/DataTypes/CrewMember.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
+import 'package:sql_test/src/DataTypes/CrewMember.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 
-import '../../../../../../StateManagement/UserData/UserData.dart';
-import '../../../../../../Utilities/Style.dart';
+import '../../../../../StateManagement/UserData/UserData.dart';
+import '../../../../../Utilities/Style.dart';
 
 class CustomListView extends StatelessWidget {
   final List<CrewMember> employees;

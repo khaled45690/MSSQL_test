@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../MainWidgets/LoadingWidget.dart';
+import '../../MainWidgets/LoadingWidget.dart';
 import '../../../Utilities/Colors.dart';
 import 'Controller/JourneyScreenController.dart';
 import 'Widgets/JourneiesList.dart';

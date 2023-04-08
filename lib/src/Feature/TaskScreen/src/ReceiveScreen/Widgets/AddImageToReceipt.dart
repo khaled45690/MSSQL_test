@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 
-import '../../../../../../MainWidgets/ImageViewer.dart';
+import '../../../../../MainWidgets/ImageViewer.dart';
 
 class AddImageToReceipt extends StatelessWidget {
   final List<Uint8List> reciptImageList;

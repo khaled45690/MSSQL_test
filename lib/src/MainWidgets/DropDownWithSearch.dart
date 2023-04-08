@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 
-import '../../../../Utilities/Style.dart';
+import '../Utilities/Style.dart';
 import 'SearchTextField.dart';
 
 String? searchString;

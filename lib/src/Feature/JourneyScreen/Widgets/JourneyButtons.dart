@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../MainWidgets/CustomButton.dart';
-import '../../../../StateManagement/InternetState/InternetStateHandler.dart';
+import '../../../MainWidgets/CustomButton.dart';
+import '../../../StateManagement/InternetState/InternetStateHandler.dart';
 
 class JourneyButtons extends StatelessWidget {
   final bool isStartEnabled, isEndEnabled;

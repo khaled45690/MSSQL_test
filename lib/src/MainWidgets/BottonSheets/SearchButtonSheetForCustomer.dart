@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sql_test/DataTypes/Currency.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
-import 'package:sql_test/Utilities/colors.dart';
+import 'package:sql_test/src/DataTypes/Customer.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
+import 'package:sql_test/src/Utilities/colors.dart';
 
 import '../../Utilities/Style.dart';
 import '../SearchTextField.dart';
@@ -14,23 +14,24 @@ Map<int, Color> color = {
   200: Colors.white,
 };
 
-searchButtonSheetForCurrency(BuildContext context, List<Currency> currencyList,
-    Function(Currency currency ) onSelectCurrencyFunc ) {
+searchButtonSheetForCustomer(BuildContext context, List<Customer> customerList,
+    Function(Customer customer , bool isDeliveredTo) onSelectCustomerFunc , bool isDeliveredTo) {
   Scaffold.of(context).showBottomSheet<void>(
     clipBehavior: Clip.antiAlias,
     elevation: 3,
     enableDrag: false,
     (BuildContext context) {
-      return CustomSearchWithFilterWidget(currencyList, onSelectCurrencyFunc);
+      return CustomSearchWithFilterWidget(customerList, onSelectCustomerFunc , isDeliveredTo);
     },
   );
 }
 
 class CustomSearchWithFilterWidget extends StatefulWidget {
-  final List<Currency> currencyList;
-  final Function(Currency currency ) onSelectCurrencyFunc;
+  final List<Customer> customerList;
+  final Function(Customer customer , bool isDeliveredTo) onSelectCustomerFunc;
+  final bool isDeliveredTo;
   const CustomSearchWithFilterWidget(
-      this.currencyList, this.onSelectCurrencyFunc,
+      this.customerList, this.onSelectCustomerFunc,this.isDeliveredTo,
       {super.key});
 
   @override
@@ -40,13 +41,13 @@ class CustomSearchWithFilterWidget extends StatefulWidget {
 
 class _CustomSearchWithFilterWidgetState
     extends State<CustomSearchWithFilterWidget> {
-  late List<Currency> currencyList;
+  late List<Customer> customerList;
   bool isId = false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    currencyList = widget.currencyList;
+    customerList = widget.customerList;
   }
 
   @override
@@ -131,7 +132,7 @@ class _CustomSearchWithFilterWidgetState
                   child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
-                    itemCount: currencyList.length,
+                    itemCount: customerList.length,
                     itemBuilder: (listContext, index) {
                       return MaterialButton(
                         shape: const RoundedRectangleBorder(
@@ -140,7 +141,7 @@ class _CustomSearchWithFilterWidgetState
                         splashColor: Colors.lightBlue.withOpacity(.7),
                         onPressed: () {
                           Navigator.pop(context);
-                          widget.onSelectCurrencyFunc(currencyList[index]);
+                          widget.onSelectCustomerFunc(customerList[index] , widget.isDeliveredTo);
                         },
                         child: Container(
                             margin: const EdgeInsets.only(bottom: 20),
@@ -159,8 +160,8 @@ class _CustomSearchWithFilterWidgetState
                                   width: 170,
                                   child: Text(
                                     isId
-                                        ? currencyList[index].F_CURRANCY_ID.toString()
-                                        : currencyList[index].F_CURRANCY_NAM,
+                                        ? customerList[index].CustID.toString()
+                                        : customerList[index].CustName,
                                     overflow: TextOverflow.visible,
                                     textDirection: TextDirection.rtl,
                                     style: favoriteDescriptionTextStyle,
@@ -181,28 +182,28 @@ class _CustomSearchWithFilterWidgetState
   }
 
   onChange(String variableName, String value) {
-    List<Currency> filter = [];
+    List<Customer> filter = [];
     if (value == "" && value == " ") {
-      currencyList = widget.currencyList;
+      customerList = widget.customerList;
       setState(() {});
     }
-    for (var currency in widget.currencyList) {
+    for (var customer in widget.customerList) {
       if (!isId) {
-        if (value.length < currency.F_CURRANCY_NAM.length) {
-          if (currency.F_CURRANCY_NAM.substring(0, value.length) == value) {
-            filter.add(currency);
+        if (value.length < customer.CustName.length) {
+          if (customer.CustName.substring(0, value.length) == value) {
+            filter.add(customer);
           }
         }
       } else {
-        if (value.length <= currency.F_CURRANCY_ID.toString().length) {
-          if (currency.F_CURRANCY_ID.toString().substring(0, value.length) == value) {
-            filter.add(currency);
+        if (value.length <= customer.CustID.toString().length) {
+          if (customer.CustID.toString().substring(0, value.length) == value) {
+            filter.add(customer);
           }
         }
       }
     }
 
-    currencyList = filter;
+    customerList = filter;
     setState(() {});
   }
 }

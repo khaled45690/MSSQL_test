@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sql_test/DataTypes/Journey.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
+import 'package:sql_test/src/DataTypes/Journey.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 import 'package:sql_test/src/Feature/TaskScreen/src/DeliverTaskScreen/DeliverTaskScreen.dart';
 
-import '../../../MainWidgets/CustomButton.dart';
+import '../../MainWidgets/CustomButton.dart';
 import '../../../Utilities/Colors.dart';
 import 'Controller/TaskScreenController.dart';
 import 'Widgets/ReceiveAndDeliverRadioGroup.dart';

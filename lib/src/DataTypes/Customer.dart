@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:sql_test/DataTypes/CustomerBranch.dart';
+import 'package:sql_test/src/DataTypes/CustomerBranch.dart';
 
 class Customer {
   int CustID;

@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 
-import '../../../../DataTypes/User.dart';
-import '../../../../Utilities/Prefs.dart';
-import '../../../../Utilities/Strings.dart';
+import '../../../DataTypes/User.dart';
+import '../../../Utilities/Prefs.dart';
+import '../../../Utilities/Strings.dart';
 import '../../JourneyScreen/JourneyScreen.dart';
-import '../LoginScreen.dart';
+import '../AuthScreen.dart';
 
-abstract class LoginScreenController extends State<LoginScreen> {
+abstract class AuthScreenController extends State<AuthScreen> {
   Map loginInfo = {
     "user": null,
     "password": null,

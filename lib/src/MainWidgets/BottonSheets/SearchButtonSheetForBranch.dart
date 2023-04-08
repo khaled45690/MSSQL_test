@@ -1,11 +1,12 @@
-
 import 'package:flutter/material.dart';
-import 'package:sql_test/DataTypes/ReceiptType.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
-import 'package:sql_test/Utilities/colors.dart';
+import 'package:sql_test/src/DataTypes/Customer.dart';
+import 'package:sql_test/src/DataTypes/CustomerBranch.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
+import 'package:sql_test/src/Utilities/colors.dart';
 
 import '../../Utilities/Style.dart';
 import '../SearchTextField.dart';
+
 
 Map<int, Color> color = {
   50: Colors.white,
@@ -13,23 +14,24 @@ Map<int, Color> color = {
   200: Colors.white,
 };
 
-searchButtonSheetForReceiptType(BuildContext context, List<ReceiptType> receiptTypeList,
-    Function(ReceiptType receiptTypeList) onSelectCustomerFunc ) {
+searchButtonSheetForBranch(BuildContext context, List<CustomerBranch> customerBranchList,
+    Function(CustomerBranch customerBranch , bool isDeliveredTo) onSelectCustomerFunc , bool isDeliveredTo) {
   Scaffold.of(context).showBottomSheet<void>(
     clipBehavior: Clip.antiAlias,
     elevation: 3,
     enableDrag: false,
     (BuildContext context) {
-      return CustomSearchWithFilterWidget(receiptTypeList, onSelectCustomerFunc);
+      return CustomSearchWithFilterWidget(customerBranchList, onSelectCustomerFunc , isDeliveredTo);
     },
   );
 }
 
 class CustomSearchWithFilterWidget extends StatefulWidget {
-  final List<ReceiptType> receiptTypeList;
-  final Function(ReceiptType receiptTypeList) onSelectCustomerFunc;
+  final List<CustomerBranch> customerBranchList;
+  final Function(CustomerBranch customerBranch, bool isDeliveredTo) onSelectCustomerFunc;
+  final bool isDeliveredTo;
   const CustomSearchWithFilterWidget(
-      this.receiptTypeList, this.onSelectCustomerFunc,
+      this.customerBranchList, this.onSelectCustomerFunc,this.isDeliveredTo,
       {super.key});
 
   @override
@@ -39,13 +41,13 @@ class CustomSearchWithFilterWidget extends StatefulWidget {
 
 class _CustomSearchWithFilterWidgetState
     extends State<CustomSearchWithFilterWidget> {
-  late List<ReceiptType> receiptTypeList;
+  late List<CustomerBranch> customerList;
   bool isId = false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    receiptTypeList = widget.receiptTypeList;
+    customerList = widget.customerBranchList;
   }
 
   @override
@@ -130,7 +132,7 @@ class _CustomSearchWithFilterWidgetState
                   child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
-                    itemCount: receiptTypeList.length,
+                    itemCount: customerList.length,
                     itemBuilder: (listContext, index) {
                       return MaterialButton(
                         shape: const RoundedRectangleBorder(
@@ -139,7 +141,7 @@ class _CustomSearchWithFilterWidgetState
                         splashColor: Colors.lightBlue.withOpacity(.7),
                         onPressed: () {
                           Navigator.pop(context);
-                          widget.onSelectCustomerFunc(receiptTypeList[index]);
+                          widget.onSelectCustomerFunc(customerList[index] , widget.isDeliveredTo);
                         },
                         child: Container(
                             margin: const EdgeInsets.only(bottom: 20),
@@ -158,8 +160,8 @@ class _CustomSearchWithFilterWidgetState
                                   width: 170,
                                   child: Text(
                                     isId
-                                        ? receiptTypeList[index].receiptTypeNumber.toString()
-                                        : receiptTypeList[index].receiptTypeName,
+                                        ? customerList[index].F_Branch_Id.toString()
+                                        : customerList[index].F_Branch_Name,
                                     overflow: TextOverflow.visible,
                                     textDirection: TextDirection.rtl,
                                     style: favoriteDescriptionTextStyle,
@@ -180,29 +182,28 @@ class _CustomSearchWithFilterWidgetState
   }
 
   onChange(String variableName, String value) {
-    List<ReceiptType> filter = [];
+    List<CustomerBranch> filter = [];
     if (value == "" && value == " ") {
-      receiptTypeList = widget.receiptTypeList;
+      customerList = widget.customerBranchList;
       setState(() {});
     }
-    for (var customer in widget.receiptTypeList) {
+    for (var customer in widget.customerBranchList) {
       if (!isId) {
-        if (value.length < customer.receiptTypeName.length) {
-          if (customer.receiptTypeName.substring(0, value.length) == value) {
+        if (value.length < customer.F_Branch_Name.length) {
+          if (customer.F_Branch_Name.substring(0, value.length) == value) {
             filter.add(customer);
           }
         }
       } else {
-        if (value.length <= customer.receiptTypeNumber.toString().length) {
-          if (customer.receiptTypeNumber.toString().substring(0, value.length) == value) {
+        if (value.length <= customer.F_Branch_Id.toString().length) {
+          if (customer.F_Branch_Id.toString().substring(0, value.length) == value) {
             filter.add(customer);
           }
         }
       }
     }
 
-    receiptTypeList = filter;
+    customerList = filter;
     setState(() {});
   }
 }
-

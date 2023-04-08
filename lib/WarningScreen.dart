@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
-import 'Utilities/Style.dart';
+import 'src/Utilities/Style.dart';
 
 class WarningScreen extends StatelessWidget {
   const WarningScreen({super.key});

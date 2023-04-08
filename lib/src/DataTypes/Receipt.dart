@@ -5,8 +5,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:sql_test/DataTypes/CrewMember.dart';
-import 'package:sql_test/DataTypes/CustomerBranch.dart';
+import 'package:sql_test/src/DataTypes/CrewMember.dart';
+import 'package:sql_test/src/DataTypes/CustomerBranch.dart';
 
 import 'Bank.dart';
 import 'Customer.dart';

@@ -3,17 +3,17 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sql_conn/sql_conn.dart';
-import 'package:sql_test/StateManagement/InternetState/InternetStateHandler.dart';
-import 'package:sql_test/DataTypes/Journey.dart';
-import 'package:sql_test/StateManagement/JourneyData/JourneyData.dart';
-import 'package:sql_test/Utilities/Prefs.dart';
+import 'package:sql_test/src/StateManagement/InternetState/InternetStateHandler.dart';
+import 'package:sql_test/src/DataTypes/Journey.dart';
+import 'package:sql_test/src/StateManagement/JourneyData/JourneyData.dart';
+import 'package:sql_test/src/Utilities/Prefs.dart';
 import 'package:sql_test/src/Feature/JourneyScreen/JourneyScreen.dart';
 
-import 'DataTypes/User.dart';
-import 'StateManagement/UserData/UserData.dart';
-import 'Utilities/Strings.dart';
+import 'src/DataTypes/User.dart';
+import 'src/StateManagement/UserData/UserData.dart';
+import 'src/Utilities/Strings.dart';
 import 'WarningScreen.dart';
-import 'src/Feature/LoginScreen/LoginScreen.dart';
+import 'src/Feature/AuthScreen/AuthScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -82,12 +82,10 @@ class _MyAppState extends State<MyApp> {
               theme: ThemeData(),
               initialRoute: user == null ? '/LoginScreen' : '/JourneyScreen',
               routes: {
-                '/LoginScreen': (context) => const LoginScreen(),
+                '/LoginScreen': (context) => const AuthScreen(),
                 '/JourneyScreen': (context) => const JourneyScreen(),
               },
             ),
     );
   }
 }
-
-

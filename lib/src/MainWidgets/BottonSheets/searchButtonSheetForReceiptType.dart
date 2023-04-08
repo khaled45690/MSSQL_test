@@ -1,12 +1,11 @@
+
 import 'package:flutter/material.dart';
-import 'package:sql_test/DataTypes/Customer.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
-import 'package:sql_test/Utilities/colors.dart';
+import 'package:sql_test/src/DataTypes/ReceiptType.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
+import 'package:sql_test/src/Utilities/colors.dart';
 
 import '../../Utilities/Style.dart';
 import '../SearchTextField.dart';
-
-
 
 Map<int, Color> color = {
   50: Colors.white,
@@ -14,24 +13,23 @@ Map<int, Color> color = {
   200: Colors.white,
 };
 
-searchButtonSheetForCustomer(BuildContext context, List<Customer> customerList,
-    Function(Customer customer , bool isDeliveredTo) onSelectCustomerFunc , bool isDeliveredTo) {
+searchButtonSheetForReceiptType(BuildContext context, List<ReceiptType> receiptTypeList,
+    Function(ReceiptType receiptTypeList) onSelectCustomerFunc ) {
   Scaffold.of(context).showBottomSheet<void>(
     clipBehavior: Clip.antiAlias,
     elevation: 3,
     enableDrag: false,
     (BuildContext context) {
-      return CustomSearchWithFilterWidget(customerList, onSelectCustomerFunc , isDeliveredTo);
+      return CustomSearchWithFilterWidget(receiptTypeList, onSelectCustomerFunc);
     },
   );
 }
 
 class CustomSearchWithFilterWidget extends StatefulWidget {
-  final List<Customer> customerList;
-  final Function(Customer customer , bool isDeliveredTo) onSelectCustomerFunc;
-  final bool isDeliveredTo;
+  final List<ReceiptType> receiptTypeList;
+  final Function(ReceiptType receiptTypeList) onSelectCustomerFunc;
   const CustomSearchWithFilterWidget(
-      this.customerList, this.onSelectCustomerFunc,this.isDeliveredTo,
+      this.receiptTypeList, this.onSelectCustomerFunc,
       {super.key});
 
   @override
@@ -41,13 +39,13 @@ class CustomSearchWithFilterWidget extends StatefulWidget {
 
 class _CustomSearchWithFilterWidgetState
     extends State<CustomSearchWithFilterWidget> {
-  late List<Customer> customerList;
+  late List<ReceiptType> receiptTypeList;
   bool isId = false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    customerList = widget.customerList;
+    receiptTypeList = widget.receiptTypeList;
   }
 
   @override
@@ -132,7 +130,7 @@ class _CustomSearchWithFilterWidgetState
                   child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
-                    itemCount: customerList.length,
+                    itemCount: receiptTypeList.length,
                     itemBuilder: (listContext, index) {
                       return MaterialButton(
                         shape: const RoundedRectangleBorder(
@@ -141,7 +139,7 @@ class _CustomSearchWithFilterWidgetState
                         splashColor: Colors.lightBlue.withOpacity(.7),
                         onPressed: () {
                           Navigator.pop(context);
-                          widget.onSelectCustomerFunc(customerList[index] , widget.isDeliveredTo);
+                          widget.onSelectCustomerFunc(receiptTypeList[index]);
                         },
                         child: Container(
                             margin: const EdgeInsets.only(bottom: 20),
@@ -160,8 +158,8 @@ class _CustomSearchWithFilterWidgetState
                                   width: 170,
                                   child: Text(
                                     isId
-                                        ? customerList[index].CustID.toString()
-                                        : customerList[index].CustName,
+                                        ? receiptTypeList[index].receiptTypeNumber.toString()
+                                        : receiptTypeList[index].receiptTypeName,
                                     overflow: TextOverflow.visible,
                                     textDirection: TextDirection.rtl,
                                     style: favoriteDescriptionTextStyle,
@@ -182,28 +180,29 @@ class _CustomSearchWithFilterWidgetState
   }
 
   onChange(String variableName, String value) {
-    List<Customer> filter = [];
+    List<ReceiptType> filter = [];
     if (value == "" && value == " ") {
-      customerList = widget.customerList;
+      receiptTypeList = widget.receiptTypeList;
       setState(() {});
     }
-    for (var customer in widget.customerList) {
+    for (var customer in widget.receiptTypeList) {
       if (!isId) {
-        if (value.length < customer.CustName.length) {
-          if (customer.CustName.substring(0, value.length) == value) {
+        if (value.length < customer.receiptTypeName.length) {
+          if (customer.receiptTypeName.substring(0, value.length) == value) {
             filter.add(customer);
           }
         }
       } else {
-        if (value.length <= customer.CustID.toString().length) {
-          if (customer.CustID.toString().substring(0, value.length) == value) {
+        if (value.length <= customer.receiptTypeNumber.toString().length) {
+          if (customer.receiptTypeNumber.toString().substring(0, value.length) == value) {
             filter.add(customer);
           }
         }
       }
     }
 
-    customerList = filter;
+    receiptTypeList = filter;
     setState(() {});
   }
 }
+

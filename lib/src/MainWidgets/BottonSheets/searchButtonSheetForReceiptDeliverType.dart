@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:sql_test/DataTypes/ReceiptDeliver.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
-import 'package:sql_test/Utilities/colors.dart';
+import 'package:sql_test/src/DataTypes/ReceiptDeliver.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
+import 'package:sql_test/src/Utilities/colors.dart';
 
 import '../../DataTypes/ReceiptDeliver.dart';
 import '../../Utilities/Style.dart';

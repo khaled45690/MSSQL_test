@@ -3,7 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sql_test/Utilities/Strings.dart';
+import 'package:sql_test/src/Utilities/Strings.dart';
 
 import '../../Utilities/Prefs.dart';
 import '../../DataTypes/Journey.dart';

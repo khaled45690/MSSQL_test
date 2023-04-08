@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sql_test/DataTypes/Receipt.dart';
-import 'package:sql_test/Utilities/Extentions.dart';
+import 'package:sql_test/src/DataTypes/Receipt.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 import 'package:sql_test/src/Feature/TaskScreen/src/ReceiveScreen/ReceiveScreen.dart';
 
-import '../../../../Utilities/Style.dart';
+import '../../../Utilities/Style.dart';
 
 class ReceiptCard extends StatelessWidget {
   final Receipt receipt;
