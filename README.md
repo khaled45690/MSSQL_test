@@ -23,10 +23,10 @@ Consist of all the classes that represent custom datatypes that used through the
 ## Feature Folder
 Consist of all the Features in the application like
 - ### JourneyScreen
--- which contains the UI screen of creating and deleting a Journey and all it's Functionality as
-- Controllers
-- UI(Views widgets)
-- Models
+ which contains the UI screen of creating and deleting a Journey and all it's Functionality as
+    - Controllers
+    - UI(Views widgets)
+    - Models
 
 A few resources to get you started if this is your first Flutter project:
 
