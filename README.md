@@ -22,17 +22,28 @@ Consist of all the classes that represent custom datatypes that used through the
 
 ## Feature Folder
 Consist of all the Features in the application like
-- ### JourneyScreen
- which contains the UI screen of creating and deleting a Journey and all it's Functionality as
+
+- ### AuthScreen
     - Controllers
     - UI(Views widgets)
     - Models
+     JourneyScreen contains the UI screen of creating and deleting a Auths and all it's Functionality as well
 
-A few resources to get you started if this is your first Flutter project:
+- ### JourneyScreen
+    - Controllers
+    - UI(Views widgets)
+    - Models
+     JourneyScreen contains the UI screen of creating and deleting a Journey and all it's Functionality as well
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- ### TaskScreen
+    - Controllers
+    - UI(Views widgets)
+    - Models
+    - src
+        - RecievedScreen
+        - DeliverScreen
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+     TaskScreen contains the UI screen of creating and deleting any Tasks and all it's Functionality, also in the TaskSCreen folder there is src folder which contains RecievedScreen
+     and DeliverScreen which follows the same hierarchy as well
+
+
