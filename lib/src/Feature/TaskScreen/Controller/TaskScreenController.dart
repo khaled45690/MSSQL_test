@@ -31,7 +31,7 @@ abstract class TaskScreenController extends State<TaskScreen> {
   }
 
   saveReceiptInJouerny(Receipt receiptParameter) {
-      widget.journey.receiptList.add(receiptParameter);
+    widget.journey.receiptList.add(receiptParameter);
     List<Journey> journeyList = context.read<JourneyCubit>().state;
     journeyList[journeyList.length - 1] = widget.journey;
     context.read<JourneyCubit>().setjourneyDataWithSharedPrefrence(journeyList);
@@ -39,16 +39,18 @@ abstract class TaskScreenController extends State<TaskScreen> {
     setState(() {});
     receipt = Receipt.fromJson({});
 
-    if(SqlConn.isConnected) widget.updateDataBase();
+    if (SqlConn.isConnected) widget.updateDataBase();
   }
 
-  editReceiptInJouerny(Receipt receiptParameter , int receiptIndex) {
-      widget.journey.receiptList[receiptIndex] = receiptParameter ;
+  editReceiptInJouerny(Receipt receiptParameter, int receiptIndex) {
+    debugPrint("isEntered");
+    debugPrint(receiptParameter.isSavedInDatabase.toString());
+    widget.journey.receiptList[receiptIndex] = receiptParameter;
     List<Journey> journeyList = context.read<JourneyCubit>().state;
     journeyList[journeyList.length - 1] = widget.journey;
     context.read<JourneyCubit>().setjourneyDataWithSharedPrefrence(journeyList);
     setState(() {});
-    if(SqlConn.isConnected) widget.updateDataBase();
+    if (SqlConn.isConnected) widget.updateDataBase();
   }
 
   addNewReceipt() {

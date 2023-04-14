@@ -130,13 +130,4 @@ class InternetConnectionCubit extends Cubit<bool> {
         currencyInfo, Currency.fromCurrencyListToJsonListString(currency));
   }
 
-  _updateBank() async {
-    String currencyData = await SqlConn.readData(
-        "SELECT F_CURRANCY_ID , F_CURRANCY_NAM from dbo.T_CURRANCY ORDER BY F_CURRANCY_ID ASC");
-    List<Currency> currency =
-        Currency.fromJsonStringListToCurrencyList(currencyData);
-
-    Prefs.setString(
-        currencyInfo, Currency.fromCurrencyListToJsonListString(currency));
-  }
 }

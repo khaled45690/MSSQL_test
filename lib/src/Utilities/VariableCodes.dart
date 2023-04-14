@@ -9,3 +9,4 @@ const ForeignCurrency = 1;
 const CoinsCurrency = 2;
 const EGP = 1;
 const USD = 2;
+const maxEmpSize = 6;

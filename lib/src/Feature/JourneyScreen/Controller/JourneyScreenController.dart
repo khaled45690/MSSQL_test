@@ -36,10 +36,7 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
   void initState() {
     super.initState();
     user = context.read<UserCubit>().getUserDataFromPref();
-    Timer(const Duration(milliseconds: 1000), _getUserJournies);
-    internetConnectionListener = InternetConnectionCubit
-        .isConnectedToInternet.stream
-        .listen(_connectionListenerFunction);
+    Timer(const Duration(milliseconds: 1000), initialFunction);
     // tagraba();
     // Timer(Duration(milliseconds: 2000), _updateDataBase);
   }
@@ -58,7 +55,13 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
     var response = await http.post(url,
         body: jsonEncode({'pdfData': customersData[0]["F_Attachment"]}),
         headers: {"Content-Type": "application/json"});
-    debugPrint(response.statusCode.toString());
+  }
+
+  initialFunction() async {
+    _getUserJournies();
+    internetConnectionListener = InternetConnectionCubit
+        .isConnectedToInternet.stream
+        .listen(_connectionListenerFunction);
   }
 
   @override
@@ -85,7 +88,7 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(DateTime.now().year),
-        lastDate: DateTime(DateTime.now().year));
+        lastDate: DateTime(DateTime.now().year + 1));
     if (pickedDate == null) return;
 
     isStartEnabled = false;
@@ -194,7 +197,6 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
       context.snackBar(dataHasBeenUpdated, color: Colors.green.shade900);
     } catch (e) {
       context.snackBar(dataHasNotBeenUpdated, color: Colors.red.shade900);
-      debugPrint(e.toString());
     }
   }
 
@@ -226,8 +228,29 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
         _handelStartAndEndButton(null);
         context.read<JourneyCubit>().setjourneyData([]);
       } else {
-        _handelStartAndEndButton(jouernies[jouernies.length - 1]);
-        context.read<JourneyCubit>().setjourneyData(jouernies);
+        Journey latestJourney = jouernies[jouernies.length - 1];
+        if (latestJourney.F_Emp_Id != user!.F_EmpID) {
+          await _getUserJourniesFromInternet();
+          context.snackBar(dataHasBeenUpdated, color: Colors.green);
+        } else {
+          if (SqlConn.isConnected) {
+            String jouerniesDataString = await SqlConn.readData(
+                "SELECT * from dbo.T_DAY WHERE F_Emp_Id = ${user!.F_EmpID} ORDER BY F_Id ASC");
+            List<Journey> jouerniesFromDatabase =
+                Journey.fromJsonStringListToJourneyList(jouerniesDataString);
+
+            if (jouerniesFromDatabase.isEmpty) {
+              _handelStartAndEndButton(null);
+              context.read<JourneyCubit>().setjourneyData([]);
+            } else {
+              _handelStartAndEndButton(jouernies[jouernies.length - 1]);
+              context.read<JourneyCubit>().setjourneyData(jouernies);
+            }
+          } else {
+            _handelStartAndEndButton(jouernies[jouernies.length - 1]);
+            context.read<JourneyCubit>().setjourneyData(jouernies);
+          }
+        }
       }
 
       isDataLoading = false;
@@ -247,10 +270,26 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
             .read<JourneyCubit>()
             .setjourneyDataWithSharedPrefrence([]);
       }
+
+      String jouerniesRecieptsDataString = await SqlConn.readData(
+          "SELECT * from dbo.T_Deliver_Recieve_M WHERE F_Emp_Id_D = ${user!.F_EmpID} AND F_Id = ${jouernies[jouernies.length - 1].F_Id} ORDER BY F_Recipt_No ASC");
+      List<Receipt> receipts = Receipt.fromJsonStringListToReceiptList(
+          jouerniesRecieptsDataString,
+          isUpdatingFromDatabase: true);
+      for (var i = 0; i < receipts.length; i++) {
+        String RecieptsDetailsDataString = await SqlConn.readData(
+            "SELECT * from dbo.T_Deliver_Recieve_D WHERE F_Recipt_No = ${receipts[i].F_Recipt_No}");
+        receipts[i].ReceiptDetailsList =
+            ReceiptDetails.fromJsonStringListToReceiptDetailsList(
+                RecieptsDetailsDataString);
+        receipts[i].isSavedInDatabase = true;
+      }
+      Journey dumyJoureny = jouernies[jouernies.length - 1];
+      dumyJoureny.receiptList = receipts;
       context
           .read<JourneyCubit>()
-          .setjourneyDataWithSharedPrefrence([jouernies[jouernies.length - 1]]);
-      _handelStartAndEndButton(jouernies[jouernies.length - 1]);
+          .setjourneyDataWithSharedPrefrence([dumyJoureny]);
+      _handelStartAndEndButton(dumyJoureny);
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -335,6 +374,7 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
     String updateQuery = "BEGIN TRANSACTION; DECLARE @recipt_no INT;";
 
     for (int i = 0; i < journey.receiptList.length; i++) {
+      debugPrint("journey.receiptList[i].isSavedInDatabase.toString()");
       debugPrint(journey.receiptList[i].isSavedInDatabase.toString());
       if (journey.receiptList[i].isSavedInDatabase) {
         updateQuery += "SET @recipt_no=${journey.receiptList[i].F_Recipt_No};";
@@ -353,6 +393,7 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
 
         String receiptDataString = await SqlConn.readData(query);
         List receiptDataList = jsonDecode(receiptDataString);
+        debugPrint(receiptDataList.length.toString());
         journey.receiptList[i].F_Recipt_No =
             receiptDataList[receiptDataList.length - 1]["F_Recipt_No"];
         journey.receiptList[i].isSavedInDatabase = true;
@@ -374,9 +415,8 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
         receiptList[i].Time_Save = DateTime.now().toString();
 
         var pdfInHexFormate = hex.encode(receiptList[i].imagesAsPDF!.toList());
-        debugPrint(crewList["crewListQuery"]);
         query +=
-            "SELECT @recipt_no = MAX(F_Recipt_No) + 1 FROM dbo.T_Deliver_Recieve_M;"
+            "SELECT @recipt_no = ISNULL(MAX(F_Recipt_No), 0) + 1 FROM dbo.T_Deliver_Recieve_M;"
             "INSERT INTO dbo.T_Deliver_Recieve_M (F_Recipt_No , F_Cust_Id , F_Emp_Id_D, F_Note, F_Note1, F_Bank_Id_D, F_Branch_Id_D ,"
             "F_Branch_Internal_D, F_Arrival_Time_D, F_Leaving_Time_D, F_Bank_Id_R,"
             " F_Branch_Id_R, F_Branch_Internal_R, Date_Save, Time_Save,F_Date,F_count,F_Sell_Inv_No,"
@@ -384,7 +424,7 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
             "F_totalFees_Amount,F_Recipt_Type ,F_Id , Userid_Save_ID, F_Paper_No, ${crewList["crewListQuery"]} , F_Attachment)"
             " VALUES (@recipt_no, ${receiptList[i].F_Cust!.CustID}, ${receiptList[i].F_Emp_Id_D},"
             "'${receiptList[i].F_Note} ' ,'${receiptList[i].F_Note1}' , ${receiptList[i].F_Cust!.CustID} , ${receiptList[i].F_Branch_D!.F_Branch_Id},"
-            "${receiptList[i].F_Branch_D!.F_Branch_Internal} , '${receiptList[i].F_Arrival_Time_D}' ,'${receiptList[i].F_Leaving_Time_D}', ${receiptList[i].F_Cust_R!.CustID},"
+            "${receiptList[i].F_Branch_D!.F_Branch_Internal} , '${receiptList[i].F_Arrival_Time_D}','${receiptList[i].F_Leaving_Time_D}', ${receiptList[i].F_Cust_R!.CustID},"
             " ${receiptList[i].F_Branch_R!.F_Branch_Id}, ${receiptList[i].F_Branch_R!.F_Branch_Internal},"
             "CAST('${receiptList[i].Date_Save}' AS DATETIME2),CAST('${receiptList[i].Time_Save}' AS DATETIME2),CAST('${receiptList[i].F_Date}' AS DATETIME2), ${receiptList[i].F_count}, ${receiptList[i].F_Sell_Inv_No},"
             " ${receiptList[i].F_SaleD},${receiptList[i].F_Local_Tot},"
@@ -410,12 +450,12 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
     return "INSERT INTO dbo.T_Deliver_Recieve_D "
         "(F_Recipt_No , F_Seal_No_From , F_Currency_Id , F_Packs_No,"
         "F_Pack_Class , F_Banknote_No , F_Banknote_Class, F_Package_No , F_Package_Value,"
-        "F_Total_val , F_RowNo , F_Currency_Type,F_Unite_ID,"
-        "F_Convert_Factor,F_EGP_Amount ,F_Seal_No_To, F_Bags_No)"
+        "F_Total_val , F_RowNo , F_Currency_Type,F_Unite_ID , "
+        "F_Convert_Factor,F_EGP_Amount ,F_Seal_No_To, F_Bags_No) "
         "VALUES "
         "(@recipt_no , ${receiptDetails.F_Seal_No_From} , ${receiptDetails.F_Currency_Id.F_CURRANCY_ID} , ${receiptDetails.F_Pack_No},"
         "${receiptDetails.F_Pack_Class},${receiptDetails.F_BankNote_No},${receiptDetails.F_BankNote_Class},0 , 0,"
-        "${receiptDetails.F_total_val} , ${receiptDetails.F_RowNo},${receiptDetails.F_Currency_Type},${receiptDetails.F_Uinte_Id},"
+        "${receiptDetails.F_Total_val} , ${receiptDetails.F_RowNo},${receiptDetails.F_Currency_Type},${receiptDetails.F_Uinte_Id} , "
         "${receiptDetails.F_Convert_Factor},${receiptDetails.F_EGP_Amount},${receiptDetails.F_Seal_No_To},${receiptDetails.F_Bags_No});";
   }
 

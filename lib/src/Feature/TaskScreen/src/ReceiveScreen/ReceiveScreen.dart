@@ -52,7 +52,7 @@ class _ReceiveScreenState extends ReceiveScreenController {
                 QRCodeDetection(height, onCapture, cameraController),
                 AddEmployeeByWriting(isAddingEmployee, canWeAddMoreEmp,
                     (value) => onTextChange("AddEmpByText", value),
-                    onTap: addEmpByTextFunc),
+                    onTap: addEmpByTextFunc , empTextFilledAdder: empTextFilledAdder, ),
                 CustomListView(widget.receipt.CrewIdList, removeEMp),
                 CustomElementSelector(
                   text: "اسم العميل",
@@ -77,10 +77,10 @@ class _ReceiveScreenState extends ReceiveScreenController {
                     isNumber: true, textEditingController: receiptNOController ),
                 TextFieldWithName("بيـــــان",
                     onTextChangeFunction: (String value) =>
-                        onTextChange("AddNote", value)),
+                        onTextChange("AddNote", value) , textEditingController: noteController),
                 TextFieldWithName("ملاحظات",
                     onTextChangeFunction: (String value) =>
-                        onTextChange("AddNote1", value)),
+                        onTextChange("AddNote1", value) , textEditingController: note1Controller),
                 CustomElementSelector(
                   text: "اسم العميل المرسل اليه",
                   selectedElementText: widget.receipt.F_Cust_R == null

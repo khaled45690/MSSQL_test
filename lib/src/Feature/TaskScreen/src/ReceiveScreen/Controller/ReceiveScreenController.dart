@@ -9,6 +9,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:sql_test/src/DataTypes/CrewMember.dart';
 import 'package:sql_test/src/DataTypes/Customer.dart';
 import 'package:sql_test/src/DataTypes/CustomerBranch.dart';
+import 'package:sql_test/src/Feature/JourneyScreen/JourneyScreen.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -43,13 +44,18 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
     ReceiptType(receiptTypeNumber: 2, receiptTypeName: 'محصنة')
   ];
   TextEditingController receiptNOController = TextEditingController();
+  TextEditingController noteController = TextEditingController();
+  TextEditingController note1Controller = TextEditingController();
+  TextEditingController empTextFilledAdder = TextEditingController();
   @override
   void initState() {
     super.initState();
     _setCustomerList();
     _setCustomerBranches();
     _stopCameraAtStart();
-    receiptNOController.text = widget.receipt.F_Paper_No?? '';
+    receiptNOController.text = widget.receipt.F_Paper_No ?? '';
+    noteController.text = widget.receipt.F_Note;
+    note1Controller.text = widget.receipt.F_Note1;
   }
 
   addingEmployeeButton() {
@@ -195,11 +201,10 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
   pickDate(bool isArriveTime) async {
     Navigator.of(context).push(showPicker(
       context: context,
-      value:Time(hour: DateTime.now().hour, minute: DateTime.now().minute),
+      value: Time(hour: DateTime.now().hour, minute: DateTime.now().minute),
       onChange: (onTimeChanged) => _onTimeSelected(onTimeChanged, isArriveTime),
     ));
   }
-
 
   goToRecieveDetailsScreen() {
     context.navigateTo(ReceiveDetailsScreen(
@@ -216,10 +221,11 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
     if (_receiptDateCheck()) return;
 
     widget.receipt.Time_Save = DateTime.now().toString();
-     if(receiptImageList.isNotEmpty) widget.receipt.imagesAsPDF = await _convertImagesToPDF();
+    if (receiptImageList.isNotEmpty)
+      widget.receipt.imagesAsPDF = await _convertImagesToPDF();
     widget.saveReceiptInJouerny(widget.receipt);
     // ignore: use_build_context_synchronously
-    context.popUp();
+    context.popupAllAndNavigateTo('/JourneyScreen');
   }
 
   bool _receiptDateCheck() {
@@ -245,7 +251,7 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
         } else if (widget.receipt.ReceiptDetailsList[i].F_Currency_Type ==
             ForeignCurrency) {
           widget.receipt.F_Global_Tot -=
-              widget.receipt.ReceiptDetailsList[i].F_total_val;
+              widget.receipt.ReceiptDetailsList[i].F_Total_val;
         }
         widget.receipt.F_totalAmount_EGP -=
             widget.receipt.ReceiptDetailsList[i].F_EGP_Amount;
@@ -266,9 +272,6 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
   //                                                                       //
   //                                                                       //
   ///////////////////////////////////////////////////////////////////////////
-  
-
-
 
   bool _customAndCustomerRAndPaperNoCheck() {
     bool check = false;
@@ -285,7 +288,7 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
 
   bool _branchAndBranchRCheck() {
     bool check = false;
-     if (widget.isEdit) return check;
+    if (widget.isEdit) return check;
     if (widget.receipt.F_Branch_D == null ||
         widget.receipt.F_Branch_R == null ||
         receiptImageList.isEmpty) {
@@ -309,7 +312,7 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
     if (receiptDetails.F_Currency_Type == LocalCurrency) {
       widget.receipt.F_Local_Tot += receiptDetails.F_EGP_Amount;
     } else if (receiptDetails.F_Currency_Type == ForeignCurrency) {
-      widget.receipt.F_Global_Tot += receiptDetails.F_total_val;
+      widget.receipt.F_Global_Tot += receiptDetails.F_Total_val;
     }
     widget.receipt.F_totalAmount_EGP += receiptDetails.F_EGP_Amount;
     widget.parsedFunction(widget.receipt);
@@ -388,6 +391,7 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
                 widget.receipt.CrewIdList.add(crewMember);
                 widget.parsedFunction(widget.receipt);
                 if (!isCam) isAddingEmployee = false;
+                if (!isCam) empTextFilledAdder.text = '';
                 setState(() {});
                 if (isCam) cameraController.start();
                 Navigator.of(context).pop();
@@ -398,6 +402,7 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
               child: const Text(refuse),
               onPressed: () {
                 if (!isCam) isAddingEmployee = false;
+                if (!isCam) empTextFilledAdder.text = '';
                 setState(() {});
                 if (isCam) cameraController.start();
                 Navigator.of(context).pop();
@@ -410,7 +415,7 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
   }
 
   _checkIfCrewAreSix() {
-    if (widget.receipt.CrewIdList.length >= 6) {
+    if (widget.receipt.CrewIdList.length >= maxEmpSize) {
       if (cameraController.isStarting) stopQRDetection();
       Timer(const Duration(milliseconds: 700), () {
         canWeAddMoreEmp = false;
@@ -442,7 +447,6 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
     Timer(const Duration(milliseconds: 500), () => {cameraController.stop()});
   }
 
-  
   _onTimeSelected(Time timeParameter, isArrivingTime) {
     String time = timeParameter.hourOfPeriod < 10
         ? "0${timeParameter.hourOfPeriod}"

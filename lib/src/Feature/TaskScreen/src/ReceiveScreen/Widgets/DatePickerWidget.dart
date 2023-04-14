@@ -20,7 +20,7 @@ class DatePickerWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              CustomButton("تاريخ الوصول", 140, () => pickDate(true)),
+              CustomButton("وقت الوصول", 140, () => pickDate(true)),
               Text(
                 arrivalDate ?? "",
                 style: size19BlackTextStyle,
@@ -34,7 +34,7 @@ class DatePickerWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              CustomButton("تاريخ الرحيل", 140, () => pickDate(false)),
+              CustomButton("وقت الرحيل", 140, () => pickDate(false)),
               Text(
                 leavingDate ?? "",
                 style: size19BlackTextStyle,

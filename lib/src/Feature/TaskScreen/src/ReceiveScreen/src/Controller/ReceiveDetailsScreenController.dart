@@ -15,7 +15,7 @@ abstract class ReceiveDetailsScreenController
   late List<Currency> currencyList;
   bool isCoins = false;
   TextEditingController sealTotextEditingController = TextEditingController();
- 
+
   @override
   void initState() {
     super.initState();
@@ -24,7 +24,6 @@ abstract class ReceiveDetailsScreenController
     currencyList = Currency.fromJsonStringListToCurrencyList(currencyData);
     receiptDetails.F_Recipt_No = widget.receiptNo;
     receiptDetails.F_RowNo = widget.receiptRowNo;
-
   }
 
   bool isAddingNewReceipt = false;
@@ -54,7 +53,11 @@ abstract class ReceiveDetailsScreenController
   }
 
   onTextChange(String variableName, String value) {
-    if (value == '') return;
+    if (value == '') {
+      if (variableName == "F_BankNote_No") receiptDetails.F_BankNote_No = 0;
+      return;
+    }
+
     switch (variableName) {
       case "F_Seal_No_From":
         sealTotextEditingController.text = value;
@@ -77,10 +80,10 @@ abstract class ReceiveDetailsScreenController
         receiptDetails.F_Pack_Class = valueINT;
         break;
       case "TotalInEGP":
-        int? valueINT = int.tryParse(value);
+        double? valueINT = double.tryParse(value);
         valueINT ?? context.snackBar(pleaseEnterNumber, color: Colors.red);
         if (valueINT == null) break;
-        receiptDetails.F_total_val = valueINT;
+        receiptDetails.F_Total_val = valueINT;
         break;
       case "F_Pack_No":
         int? valueINT = int.tryParse(value);
@@ -168,20 +171,21 @@ abstract class ReceiveDetailsScreenController
   bool _handleLocalCurrencyInfoBeforeSave() {
     bool check = false;
     if (receiptDetails.F_Pack_No == 0 ||
-        receiptDetails.F_BankNote_No == 0 ||
         receiptDetails.F_Pack_Class == 0 ||
-        receiptDetails.F_BankNote_No == 0 ||
         receiptDetails.F_Bags_No == 0) {
       check = true;
       context.snackBar(noBagsOrnoPapersOrBankNoteClassOrPackClass,
           color: Colors.red);
     }
-    receiptDetails.F_total_val = receiptDetails.F_Pack_No *
-        receiptDetails.F_BankNote_No *
-        receiptDetails.F_Pack_Class *
-        receiptDetails.F_BankNote_No *
-        receiptDetails.F_Bags_No;
-    receiptDetails.F_EGP_Amount = receiptDetails.F_total_val.toDouble();
+    // to calculate the total number we multiply by the number of packs with the currency number with number of bags and
+    //// add to the number of lone papers multiplied by the currency number
+    receiptDetails.F_Total_val = ((receiptDetails.F_Pack_No *
+                receiptDetails.F_Pack_Class *
+                receiptDetails.F_Bags_No *
+                100) +
+            (receiptDetails.F_BankNote_No * receiptDetails.F_Pack_Class))
+        .toDouble();
+    receiptDetails.F_EGP_Amount = receiptDetails.F_Total_val.toDouble();
     return check;
   }
 
@@ -189,23 +193,22 @@ abstract class ReceiveDetailsScreenController
     bool check = false;
 
     if (receiptDetails.F_Pack_No == 0 ||
-        receiptDetails.F_BankNote_No == 0 ||
         receiptDetails.F_Pack_Class == 0 ||
-        receiptDetails.F_BankNote_No == 0 ||
         receiptDetails.F_Bags_No == 0 ||
         receiptDetails.F_Convert_Factor == 0) {
       check = true;
       context.snackBar(noBagsOrnoPapersOrBankNoteClassOrPackClassOrFactorNo,
           color: Colors.red);
     }
-    receiptDetails.F_total_val = receiptDetails.F_Pack_No *
-        receiptDetails.F_BankNote_No *
-        receiptDetails.F_Pack_Class *
-        receiptDetails.F_BankNote_No *
-        receiptDetails.F_Bags_No;
+    receiptDetails.F_Total_val = ((receiptDetails.F_Pack_No *
+                receiptDetails.F_Pack_Class *
+                receiptDetails.F_Bags_No *
+                100) +
+            (receiptDetails.F_BankNote_No * receiptDetails.F_Pack_Class))
+        .toDouble();
 
     receiptDetails.F_EGP_Amount =
-        (receiptDetails.F_total_val * receiptDetails.F_Convert_Factor);
+        (receiptDetails.F_Total_val * receiptDetails.F_Convert_Factor);
     return check;
   }
 }

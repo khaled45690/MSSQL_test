@@ -4,10 +4,12 @@ import '../../../../../MainWidgets/CustomTextField.dart';
 import '../../../../../Utilities/Style.dart';
 
 class AddEmployeeByWriting extends StatelessWidget {
-  final bool isLoading , isEnabled;
-    final Function( String value) onChange;
-    final Function()? onTap;
-  const AddEmployeeByWriting( this.isLoading , this.isEnabled ,this.onChange, {super.key , this.onTap});
+  final bool isLoading, isEnabled;
+  final Function(String value) onChange;
+  final Function()? onTap;
+ final TextEditingController? empTextFilledAdder;
+  const AddEmployeeByWriting(this.isLoading, this.isEnabled, this.onChange,
+      {super.key, this.onTap , this.empTextFilledAdder});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,12 @@ class AddEmployeeByWriting extends StatelessWidget {
       margin: const EdgeInsets.only(top: 10, bottom: 10, right: 10),
       child: Row(
         children: [
-          CustomTextField(onChange, 250 , isNumber: true,),
+          CustomTextField(
+            textEditingController: empTextFilledAdder,
+            onChange,
+            250,
+            isNumber: true,
+          ),
           InkWell(
             onTap: isEnabled ? onTap : null,
             child: Container(
@@ -26,12 +33,14 @@ class AddEmployeeByWriting extends StatelessWidget {
               child: const Icon(Icons.add, color: Colors.white, size: 30),
             ),
           ),
-          isLoading ? Container(
-              margin: const EdgeInsets.only(right: 10, bottom: 10),
-              child: Image.asset(
-                "assets/images/loading.gif",
-                width: 30,
-              )) : Container(),
+          isLoading
+              ? Container(
+                  margin: const EdgeInsets.only(right: 10, bottom: 10),
+                  child: Image.asset(
+                    "assets/images/loading.gif",
+                    width: 30,
+                  ))
+              : Container(),
         ],
       ),
     );

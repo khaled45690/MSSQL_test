@@ -19,6 +19,7 @@ class TaskList extends StatelessWidget {
         shrinkWrap: true,
         itemCount: receipts.length,
         itemBuilder: (BuildContext context, int i) {
+
           return ReceiptCard(
             receipts[i],
             true,

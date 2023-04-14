@@ -5,13 +5,19 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:sql_test/src/DataTypes/CrewMember.dart';
 import 'package:sql_test/src/DataTypes/CustomerBranch.dart';
 
-import 'Bank.dart';
+import '../Utilities/Prefs.dart';
+import '../Utilities/Strings.dart';
+import '../Utilities/VariableCodes.dart';
 import 'Customer.dart';
 import 'ReceiptDetails.dart';
 import 'ReceiptType.dart';
+import 'package:convert/convert.dart';
+
+import 'User.dart';
 
 class Receipt {
   int F_Id;
@@ -80,16 +86,35 @@ class Receipt {
     required this.isSavedInDatabase,
     this.imagesAsPDF,
   });
-  factory Receipt.fromJson(Map json) {
+  factory Receipt.fromJson(Map json, {isUpdatingFromDatabase = false}) {
+    List Recipt_Type = ["تسليم", "فرز", "محصنة"];
+
+    Customer? cust = _customerSetter(json['F_Cust_Id']);
+    Customer? cust_R = _customerSetter(json['F_Bank_Id_R']);
+    if (isUpdatingFromDatabase) {
+      DateTime arrivalTime = DateTime.parse(json['F_Arrival_Time_D']),
+          leavingTime = DateTime.parse(json['F_Leaving_Time_D']);
+          String arrivalHour = arrivalTime.hour > 12 ? (arrivalTime.hour - 12) > 10? "${(arrivalTime.hour - 12)}" : "0${(arrivalTime.hour - 12)}" :   (arrivalTime.hour ) > 10? "${(arrivalTime.hour)}" : "0${(arrivalTime.hour)}";
+          String arrivalMinute = arrivalTime.minute > 10 ?  "${(arrivalTime.minute)}" : "0${(arrivalTime.minute)}";
+          String leavingHour = leavingTime.hour > 12 ? (leavingTime.hour - 12) > 10? "${(leavingTime.hour - 12)}" : "0${(leavingTime.hour - 12)}" :   (leavingTime.hour ) > 10? "${(leavingTime.hour)}" : "0${(leavingTime.hour)}";
+          String leavingMinute = leavingTime.minute > 10 ?  "${(leavingTime.minute)}" : "0${(leavingTime.minute)}";
+      json['F_Arrival_Time_D'] ="$arrivalHour:$arrivalMinute ${arrivalTime.hour > 11? "PM":"AM"}";
+      json['F_Leaving_Time_D'] ="$leavingHour:$leavingMinute ${leavingTime.hour > 11? "PM":"AM"}";
+    }
     return Receipt(
       F_Id: json['F_Id'] ?? 0,
       F_Recipt_No: json['F_Recipt_No'] ?? 0,
-      F_Cust: json['F_Cust'] == null ? null : Customer.fromJson(json['F_Cust']),
+      F_Cust: json['F_Cust_Id'] != null
+          ? cust
+          : json['F_Cust'] == null
+              ? null
+              : Customer.fromJson(json['F_Cust']),
       F_Note: json['F_Note'] ?? '',
       F_Note1: json['F_Note1'] ?? '',
       F_Emp_Id_D: json['F_Emp_Id_D'],
       F_Branch_D: json['F_Branch_D'] == null
-          ? null
+          ? _customerBranchSetter(
+              json['F_Branch_Id_D'], cust == null ? [] : cust.CustomerBranches)
           : CustomerBranch.fromJson(json['F_Branch_D']),
       F_Arrival_Time_D: json['F_Arrival_Time_D'],
       F_Leaving_Time_D: json['F_Leaving_Time_D'],
@@ -107,27 +132,39 @@ class Receipt {
       F_Reviewd: json['F_Reviewd'] ?? 0,
       F_totalAmount_EGP: json['F_totalAmount_EGP'] ?? 0,
       F_totalFees_Amount: json['F_totalFees_Amount'] ?? 0,
-      F_Paper_No: json['F_Paper_No'],
-      F_Cust_R:
-          json['F_Cust_R'] == null ? null : Customer.fromJson(json['F_Cust_R']),
+      F_Paper_No: json['F_Paper_No']?.toString(),
+      F_Cust_R: json['F_Bank_Id_R'] != null
+          ? _customerSetter(json['F_Bank_Id_R'])
+          : json['F_Cust_R'] == null
+              ? null
+              : Customer.fromJson(json['F_Cust_R']),
       F_Branch_R: json['F_Branch_R'] == null
-          ? null
+          ? _customerBranchSetter(json['F_Branch_Id_R'],
+              cust_R == null ? [] : cust_R.CustomerBranches)
           : CustomerBranch.fromJson(json['F_Branch_R']),
       F_Branch_Internal_R: json['F_Branch_Internal_R'] ?? 0,
       F_Recipt_Type: json['F_Recipt_Type'] == null
           ? ReceiptType(receiptTypeNumber: 0, receiptTypeName: "تسليم")
-          : ReceiptType.fromJson(json['F_Recipt_Type']),
+          : json['F_Recipt_Type'] is int
+              ? ReceiptType(
+                  receiptTypeNumber: json['F_Recipt_Type'],
+                  receiptTypeName: Recipt_Type[json['F_Recipt_Type']])
+              : ReceiptType.fromJson(json['F_Recipt_Type']),
       CrewIdList: json['CrewIdList'] == null
-          ? []
+          ? json['F_Team1'] != null
+              ? _crewMemberSetter(json)
+              : []
           : CrewMember.fromJsonListToCrewMemberList(json['CrewIdList']),
       ReceiptDetailsList: json['ReceiptDetailsList'] == null
           ? []
           : ReceiptDetails.fromJsonListToReceiptDetailsList(
               json['ReceiptDetailsList']),
-      imagesAsPDF: json['imagesAsPDF'] == null
-          ? null
-          : Uint8List.fromList(json['imagesAsPDF'].cast<int>()),
-      isSavedInDatabase: json['isSavedInDatabase']?? false,
+      imagesAsPDF: json["F_Attachment"] != null
+          ? Uint8List.fromList(hex.decode(json['F_Attachment']))
+          : json['imagesAsPDF'] == null
+              ? null
+              : Uint8List.fromList(json['imagesAsPDF'].cast<int>()),
+      isSavedInDatabase: json['isSavedInDatabase'] ?? false,
     );
   }
 
@@ -245,12 +282,12 @@ class Receipt {
   }
 
   static List<Receipt> fromJsonStringListToReceiptList(
-      String ListOfJsonString) {
+      String ListOfJsonString , {isUpdatingFromDatabase = false}) {
     List listOfJson = jsonDecode(ListOfJsonString);
     List<Receipt> listOfUsers = [];
 
     for (var element in listOfJson) {
-      listOfUsers.add(Receipt.fromJson(element));
+      listOfUsers.add(Receipt.fromJson(element , isUpdatingFromDatabase: isUpdatingFromDatabase));
     }
     return listOfUsers;
   }
@@ -289,5 +326,61 @@ class Receipt {
     }
     listOfReceipt += "]";
     return listOfReceipt;
+  }
+
+  static Customer? _customerSetter(var CustomerId) {
+    if (CustomerId == null) return null;
+    Customer? returnedCustomer;
+    if (CustomerId is int) {
+      String? customerListString = Prefs.getString(customersInfo);
+      if (customerListString != null) {
+        List customerList =
+            Customer.fromJsonStringListToCustomerList(customerListString);
+        for (Customer customer in customerList) {
+          if (customer.CustID == CustomerId) {
+            returnedCustomer = customer;
+            break;
+          }
+        }
+      }
+    } else {
+      returnedCustomer = Customer.fromJson(CustomerId);
+    }
+
+    return returnedCustomer;
+  }
+
+  static CustomerBranch? _customerBranchSetter(
+      var customerBranch, List<CustomerBranch> customerBranchList) {
+    CustomerBranch? returnedCustomerBranch;
+    if (customerBranch == null) return null;
+    if (customerBranch is int) {
+      for (var i = 0; i < customerBranchList.length; i++) {
+        if (customerBranch == customerBranchList[i].F_Branch_Id) {
+          returnedCustomerBranch = customerBranchList[i];
+        }
+      }
+    } else {
+      returnedCustomerBranch = CustomerBranch.fromJson(customerBranch);
+    }
+    return returnedCustomerBranch;
+  }
+
+  static List<CrewMember> _crewMemberSetter(Map json) {
+    List<CrewMember> crewMemberList = [];
+    List<User> allUsers = User.fromJsonStringListToUserList(
+        Prefs.getString(allUsersFromLocaleDataBase)!);
+    for (var i = 0; i < maxEmpSize; i++) {
+      if (json["F_Team${i + 1}"] != null) {
+        for (User user in allUsers) {
+          if (user.F_EmpID == json["F_Team${i + 1}"]) {
+            CrewMember crewMember =
+                CrewMember(F_EmpID: user.F_EmpID, F_EmpName: user.F_EmpName);
+            crewMemberList.add(crewMember);
+          }
+        }
+      }
+    }
+    return crewMemberList;
   }
 }
