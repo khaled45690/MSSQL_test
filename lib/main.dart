@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sql_conn/sql_conn.dart';
 import 'package:sql_test/src/StateManagement/InternetState/InternetStateHandler.dart';
-import 'package:sql_test/src/DataTypes/Journey.dart';
 import 'package:sql_test/src/StateManagement/JourneyData/JourneyData.dart';
 import 'package:sql_test/src/Utilities/Prefs.dart';
 import 'package:sql_test/src/Feature/JourneyScreen/JourneyScreen.dart';
@@ -59,7 +57,7 @@ class _MyAppState extends State<MyApp> {
         context.read<UserCubit>().setUserData(null);
       }
     }
-    if (DateTime.parse("2023-06-01 13:05:03.037527")
+    if (DateTime.parse("2023-08-01 13:05:03.037527")
             .difference(DateTime.now())
             .inMinutes <=
         0) {

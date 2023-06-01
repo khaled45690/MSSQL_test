@@ -4,6 +4,7 @@ import 'package:sql_conn/sql_conn.dart';
 import 'package:sql_test/src/DataTypes/CrewMember.dart';
 import 'package:sql_test/src/DataTypes/Journey.dart';
 import 'package:sql_test/src/StateManagement/JourneyData/JourneyData.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 
 import '../../../DataTypes/Receipt.dart';
 import '../../../DataTypes/User.dart';
@@ -30,7 +31,7 @@ abstract class TaskScreenController extends State<TaskScreen> {
     receipt = receiptParameter;
   }
 
-  saveReceiptInJouerny(Receipt receiptParameter) {
+  saveReceiptInJouerny(Receipt receiptParameter) async {
     widget.journey.receiptList.add(receiptParameter);
     List<Journey> journeyList = context.read<JourneyCubit>().state;
     journeyList[journeyList.length - 1] = widget.journey;
@@ -38,19 +39,21 @@ abstract class TaskScreenController extends State<TaskScreen> {
     isAddingNewReceipt = false;
     setState(() {});
     receipt = Receipt.fromJson({});
+    // if (SqlConn.isConnected) await widget.updateDataBase();
 
-    if (SqlConn.isConnected) widget.updateDataBase();
+    // ignore: use_build_context_synchronously
+    context.popupAllAndNavigateTo('/JourneyScreen');
   }
 
-  editReceiptInJouerny(Receipt receiptParameter, int receiptIndex) {
-    debugPrint("isEntered");
-    debugPrint(receiptParameter.isSavedInDatabase.toString());
+  editReceiptInJouerny(Receipt receiptParameter, int receiptIndex , bool isfinalyEdited) async {
     widget.journey.receiptList[receiptIndex] = receiptParameter;
     List<Journey> journeyList = context.read<JourneyCubit>().state;
     journeyList[journeyList.length - 1] = widget.journey;
     context.read<JourneyCubit>().setjourneyDataWithSharedPrefrence(journeyList);
     setState(() {});
-    if (SqlConn.isConnected) widget.updateDataBase();
+    // if (SqlConn.isConnected) await widget.updateDataBase();
+    // ignore: use_build_context_synchronously
+    if(isfinalyEdited) context.popupAllAndNavigateTo('/JourneyScreen');
   }
 
   addNewReceipt() {

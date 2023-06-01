@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 import 'src/Utilities/Style.dart';
 
@@ -11,7 +9,7 @@ class WarningScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text("من فضلك قم بدفع ما عليك من مال \nخالد سعد عباس ",
+        child: Text("من فضلك قم بالتواصل مع \nخالد سعد عباس ",
             textAlign: TextAlign.center, style: moneyWarningTextStyle),
       ),
     );

@@ -160,7 +160,7 @@ class _CustomSearchWithFilterWidgetState
                                   width: 170,
                                   child: Text(
                                     isId
-                                        ? customerList[index].F_Branch_Id.toString()
+                                        ? customerList[index].F_Branch_Internal.toString()
                                         : customerList[index].F_Branch_Name,
                                     overflow: TextOverflow.visible,
                                     textDirection: TextDirection.rtl,
@@ -195,8 +195,8 @@ class _CustomSearchWithFilterWidgetState
           }
         }
       } else {
-        if (value.length <= customer.F_Branch_Id.toString().length) {
-          if (customer.F_Branch_Id.toString().substring(0, value.length) == value) {
+        if (value.length <= customer.F_Branch_Internal.toString().length) {
+          if (customer.F_Branch_Internal.toString().substring(0, value.length) == value) {
             filter.add(customer);
           }
         }

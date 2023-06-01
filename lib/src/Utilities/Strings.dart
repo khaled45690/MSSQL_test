@@ -39,3 +39,4 @@ const String loginUserFromLocaleDataBase = "LoginUserData";
 const String userJouernies = "UserJouernies";
 const String customersInfo = "CustomersInfo";
 const String currencyInfo = "CurrencysInfo";
+const String companyBranchesInfo = "companyBranchesInfo";

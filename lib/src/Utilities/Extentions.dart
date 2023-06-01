@@ -21,7 +21,7 @@ extension customContext on BuildContext {
 
   popupAllAndNavigateTo(String destinationName) {
     Timer(const Duration(milliseconds: 50), () {
-      Navigator.popUntil(this, ModalRoute.withName('/JourneyScreen'));
+      Navigator.popUntil(this, ModalRoute.withName(destinationName));
     });
 
     Timer(const Duration(milliseconds: 50), () {

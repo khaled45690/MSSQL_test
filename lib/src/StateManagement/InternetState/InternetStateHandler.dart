@@ -11,6 +11,7 @@ import 'package:sql_test/src/DataTypes/Currency.dart';
 import 'package:sql_test/src/DataTypes/Customer.dart';
 import 'package:sql_test/src/DataTypes/CustomerBranch.dart';
 
+import '../../DataTypes/CompanyBranch.dart';
 import '../../Utilities/Prefs.dart';
 import '../../Utilities/Strings.dart';
 import '../../DataTypes/User.dart';
@@ -43,7 +44,7 @@ class InternetConnectionCubit extends Cubit<bool> {
           case InternetConnectionStatus.connected:
             if (!SqlConn.isConnected) {
               SqlConn.connect(
-                      ip: "196.218.142.75",
+                      ip: "196.219.183.213",
                       port: "1455",
                       databaseName: "SWAT_${DateTime.now().year}",
                       username: "sa",
@@ -72,8 +73,7 @@ class InternetConnectionCubit extends Cubit<bool> {
     _updateUsers();
     _updateCustomers();
     _updateCurrency();
-
- 
+    _updateCompanyBranches();
   }
 
   _disconnected() {
@@ -130,4 +130,14 @@ class InternetConnectionCubit extends Cubit<bool> {
         currencyInfo, Currency.fromCurrencyListToJsonListString(currency));
   }
 
+  _updateCompanyBranches() async {
+    String companyBranchesData = await SqlConn.readData(
+        "SELECT * from dbo.T_Sort_Loc ORDER BY F_Sort_Loc_Id ASC");
+    List<CompanyBranch> companyBranches =
+        CompanyBranch.fromJsonStringListToCompanyBrancheList(
+            companyBranchesData);
+
+    Prefs.setString(companyBranchesInfo,
+        CompanyBranch.fromCompanyBrancheListToJsonListString(companyBranches));
+  }
 }

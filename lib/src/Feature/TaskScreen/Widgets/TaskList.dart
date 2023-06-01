@@ -6,7 +6,7 @@ import '../../../DataTypes/Receipt.dart';
 
 class TaskList extends StatelessWidget {
   final List<Receipt> receipts;
-  final Function(Receipt receiptParameter , int receiptIndex) parsedFunction;
+  final Function(Receipt receiptParameter , int receiptIndex , bool isFinalyEdited) parsedFunction;
   const TaskList(this.receipts, this.parsedFunction,
       {super.key});
 
@@ -23,8 +23,8 @@ class TaskList extends StatelessWidget {
           return ReceiptCard(
             receipts[i],
             true,
-            parsedFunction: (receipt) => parsedFunction(receipt , i),
-            saveReceiptInJouerny: (receipt) => parsedFunction(receipt , i),
+            parsedFunction: (receipt) => parsedFunction(receipt , i , false),
+            saveReceiptInJouerny: (receipt) => parsedFunction(receipt , i , true),
           );
         },
       ),

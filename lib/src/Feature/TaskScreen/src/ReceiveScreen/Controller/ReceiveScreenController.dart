@@ -224,8 +224,6 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
     if (receiptImageList.isNotEmpty)
       widget.receipt.imagesAsPDF = await _convertImagesToPDF();
     widget.saveReceiptInJouerny(widget.receipt);
-    // ignore: use_build_context_synchronously
-    context.popupAllAndNavigateTo('/JourneyScreen');
   }
 
   bool _receiptDateCheck() {

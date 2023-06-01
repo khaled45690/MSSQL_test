@@ -37,6 +37,7 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
     super.initState();
     user = context.read<UserCubit>().getUserDataFromPref();
     Timer(const Duration(milliseconds: 1000), initialFunction);
+    if (SqlConn.isConnected) updateDataBase();
     // tagraba();
     // Timer(Duration(milliseconds: 2000), _updateDataBase);
   }
@@ -261,9 +262,11 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
   _getUserJourniesFromInternet() async {
     String jouerniesDataString = await SqlConn.readData(
         "SELECT * from dbo.T_DAY WHERE F_Emp_Id = ${user!.F_EmpID} ORDER BY F_Id ASC");
+              debugPrint(jouerniesDataString);
     try {
       List<Journey> jouernies =
           Journey.fromJsonStringListToJourneyList(jouerniesDataString);
+
       if (jouernies.isEmpty) {
         _handelStartAndEndButton(null);
         return context
@@ -374,8 +377,6 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
     String updateQuery = "BEGIN TRANSACTION; DECLARE @recipt_no INT;";
 
     for (int i = 0; i < journey.receiptList.length; i++) {
-      debugPrint("journey.receiptList[i].isSavedInDatabase.toString()");
-      debugPrint(journey.receiptList[i].isSavedInDatabase.toString());
       if (journey.receiptList[i].isSavedInDatabase) {
         updateQuery += "SET @recipt_no=${journey.receiptList[i].F_Recipt_No};";
 
@@ -393,7 +394,6 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
 
         String receiptDataString = await SqlConn.readData(query);
         List receiptDataList = jsonDecode(receiptDataString);
-        debugPrint(receiptDataList.length.toString());
         journey.receiptList[i].F_Recipt_No =
             receiptDataList[receiptDataList.length - 1]["F_Recipt_No"];
         journey.receiptList[i].isSavedInDatabase = true;

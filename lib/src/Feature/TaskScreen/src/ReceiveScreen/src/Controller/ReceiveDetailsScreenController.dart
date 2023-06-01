@@ -33,8 +33,6 @@ abstract class ReceiveDetailsScreenController
   }
 
   onRadioChangeCallbackForCurrencyTypes(int radioGroupValue) {
-    debugPrint((receiptDetails.F_Currency_Type == 1 && radioGroupValue != 2)
-        .toString());
     if ((receiptDetails.F_Currency_Type == LocalCurrency &&
             radioGroupValue != CoinsCurrency) ||
         (receiptDetails.F_Currency_Type == ForeignCurrency &&
@@ -113,7 +111,6 @@ abstract class ReceiveDetailsScreenController
 
   onSelectreceiptTypeFunc(Currency currency) {
     receiptDetails.F_Currency_Id = currency;
-    debugPrint(currency.F_CURRANCY_ID.toString());
     if (currency.F_CURRANCY_ID == EGP) {
       receiptDetails.F_Currency_Type = LocalCurrency;
     } else {
