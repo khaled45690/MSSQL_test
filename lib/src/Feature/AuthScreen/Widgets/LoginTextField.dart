@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 
@@ -28,7 +30,7 @@ class LoginTextField extends StatelessWidget {
               
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(width: 1.5, color: mainBlue)),
+                  borderSide: const BorderSide(width: 1.5, color: mainBlue)),
               filled: true,
               fillColor: mainBlue.withOpacity(0.1),
               focusColor: mainBlue,
@@ -37,7 +39,7 @@ class LoginTextField extends StatelessWidget {
               hintStyle: textfieldHintStyle,
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(width: 0)),
+                  borderSide: const BorderSide(width: 0)),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:sql_test/src/DataTypes/Journey.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';

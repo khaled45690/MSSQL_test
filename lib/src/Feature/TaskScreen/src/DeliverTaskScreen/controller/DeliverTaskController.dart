@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously, file_names, depend_on_referenced_packages
 
 import 'dart:async';
 import 'dart:typed_data';
@@ -55,10 +55,12 @@ abstract class DeliverTaskController extends State<DeliverTaskScreen> {
   @override
   void dispose() {
     super.dispose();
-    if (internetConnectionListenerForRetrevingData != null)
+    if (internetConnectionListenerForRetrevingData != null) {
       internetConnectionListenerForRetrevingData!.cancel();
-    if (internetConnectionListener != null)
+    }
+    if (internetConnectionListener != null) {
       internetConnectionListener!.cancel();
+    }
   }
 
   addingEmployeeButton() {
@@ -94,7 +96,6 @@ abstract class DeliverTaskController extends State<DeliverTaskScreen> {
 
   onCapture(BarcodeCapture capture) {
     final List<Barcode> barcodes = capture.barcodes;
-    final Uint8List? image = capture.image;
     for (final barcode in barcodes) {
       debugPrint('Barcode found! ${barcode.rawValue}');
       if (barcode.rawValue == null) return;

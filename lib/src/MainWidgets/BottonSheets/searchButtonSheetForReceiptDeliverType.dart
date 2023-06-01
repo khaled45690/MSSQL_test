@@ -1,10 +1,11 @@
 
+// ignore_for_file: file_names, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:sql_test/src/DataTypes/ReceiptDeliver.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 import 'package:sql_test/src/Utilities/colors.dart';
 
-import '../../DataTypes/ReceiptDeliver.dart';
 import '../../Utilities/Style.dart';
 import '../SearchTextField.dart';
 
@@ -44,7 +45,6 @@ class _CustomSearchWithFilterWidgetState
   bool isId = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     ReceiptDeliverList = widget.receiptDeliverList;
   }

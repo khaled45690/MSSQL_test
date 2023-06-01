@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -9,7 +11,6 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:sql_test/src/DataTypes/CrewMember.dart';
 import 'package:sql_test/src/DataTypes/Customer.dart';
 import 'package:sql_test/src/DataTypes/CustomerBranch.dart';
-import 'package:sql_test/src/Feature/JourneyScreen/JourneyScreen.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -91,7 +92,6 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
 
   onCapture(BarcodeCapture capture) {
     final List<Barcode> barcodes = capture.barcodes;
-    final Uint8List? image = capture.image;
     for (final barcode in barcodes) {
       debugPrint('Barcode found! ${barcode.rawValue}');
       if (barcode.rawValue == null) return;
@@ -221,8 +221,9 @@ abstract class ReceiveScreenController extends State<ReceiveScreen> {
     if (_receiptDateCheck()) return;
 
     widget.receipt.Time_Save = DateTime.now().toString();
-    if (receiptImageList.isNotEmpty)
+    if (receiptImageList.isNotEmpty) {
       widget.receipt.imagesAsPDF = await _convertImagesToPDF();
+    }
     widget.saveReceiptInJouerny(widget.receipt);
   }
 

@@ -1,5 +1,8 @@
-import 'package:flutter/material.dart';
 
+
+// ignore_for_file: file_names
+
+import 'package:flutter/material.dart';
 import 'package:sql_test/src/DataTypes/ReceiptDetails.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 
@@ -26,7 +29,7 @@ class CustomViewListForReceipts extends StatelessWidget {
               itemCount: receiptList.length,
               itemBuilder: (context, index) {
                 String textString =
-                    "${index + 1}) ${receiptList[index].F_Total_val} ${receiptList[index].F_Currency_Id!.F_CURRANCY_NAM}";
+                    "${index + 1}) ${receiptList[index].F_Total_val} ${receiptList[index].F_Currency_Id.F_CURRANCY_NAM}";
                 return Container(
                   margin: const EdgeInsets.all(5),
                   child: Row(

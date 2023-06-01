@@ -1,4 +1,5 @@
-import 'dart:convert';
+
+// ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
@@ -6,7 +7,6 @@ import 'package:sql_test/src/Utilities/Extentions.dart';
 import '../../../DataTypes/User.dart';
 import '../../../Utilities/Prefs.dart';
 import '../../../Utilities/Strings.dart';
-import '../../JourneyScreen/JourneyScreen.dart';
 import '../AuthScreen.dart';
 
 abstract class AuthScreenController extends State<AuthScreen> {

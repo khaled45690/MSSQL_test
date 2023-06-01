@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:sql_test/src/DataTypes/Currency.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
@@ -44,7 +46,7 @@ class _CustomSearchWithFilterWidgetState
   bool isId = false;
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
     currencyList = widget.currencyList;
   }

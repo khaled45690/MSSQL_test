@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 import 'Colors.dart';
@@ -203,7 +205,7 @@ BoxDecoration lightBlueAccent20percentageWithRadius10Decoration = BoxDecoration(
       color: Colors.lightBlueAccent.withOpacity(0.5),
       spreadRadius: 3,
       blurRadius: 3,
-      offset: Offset(0, 3), // changes position of shadow
+      offset: const Offset(0, 3), // changes position of shadow
     ),
   ],
   color: Colors.lightBlueAccent.withOpacity(0.2),
@@ -228,7 +230,7 @@ BoxDecoration taskContentDecoration = BoxDecoration(
       color: Colors.grey.withOpacity(0.5),
       spreadRadius: 5,
       blurRadius: 7,
-      offset: Offset(0, 3), // changes position of shadow
+      offset: const Offset(0, 3), // changes position of shadow
     ),
   ],
   color: mainBlue.withOpacity(0.4),

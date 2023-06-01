@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart' show BuildContext, Center, Colors, Container, Image, StatelessWidget, Widget;
 import 'package:sql_test/src/Utilities/Extentions.dart';
 

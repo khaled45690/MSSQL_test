@@ -1,8 +1,7 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, file_names
 
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:sql_test/src/Utilities/VariableCodes.dart';
 
 import '../Utilities/Prefs.dart';

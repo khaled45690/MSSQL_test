@@ -1,11 +1,10 @@
 // F_Id
 
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, file_names, depend_on_referenced_packages
 
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:sql_test/src/DataTypes/CrewMember.dart';
 import 'package:sql_test/src/DataTypes/CustomerBranch.dart';
 

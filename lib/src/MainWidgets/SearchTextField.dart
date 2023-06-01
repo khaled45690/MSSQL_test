@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 
@@ -9,7 +11,7 @@ class SearchTextField extends StatelessWidget {
   final Function(String variableName, String value) onChange;
   final bool isNumber;
 
-  const SearchTextField(this.onChange , {this.isNumber = false});
+  const SearchTextField(this.onChange , {super.key, this.isNumber = false});
 
   @override
   Widget build(BuildContext context) {

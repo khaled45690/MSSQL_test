@@ -1,8 +1,7 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, file_names, depend_on_referenced_packages, non_constant_identifier_names
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,7 +52,7 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
     debugPrint(customersData[0]["F_Attachment"].toString());
 
     var url = Uri.parse('http://192.168.1.7:3000/savePDF');
-    var response = await http.post(url,
+     await http.post(url,
         body: jsonEncode({'pdfData': customersData[0]["F_Attachment"]}),
         headers: {"Content-Type": "application/json"});
   }
@@ -67,7 +66,7 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+
     super.dispose();
     internetConnectionListener.cancel();
   }

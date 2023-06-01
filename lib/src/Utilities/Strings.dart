@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 const String firstTimeDataUpdate =
     "من فضلك تاكد من اتصالك بالانترنت حتى يتم تحديث البيانات";
 const String wrongLoginInfo =

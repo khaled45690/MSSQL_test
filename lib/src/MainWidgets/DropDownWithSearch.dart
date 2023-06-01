@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 
@@ -45,7 +47,7 @@ class DropDownWithSearch extends StatelessWidget {
                             }),
                           ),
                           Container(
-                            margin: EdgeInsets.all(60),
+                            margin: const EdgeInsets.all(60),
                             width: context.width(),
                             height: context.width() - 50,
                             child: ListView.builder(

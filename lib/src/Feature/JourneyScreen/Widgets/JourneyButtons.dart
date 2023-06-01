@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 import '../../../MainWidgets/CustomButton.dart';
@@ -23,8 +25,6 @@ class JourneyButtons extends StatelessWidget {
             stream: InternetConnectionCubit.isConnectedToInternet.stream,
             builder:
                 (BuildContext context, AsyncSnapshot<bool> isConnectedStream) {
-              bool isConnected =
-                  isConnectedStream.hasData ? isConnectedStream.data! : false;
               debugPrint(InternetConnectionCubit.isConnected.toString());
               return CircleAvatar(
                   radius: 20,

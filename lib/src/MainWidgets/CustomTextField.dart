@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 import '../Utilities/Style.dart';
@@ -29,14 +31,14 @@ class CustomTextField extends StatelessWidget {
             keyboardType: isNumber ? TextInputType.number : TextInputType.text,
             decoration: InputDecoration(
               focusedBorder:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(10) ,borderSide: BorderSide(width: 1.5, color: mainBlue)),
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(10) ,borderSide: const BorderSide(width: 1.5, color: mainBlue)),
               filled: true,
               fillColor: Colors.blueGrey.withOpacity(0.2),
               focusColor: mainBlue,
               alignLabelWithHint: true,
             
               hintStyle: textfieldHintStyle,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10) ,borderSide: BorderSide(width: 0)),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10) ,borderSide: const BorderSide(width: 0)),
               enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10) ,borderSide: BorderSide(width: 1 , color: mainBlue.withOpacity(0.7))),
               hintText: hint,
             )),

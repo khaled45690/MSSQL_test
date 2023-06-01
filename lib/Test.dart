@@ -1,4 +1,5 @@
-import 'dart:typed_data';
+// ignore_for_file: file_names
+
 
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -24,7 +25,7 @@ class _TestState extends State<Test> {
               icon: ValueListenableBuilder(
                 valueListenable: cameraController.torchState,
                 builder: (context, state, child) {
-                  switch (state as TorchState) {
+                  switch (state) {
                     case TorchState.off:
                       return const Icon(Icons.flash_off, color: Colors.grey);
                     case TorchState.on:
@@ -40,7 +41,7 @@ class _TestState extends State<Test> {
               icon: ValueListenableBuilder(
                 valueListenable: cameraController.cameraFacingState,
                 builder: (context, state, child) {
-                  switch (state as CameraFacing) {
+                  switch (state) {
                     case CameraFacing.front:
                       return const Icon(Icons.camera_front);
                     case CameraFacing.back:
@@ -58,7 +59,6 @@ class _TestState extends State<Test> {
           controller: cameraController,
           onDetect: (capture) {
             final List<Barcode> barcodes = capture.barcodes;
-            final Uint8List? image = capture.image;
             for (final barcode in barcodes) {
               debugPrint('Barcode found! ${barcode.rawValue}');
             }
