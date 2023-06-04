@@ -41,7 +41,11 @@ Consist of all the Features in the application like
     - Models
     - src
         - RecievedScreen
+            - InteralRecievedScreen
+            - ExternalRecievedScreen
         - DeliverScreen
+            - InternalDeliverScreen
+            - ExternalDeliverScreen
 
      TaskScreen contains the UI screen of creating and deleting any Tasks and all it's Functionality, also in the TaskSCreen folder there is src folder which contains RecievedScreen
      and DeliverScreen which follows the same hierarchy as well

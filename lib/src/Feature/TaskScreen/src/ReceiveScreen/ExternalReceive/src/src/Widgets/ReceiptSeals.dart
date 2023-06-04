@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../../../Utilities/Style.dart';
-import '../../Widgets/TextFieldWithName.dart';
+import '../../../../../../../../Utilities/Style.dart';
+import '../../../Widgets/TextFieldWithName.dart';
+
+
 
 class ReceiptSeals extends StatelessWidget {
   final Function(String variableName, String value) onTextChange;

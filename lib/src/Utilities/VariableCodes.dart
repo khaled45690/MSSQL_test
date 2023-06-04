@@ -9,3 +9,7 @@ const CoinsCurrency = 2;
 const EGP = 1;
 const USD = 2;
 const maxEmpSize = 6;
+const InternalDelivery = 0;
+const ExternalDelivery = 1;
+const InternalReceiving = 0;
+const ExternalReceiving = 1;

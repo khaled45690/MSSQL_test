@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:sql_test/src/DataTypes/Journey.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 import 'package:sql_test/src/Feature/TaskScreen/src/DeliverTaskScreen/DeliverTaskScreen.dart';
-
-import '../../MainWidgets/CustomButton.dart';
 import '../../Utilities/Colors.dart';
+import '../../Utilities/VariableCodes.dart';
 import 'Controller/TaskScreenController.dart';
+import 'Widgets/InternalAndExternalReceiveRadioButton.dart';
 import 'Widgets/ReceiveAndDeliverRadioGroup.dart';
-import 'Widgets/ReceiptCard.dart';
-import 'Widgets/TaskList.dart';
+import 'src/ReceiveScreen/ExternalReceive/ExternalReceive.dart';
 
 class TaskScreen extends StatefulWidget {
   final Journey journey;
@@ -34,29 +33,56 @@ class _TaskScreenState extends TaskScreenController {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 50),
+                const SizedBox(height: 20),
                 ReceiveAndDeliverRadioGroup(
                     radioGroupValue: radioGroupValue,
                     onRadioChangeCallback: onRadioChangeCallback),
-                const SizedBox(height: 30),
+                const SizedBox(height: 10),
                 radioGroupValue == "Receive"
                     ? Column(
                         children: [
-                          TaskList(widget.journey.receiptList, editReceiptInJouerny),
-                          isAddingNewReceipt
-                              ? ReceiptCard(
+                          InternalAndExternalReceiveRadioButton(
+                              radioGroupValue: receiveradioGroupValue,
+                              onRadioChangeCallback: receiveOnRadioChangeCallback),
+                          receiveradioGroupValue == InternalReceiving
+                              ? ExternalReceive(
+                                  widget.journey.receiptList,
+                                  editReceiptInJouerny,
                                   receipt,
-                                  false,
-                                  parsedFunction: saveTempReceipt,
+                                  saveTempReceipt: saveTempReceipt,
                                   saveReceiptInJouerny: saveReceiptInJouerny,
+                                  isEnabled: isAddingNewReceipt,
+                                  addNewReceipt: addNewReceipt,
                                 )
-                              : const SizedBox(),
-                          const SizedBox(height: 30),
-                          CustomButton("اضف وصل", 250, addNewReceipt,
-                              isEnabled: !isAddingNewReceipt),
+                              : ExternalReceive(
+                                  widget.journey.receiptList,
+                                  editReceiptInJouerny,
+                                  receipt,
+                                  saveTempReceipt: saveTempReceipt,
+                                  saveReceiptInJouerny: saveReceiptInJouerny,
+                                  isEnabled: isAddingNewReceipt,
+                                  addNewReceipt: addNewReceipt,
+                                )
                         ],
                       )
-                    : DeliverTaskScreen(widget.journey),
+                    : DeliverTaskScreen(widget.journey, deliveryradioGroupValue,
+                        deliveryOnRadioChangeCallback),
+                // Column(
+                //   children: [
+                //     TaskList(widget.journey.receiptList, editReceiptInJouerny),
+                //     isAddingNewReceipt
+                //         ? ReceiptCard(
+                //             receipt,
+                //             false,
+                //             parsedFunction: saveTempReceipt,
+                //             saveReceiptInJouerny: saveReceiptInJouerny,
+                //           )
+                //         : const SizedBox(),
+                //     const SizedBox(height: 30),
+                //     CustomButton("اضف وصل", 250, addNewReceipt,
+                //         isEnabled: !isAddingNewReceipt),
+                //   ],
+                // )
               ],
             ),
           ),

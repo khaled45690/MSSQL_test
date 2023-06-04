@@ -15,14 +15,16 @@ import 'package:sql_test/src/Utilities/Extentions.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:sql_test/src/Utilities/VariableCodes.dart';
-import '../../../../../DataTypes/ReceiptDetails.dart';
-import '../../../../../DataTypes/ReceiptType.dart';
-import '../../../../../DataTypes/User.dart';
-import '../../../../../MainWidgets/CustomButton.dart';
-import '../../../../../Utilities/Prefs.dart';
-import '../../../../../Utilities/Strings.dart';
+import '../../../../../../../DataTypes/ReceiptDetails.dart';
+import '../../../../../../../DataTypes/ReceiptType.dart';
+import '../../../../../../../DataTypes/User.dart';
+import '../../../../../../../MainWidgets/CustomButton.dart';
+import '../../../../../../../Utilities/Prefs.dart';
+import '../../../../../../../Utilities/Strings.dart';
 import '../ReceiveScreen.dart';
 import '../src/ReceiveDetailsScreen.dart';
+
+
 
 abstract class ReceiveScreenController extends State<ReceiveScreen> {
   MobileScannerController cameraController =

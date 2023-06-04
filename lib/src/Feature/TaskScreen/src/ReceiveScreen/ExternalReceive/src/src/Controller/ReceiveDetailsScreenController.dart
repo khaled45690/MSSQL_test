@@ -5,10 +5,12 @@ import 'package:sql_test/src/DataTypes/Currency.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 import 'package:sql_test/src/Utilities/VariableCodes.dart';
 
-import '../../../../../../DataTypes/ReceiptDetails.dart';
-import '../../../../../../Utilities/Prefs.dart';
-import '../../../../../../Utilities/Strings.dart';
+import '../../../../../../../../DataTypes/ReceiptDetails.dart';
+import '../../../../../../../../Utilities/Prefs.dart';
+import '../../../../../../../../Utilities/Strings.dart';
 import '../ReceiveDetailsScreen.dart';
+
+
 
 abstract class ReceiveDetailsScreenController
     extends State<ReceiveDetailsScreen> {

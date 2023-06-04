@@ -1,14 +1,18 @@
+//InternalAndExternalReceiveRadioButton
+
+
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
 
-import '../../../../../../Utilities/Style.dart';
+import '../../../Utilities/Style.dart';
+import '../../../Utilities/VariableCodes.dart';
 
 
-class CoinsORPaperMoneyRadioGroup extends StatelessWidget {
-  final bool radioGroupValue;
-  final Function(bool) onRadioChangeCallback;
-  const CoinsORPaperMoneyRadioGroup(
+class InternalAndExternalReceiveRadioButton extends StatelessWidget {
+  final int radioGroupValue;
+  final Function(int) onRadioChangeCallback;
+  const InternalAndExternalReceiveRadioButton(
       {super.key,
       required this.radioGroupValue,
       required this.onRadioChangeCallback});
@@ -19,32 +23,32 @@ class CoinsORPaperMoneyRadioGroup extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         InkWell(
-          onTap: () => onRadioChangeCallback(false),
+          onTap: () => onRadioChangeCallback(InternalReceiving),
           child: Row(
             children: [
               const Text(
-                "عملات ورقية",
+                "استلام داخلى",
                 style: size19BlackTextStyle,
               ),
               Radio(
-                  value: false,
+                  value: InternalReceiving,
                   groupValue: radioGroupValue,
-                  onChanged: (value) => onRadioChangeCallback(false))
+                  onChanged: (value) => onRadioChangeCallback(InternalReceiving))
             ],
           ),
         ),
         InkWell(
-          onTap: () => onRadioChangeCallback(true),
+          onTap: () => onRadioChangeCallback(ExternalReceiving),
           child: Row(
             children: [
               const Text(
-                "عملات معدتية",
+                "استلام خارجى",
                 style: size19BlackTextStyle,
               ),
               Radio(
-                value: true,
+                value: ExternalReceiving,
                 groupValue: radioGroupValue,
-                onChanged: (value) => onRadioChangeCallback(true)
+                onChanged: (value) => onRadioChangeCallback(ExternalReceiving)
               )
             ],
           ),

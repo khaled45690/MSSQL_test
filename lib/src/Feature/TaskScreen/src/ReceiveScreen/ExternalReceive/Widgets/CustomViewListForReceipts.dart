@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:sql_test/src/DataTypes/ReceiptDetails.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 
-import '../../../../../Utilities/Style.dart';
+import '../../../../../../Utilities/Style.dart';
+
+
+
 
 class CustomViewListForReceipts extends StatelessWidget {
   final List<ReceiptDetails> receiptList;

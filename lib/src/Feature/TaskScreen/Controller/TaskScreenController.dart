@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, unnecessary_this
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +11,7 @@ import 'package:sql_test/src/Utilities/Extentions.dart';
 import '../../../DataTypes/Receipt.dart';
 import '../../../DataTypes/User.dart';
 import '../../../StateManagement/UserData/UserData.dart';
+import '../../../Utilities/VariableCodes.dart';
 import '../TaskScreen.dart';
 
 abstract class TaskScreenController extends State<TaskScreen> {
@@ -26,6 +27,19 @@ abstract class TaskScreenController extends State<TaskScreen> {
   bool isAddingNewReceipt = false;
   onRadioChangeCallback(String radioGroupValue) {
     this.radioGroupValue = radioGroupValue;
+    setState(() {});
+  }
+
+  int deliveryradioGroupValue = InternalDelivery;
+  deliveryOnRadioChangeCallback(int radioGroupValue) {
+    this.deliveryradioGroupValue = radioGroupValue;
+    setState(() {});
+  }
+
+
+   int receiveradioGroupValue = InternalReceiving;
+  receiveOnRadioChangeCallback(int radioGroupValue) {
+    this.receiveradioGroupValue = radioGroupValue;
     setState(() {});
   }
 
@@ -47,7 +61,8 @@ abstract class TaskScreenController extends State<TaskScreen> {
     context.popupAllAndNavigateTo('/JourneyScreen');
   }
 
-  editReceiptInJouerny(Receipt receiptParameter, int receiptIndex , bool isfinalyEdited) async {
+  editReceiptInJouerny(
+      Receipt receiptParameter, int receiptIndex, bool isfinalyEdited) async {
     widget.journey.receiptList[receiptIndex] = receiptParameter;
     List<Journey> journeyList = context.read<JourneyCubit>().state;
     journeyList[journeyList.length - 1] = widget.journey;
@@ -55,7 +70,7 @@ abstract class TaskScreenController extends State<TaskScreen> {
     setState(() {});
     // if (SqlConn.isConnected) await widget.updateDataBase();
     // ignore: use_build_context_synchronously
-    if(isfinalyEdited) context.popupAllAndNavigateTo('/JourneyScreen');
+    if (isfinalyEdited) context.popupAllAndNavigateTo('/JourneyScreen');
   }
 
   addNewReceipt() {

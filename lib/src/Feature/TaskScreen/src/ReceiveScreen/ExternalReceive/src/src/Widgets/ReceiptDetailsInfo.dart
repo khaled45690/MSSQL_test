@@ -3,7 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:sql_test/src/Utilities/VariableCodes.dart';
 
-import '../../Widgets/TextFieldWithName.dart';
+import '../../../Widgets/TextFieldWithName.dart';
+
+
+
+
+
 
 class ReceiptDetailsInfo extends StatelessWidget {
   final int currencyType;

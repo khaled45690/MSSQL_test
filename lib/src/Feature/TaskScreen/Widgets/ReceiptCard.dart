@@ -3,9 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:sql_test/src/DataTypes/Receipt.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
-import 'package:sql_test/src/Feature/TaskScreen/src/ReceiveScreen/ReceiveScreen.dart';
+
 
 import '../../../Utilities/Style.dart';
+import '../src/ReceiveScreen/ExternalReceive/src/ReceiveScreen.dart';
 
 class ReceiptCard extends StatelessWidget {
   final Receipt receipt;

@@ -1,22 +1,23 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+
 import 'package:sql_test/src/MainWidgets/CustomButton.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 
-import '../../../../MainWidgets/BottonSheets/SearchButtonSheetForBranch.dart';
-import '../../../../MainWidgets/BottonSheets/SearchButtonSheetForCustomer.dart';
-import '../../../../MainWidgets/BottonSheets/searchButtonSheetForReceiptType.dart';
-import '../../../../MainWidgets/CustomElementSelector.dart';
-import '../../../../MainWidgets/QRCodeDetection.dart';
-import '../../../../DataTypes/Receipt.dart';
+import '../../../../../../DataTypes/Receipt.dart';
+import '../../../../../../MainWidgets/BottonSheets/SearchButtonSheetForBranch.dart';
+import '../../../../../../MainWidgets/BottonSheets/SearchButtonSheetForCustomer.dart';
+import '../../../../../../MainWidgets/BottonSheets/searchButtonSheetForReceiptType.dart';
+import '../../../../../../MainWidgets/CustomElementSelector.dart';
+import '../../../../../../MainWidgets/QRCodeDetection.dart';
+import '../Widgets/AddEmployeeByWriting.dart';
+import '../Widgets/AddImageToReceipt.dart';
+import '../Widgets/CustomListView.dart';
+import '../Widgets/CustomViewListForReceipts.dart';
+import '../Widgets/DatePickerWidget.dart';
+import '../Widgets/TextFieldWithName.dart';
 import 'Controller/ReceiveScreenController.dart';
-import 'Widgets/AddEmployeeByWriting.dart';
-import 'Widgets/AddImageToReceipt.dart';
-import 'Widgets/CustomListView.dart';
-import 'Widgets/CustomViewListForReceipts.dart';
-import 'Widgets/DatePickerWidget.dart';
-import 'Widgets/TextFieldWithName.dart';
 
 class ReceiveScreen extends StatefulWidget {
   final Receipt receipt;

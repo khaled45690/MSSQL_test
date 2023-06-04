@@ -1,33 +1,31 @@
-// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously, file_names, depend_on_referenced_packages
-
+// ignore_for_file: file_names, use_build_context_synchronously, depend_on_referenced_packages
+import 'package:convert/convert.dart';
 import 'dart:async';
 import 'dart:typed_data';
-import 'package:convert/convert.dart';
-import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
-import 'package:day_night_time_picker/lib/state/time.dart';
+import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:sql_conn/sql_conn.dart';
-import 'package:sql_test/src/DataTypes/CustomerBranch.dart';
-import 'package:sql_test/src/Utilities/Extentions.dart';
 import 'package:pdf/pdf.dart';
+import 'package:sql_conn/sql_conn.dart';
+import 'package:sql_test/src/Feature/TaskScreen/src/DeliverTaskScreen/src/ExternalDeliverScreen/ExternalDeliverScreen.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 import 'package:pdf/widgets.dart' as pw;
-import '../../../../../DataTypes/CrewMember.dart';
-import '../../../../../DataTypes/Customer.dart';
-import '../../../../../DataTypes/ReceiptDeliver.dart';
-import '../../../../../DataTypes/ReceiptDeliverData.dart';
-import '../../../../../DataTypes/User.dart';
-import '../../../../../MainWidgets/CustomButton.dart';
-import '../../../../../StateManagement/InternetState/InternetStateHandler.dart';
-import '../../../../../StateManagement/UserData/UserData.dart';
-import '../../../../../Utilities/Prefs.dart';
-import '../../../../../Utilities/Strings.dart';
-import '../DeliverTaskScreen.dart';
+import '../../../../../../../DataTypes/CrewMember.dart';
+import '../../../../../../../DataTypes/Customer.dart';
+import '../../../../../../../DataTypes/CustomerBranch.dart';
+import '../../../../../../../DataTypes/ReceiptDeliver.dart';
+import '../../../../../../../DataTypes/ReceiptDeliverData.dart';
+import '../../../../../../../DataTypes/User.dart';
+import '../../../../../../../MainWidgets/CustomButton.dart';
+import '../../../../../../../StateManagement/InternetState/InternetStateHandler.dart';
+import '../../../../../../../StateManagement/UserData/UserData.dart';
+import '../../../../../../../Utilities/Prefs.dart';
+import '../../../../../../../Utilities/Strings.dart';
 
-abstract class DeliverTaskController extends State<DeliverTaskScreen> {
-  Customer? customerR;
+abstract class ExternalDeliverScreenController extends State<ExternalDeliverScreen>{
+Customer? customerR;
   CustomerBranch? customerBranchR;
   List<Customer> customerList = [];
   ReceiptDeliverData receiptDeliverData = ReceiptDeliverData.fromJson({});

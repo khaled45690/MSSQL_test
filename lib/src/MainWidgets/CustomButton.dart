@@ -8,8 +8,8 @@ import '../Utilities/colors.dart';
 class CustomButton extends StatelessWidget {
   final String text;
   final double width;
-  final bool isEnabled;
   final bool isLoading;
+  final bool isEnabled;
   final Function() onClick;
 
   const CustomButton(this.text, this.width, this.onClick,
