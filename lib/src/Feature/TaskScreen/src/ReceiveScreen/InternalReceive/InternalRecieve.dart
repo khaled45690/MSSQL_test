@@ -1,14 +1,21 @@
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
-class InternalRecieve extends StatefulWidget {
-  const InternalRecieve({super.key});
+
+import 'package:flutter/material.dart';
+
+import '../../../../../DataTypes/Receipt.dart';
+
+class InternalReceive extends StatefulWidget {
+    final List<Receipt> receipts;
+  final Function(
+          Receipt receiptParameter, int receiptIndex, bool isFinalyEdited)
+      editReceiptInJouerny;
+  const InternalReceive({super.key , required this.receipts , required this.editReceiptInJouerny});
 
   @override
-  State<InternalRecieve> createState() => _InternalRecieveState();
+  State<InternalReceive> createState() => _InternalReceiveState();
 }
 
-class _InternalRecieveState extends State<InternalRecieve> {
+class _InternalReceiveState extends State<InternalReceive> {
   @override
   Widget build(BuildContext context) {
     return const Placeholder();

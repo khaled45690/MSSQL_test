@@ -17,9 +17,9 @@ class ExternalReceive extends StatelessWidget {
       saveReceiptInJouerny;
   final bool isEnabled;
   final Function() addNewReceipt;
-  const ExternalReceive(
-      this.receipts, this.editReceiptInJouerny, this.receipt,
-      {super.key,
+  const ExternalReceive({
+      required this.receipts, required this.editReceiptInJouerny, required this.receipt,
+      super.key,
       required this.saveTempReceipt,
       required this.saveReceiptInJouerny,
       required this.isEnabled,

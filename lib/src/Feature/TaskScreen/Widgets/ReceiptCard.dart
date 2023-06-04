@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:sql_test/src/DataTypes/Receipt.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 
-
 import '../../../Utilities/Style.dart';
-import '../src/ReceiveScreen/ExternalReceive/src/ReceiveScreen.dart';
+import '../src/ReceiveScreen/ExternalReceive/src/ExternalReceiveScreen.dart';
 
 class ReceiptCard extends StatelessWidget {
   final Receipt receipt;
@@ -22,8 +21,8 @@ class ReceiptCard extends StatelessWidget {
     debugPrint("receipt");
     debugPrint(receipt.isSavedInDatabase.toString());
     return InkWell(
-      onTap: () => context.navigateTo(
-          ReceiveScreen(receipt, parsedFunction, saveReceiptInJouerny, isDone)),
+      onTap: () => context.navigateTo(ExternalReceiveScreen(
+          receipt, parsedFunction, saveReceiptInJouerny, isDone)),
       child: Container(
         padding: const EdgeInsets.all(5),
         margin: const EdgeInsets.only(bottom: 20),

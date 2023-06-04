@@ -17,19 +17,21 @@ import '../Widgets/CustomListView.dart';
 import '../Widgets/CustomViewListForReceipts.dart';
 import '../Widgets/DatePickerWidget.dart';
 import '../Widgets/TextFieldWithName.dart';
-import 'Controller/ReceiveScreenController.dart';
+import 'Controller/ExternalReceiveScreenController.dart';
 
-class ReceiveScreen extends StatefulWidget {
+class ExternalReceiveScreen extends StatefulWidget {
   final Receipt receipt;
-  final Function(Receipt receiptParameter) parsedFunction , saveReceiptInJouerny;
+  final Function(Receipt receiptParameter) parsedFunction, saveReceiptInJouerny;
   final bool isEdit;
-  const ReceiveScreen(this.receipt, this.parsedFunction, this.saveReceiptInJouerny,this.isEdit,{super.key});
+  const ExternalReceiveScreen(
+      this.receipt, this.parsedFunction, this.saveReceiptInJouerny, this.isEdit,
+      {super.key});
 
   @override
-  State<ReceiveScreen> createState() => _ReceiveScreenState();
+  State<ExternalReceiveScreen> createState() => _ExternalReceiveScreenState();
 }
 
-class _ReceiveScreenState extends ReceiveScreenController {
+class _ExternalReceiveScreenState extends ExternalReceiveScreenController {
   late GlobalKey key;
 
   @override
@@ -53,9 +55,13 @@ class _ReceiveScreenState extends ReceiveScreenController {
               children: [
                 addingEmployeeButton(),
                 QRCodeDetection(height, onCapture, cameraController),
-                AddEmployeeByWriting(isAddingEmployee, canWeAddMoreEmp,
-                    (value) => onTextChange("AddEmpByText", value),
-                    onTap: addEmpByTextFunc , empTextFilledAdder: empTextFilledAdder, ),
+                AddEmployeeByWriting(
+                  isAddingEmployee,
+                  canWeAddMoreEmp,
+                  (value) => onTextChange("AddEmpByText", value),
+                  onTap: addEmpByTextFunc,
+                  empTextFilledAdder: empTextFilledAdder,
+                ),
                 CustomListView(widget.receipt.CrewIdList, removeEMp),
                 CustomElementSelector(
                   text: "اسم العميل",
@@ -77,13 +83,16 @@ class _ReceiveScreenState extends ReceiveScreenController {
                 TextFieldWithName("رقم الايصال",
                     onTextChangeFunction: (String value) =>
                         onTextChange("F_Paper_No", value),
-                    isNumber: true, textEditingController: receiptNOController ),
+                    isNumber: true,
+                    textEditingController: receiptNOController),
                 TextFieldWithName("بيـــــان",
                     onTextChangeFunction: (String value) =>
-                        onTextChange("AddNote", value) , textEditingController: noteController),
+                        onTextChange("AddNote", value),
+                    textEditingController: noteController),
                 TextFieldWithName("ملاحظات",
                     onTextChangeFunction: (String value) =>
-                        onTextChange("AddNote1", value) , textEditingController: note1Controller),
+                        onTextChange("AddNote1", value),
+                    textEditingController: note1Controller),
                 CustomElementSelector(
                   text: "اسم العميل المرسل اليه",
                   selectedElementText: widget.receipt.F_Cust_R == null
@@ -114,7 +123,8 @@ class _ReceiveScreenState extends ReceiveScreenController {
                 AddImageToReceipt(receiptImageList, removeReciptPicture),
                 const SizedBox(height: 20),
                 CustomButton("اضف تفاصيل الوصل", 200, goToRecieveDetailsScreen),
-                CustomViewListForReceipts(widget.receipt.ReceiptDetailsList , deleteReciept),
+                CustomViewListForReceipts(
+                    widget.receipt.ReceiptDetailsList, deleteReciept),
                 const SizedBox(height: 20),
                 DatePickerWidget(
                     arrivalDate: widget.receipt.F_Arrival_Time_D,

@@ -21,12 +21,11 @@ import '../../../../../../../DataTypes/User.dart';
 import '../../../../../../../MainWidgets/CustomButton.dart';
 import '../../../../../../../Utilities/Prefs.dart';
 import '../../../../../../../Utilities/Strings.dart';
-import '../ReceiveScreen.dart';
+import '../ExternalReceiveScreen.dart';
 import '../src/ReceiveDetailsScreen.dart';
 
-
-
-abstract class ReceiveScreenController extends State<ReceiveScreen> {
+abstract class ExternalReceiveScreenController
+    extends State<ExternalReceiveScreen> {
   MobileScannerController cameraController =
       MobileScannerController(facing: CameraFacing.back);
   double height = 0;

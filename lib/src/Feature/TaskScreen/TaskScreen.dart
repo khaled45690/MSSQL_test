@@ -10,6 +10,8 @@ import 'Controller/TaskScreenController.dart';
 import 'Widgets/InternalAndExternalReceiveRadioButton.dart';
 import 'Widgets/ReceiveAndDeliverRadioGroup.dart';
 import 'src/ReceiveScreen/ExternalReceive/ExternalReceive.dart';
+import 'src/ReceiveScreen/InternalReceive/InternalRecieve.dart';
+import 'src/ReceiveScreen/ReceiveScreen.dart';
 
 class TaskScreen extends StatefulWidget {
   final Journey journey;
@@ -39,32 +41,17 @@ class _TaskScreenState extends TaskScreenController {
                     onRadioChangeCallback: onRadioChangeCallback),
                 const SizedBox(height: 10),
                 radioGroupValue == "Receive"
-                    ? Column(
-                        children: [
-                          InternalAndExternalReceiveRadioButton(
-                              radioGroupValue: receiveradioGroupValue,
-                              onRadioChangeCallback: receiveOnRadioChangeCallback),
-                          receiveradioGroupValue == InternalReceiving
-                              ? ExternalReceive(
-                                  widget.journey.receiptList,
-                                  editReceiptInJouerny,
-                                  receipt,
-                                  saveTempReceipt: saveTempReceipt,
-                                  saveReceiptInJouerny: saveReceiptInJouerny,
-                                  isEnabled: isAddingNewReceipt,
-                                  addNewReceipt: addNewReceipt,
-                                )
-                              : ExternalReceive(
-                                  widget.journey.receiptList,
-                                  editReceiptInJouerny,
-                                  receipt,
-                                  saveTempReceipt: saveTempReceipt,
-                                  saveReceiptInJouerny: saveReceiptInJouerny,
-                                  isEnabled: isAddingNewReceipt,
-                                  addNewReceipt: addNewReceipt,
-                                )
-                        ],
-                      )
+                    ? ReceiveScreen(
+                        receipts: widget.journey.receiptList,
+                        editReceiptInJouerny: editReceiptInJouerny,
+                        receipt: receipt,
+                        saveTempReceipt: saveTempReceipt,
+                        saveReceiptInJouerny: saveReceiptInJouerny,
+                        isAddingNewReceipt: isAddingNewReceipt,
+                        addNewReceipt: addNewReceipt,
+                        receiveradioGroupValue: receiveradioGroupValue,
+                        receiveOnRadioChangeCallback:
+                            receiveOnRadioChangeCallback)
                     : DeliverTaskScreen(widget.journey, deliveryradioGroupValue,
                         deliveryOnRadioChangeCallback),
                 // Column(
