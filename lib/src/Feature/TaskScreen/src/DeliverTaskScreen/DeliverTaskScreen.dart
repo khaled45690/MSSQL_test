@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:sql_test/src/Feature/TaskScreen/src/DeliverTaskScreen/src/ExternalDeliverScreen/ExternalDeliverScreen.dart';
+import 'package:sql_test/src/Feature/TaskScreen/src/DeliverTaskScreen/src/InternalDeliverScreen/InternalDeliverScreen.dart';
 import 'package:sql_test/src/Feature/TaskScreen/src/DeliverTaskScreen/widgets/InternalAndExternalDeliverRadioButton.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 import 'package:sql_test/src/Utilities/VariableCodes.dart';
@@ -32,7 +33,7 @@ class DeliverTaskScreen extends StatelessWidget {
                   onRadioChangeCallback: deliveryOnRadioChangeCallback),
               const SizedBox(height: 20),
               deliveryradioGroupValue == InternalDelivery
-                  ? ExternalDeliverScreen(journey)
+                  ? InternalDeliverScreen(journey)
                   : ExternalDeliverScreen(journey),
             ],
           ),

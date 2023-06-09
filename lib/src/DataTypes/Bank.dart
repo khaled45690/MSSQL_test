@@ -32,7 +32,8 @@ class Bank {
     });
   }
 
-  String toPrintableString() {
+  @override
+  String toString() {
     return "{"
         "F_Bank_ID: $F_Bank_ID,"
         " F_Bank_Name: $F_Bank_Name,"
@@ -72,7 +73,7 @@ class Bank {
       List<Bank> ListOfBank) {
     String listOfBank = "[";
     for (Bank element in ListOfBank) {
-      listOfBank += "${element.toPrintableString()},";
+      listOfBank += "${element.toString()},";
     }
     listOfBank += "]";
     return listOfBank;

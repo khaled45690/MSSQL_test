@@ -5,12 +5,8 @@ import 'package:sql_test/src/DataTypes/Journey.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 import 'package:sql_test/src/Feature/TaskScreen/src/DeliverTaskScreen/DeliverTaskScreen.dart';
 import '../../Utilities/Colors.dart';
-import '../../Utilities/VariableCodes.dart';
 import 'Controller/TaskScreenController.dart';
-import 'Widgets/InternalAndExternalReceiveRadioButton.dart';
 import 'Widgets/ReceiveAndDeliverRadioGroup.dart';
-import 'src/ReceiveScreen/ExternalReceive/ExternalReceive.dart';
-import 'src/ReceiveScreen/InternalReceive/InternalRecieve.dart';
 import 'src/ReceiveScreen/ReceiveScreen.dart';
 
 class TaskScreen extends StatefulWidget {
@@ -36,9 +32,7 @@ class _TaskScreenState extends TaskScreenController {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 20),
-                ReceiveAndDeliverRadioGroup(
-                    radioGroupValue: radioGroupValue,
-                    onRadioChangeCallback: onRadioChangeCallback),
+                ReceiveAndDeliverRadioGroup(radioGroupValue: radioGroupValue, onRadioChangeCallback: onRadioChangeCallback),
                 const SizedBox(height: 10),
                 radioGroupValue == "Receive"
                     ? ReceiveScreen(
@@ -50,26 +44,8 @@ class _TaskScreenState extends TaskScreenController {
                         isAddingNewReceipt: isAddingNewReceipt,
                         addNewReceipt: addNewReceipt,
                         receiveradioGroupValue: receiveradioGroupValue,
-                        receiveOnRadioChangeCallback:
-                            receiveOnRadioChangeCallback)
-                    : DeliverTaskScreen(widget.journey, deliveryradioGroupValue,
-                        deliveryOnRadioChangeCallback),
-                // Column(
-                //   children: [
-                //     TaskList(widget.journey.receiptList, editReceiptInJouerny),
-                //     isAddingNewReceipt
-                //         ? ReceiptCard(
-                //             receipt,
-                //             false,
-                //             parsedFunction: saveTempReceipt,
-                //             saveReceiptInJouerny: saveReceiptInJouerny,
-                //           )
-                //         : const SizedBox(),
-                //     const SizedBox(height: 30),
-                //     CustomButton("اضف وصل", 250, addNewReceipt,
-                //         isEnabled: !isAddingNewReceipt),
-                //   ],
-                // )
+                        receiveOnRadioChangeCallback: receiveOnRadioChangeCallback)
+                    : DeliverTaskScreen(widget.journey, deliveryradioGroupValue, deliveryOnRadioChangeCallback),
               ],
             ),
           ),

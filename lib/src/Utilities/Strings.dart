@@ -19,6 +19,7 @@ const String confirm = "تاكيد";
 const String refuse = "لا";
 const String cantFindEmp = "عفوا لا يمكننا العثور على هذا الموظف";
 const String thisEmpIsAddedBefore = "تمت اضافة هذا الموظف من قبل";
+const String thisEmpIsNotDriver = "هذا ليس بقائد طاقم";
 const String sealsOrCurrencyNotSelected = "من فضلك تاكد من اختيار نوع العملة او ادخال ارقام السيل";
 const String noBagsOrBankClassOrEGPNotEntered = "من فضلك تاكد من ادخال عدد الحقائب او الفئة المعدنية او اجمالى الاموال";
 const String noBagsOrnoPapersOrBankNoteClassOrPackClass = "من فضلك تاكد من ادخال عدد الحقائب او الفئة او عدد الباكوهات";

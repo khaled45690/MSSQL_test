@@ -24,22 +24,20 @@ import '../../../../../../../StateManagement/UserData/UserData.dart';
 import '../../../../../../../Utilities/Prefs.dart';
 import '../../../../../../../Utilities/Strings.dart';
 
-abstract class ExternalDeliverScreenController extends State<ExternalDeliverScreen>{
-Customer? customerR;
+abstract class ExternalDeliverScreenController extends State<ExternalDeliverScreen> {
+  Customer? customerR;
   CustomerBranch? customerBranchR;
   List<Customer> customerList = [];
   ReceiptDeliverData receiptDeliverData = ReceiptDeliverData.fromJson({});
   bool isCustomerRSelected = false;
   List<CustomerBranch> customerBranchListR = [];
   List<ReceiptDeliver> receiptDeliverList = [];
+  List<ReceiptDeliver> receiptFilteredDeliverList = [];
   String empIdFromTextField = "";
   List<Uint8List> receiptImageList = [];
   final ImagePicker _picker = ImagePicker();
-  MobileScannerController cameraController =
-      MobileScannerController(facing: CameraFacing.back);
-  bool isAddingEmployee = false,
-      isSearchingForEmploy = false,
-      canWeAddMoreEmp = true;
+  MobileScannerController cameraController = MobileScannerController(facing: CameraFacing.back);
+  bool isAddingEmployee = false, isSearchingForEmploy = false, canWeAddMoreEmp = true;
   double height = 0;
   StreamSubscription<bool>? internetConnectionListenerForRetrevingData;
   StreamSubscription<bool>? internetConnectionListener;
@@ -138,22 +136,20 @@ Customer? customerR;
     List<ReceiptDeliver> filter = [];
     for (int i = 0; i < receiptDeliverData.deliverReceipts.length; i++) {
       if (i != index) {
-        filter.add(receiptDeliverData.deliverReceipts[index]);
+        filter.add(receiptDeliverData.deliverReceipts[i]);
+      } else {
+        receiptFilteredDeliverList.add(receiptDeliverData.deliverReceipts[i]);
       }
     }
     receiptDeliverData.deliverReceipts = filter;
     setState(() {});
   }
 
-  onSelectCustomerBranchFunc(
-      CustomerBranch customerBranch, bool isDeliveredTo) {
+  onSelectCustomerBranchFunc(CustomerBranch customerBranch, bool isDeliveredTo) {
     customerBranchR = customerBranch;
     if (!_sqlConnectionChecker()) {
-      internetConnectionListenerForRetrevingData = InternetConnectionCubit
-          .isConnectedToInternet.stream
-          .listen(_internetConnectionListenerForRetrevingData);
-      return context.snackBar(pleaseConnectToInternet,
-          color: Colors.red.shade900);
+      internetConnectionListenerForRetrevingData = InternetConnectionCubit.isConnectedToInternet.stream.listen(_internetConnectionListenerForRetrevingData);
+      return context.snackBar(pleaseConnectToInternet, color: Colors.red.shade900);
     }
     _getRecieptData();
     setState(() {});
@@ -161,7 +157,7 @@ Customer? customerR;
 
   onSelectReceiptFunc(ReceiptDeliver receiptDeliver) {
     receiptDeliverData.deliverReceipts.add(receiptDeliver);
-    _getRecieptData();
+    _receiptFilteredFunc(receiptDeliver);
     setState(() {});
   }
 
@@ -225,8 +221,7 @@ Customer? customerR;
     receiptDeliverData.Userid_Edit_ID = widget.journey.F_Emp_Id.toString();
     receiptDeliverData.pdfImages = await _convertImagesToPDF();
     String crewList = _updateCrewMemberQuery(receiptDeliverData.CrewIdList);
-    String receiptDeliverQuery =
-        _updateReceiptQuery(receiptDeliverData.deliverReceipts);
+    String receiptDeliverQuery = _updateReceiptQuery(receiptDeliverData.deliverReceipts);
     var pdfInHexFormate = hex.encode(receiptDeliverData.pdfImages!.toList());
     String query = " UPDATE dbo.T_Deliver_Recieve_M"
         " SET Userid_Edit_ID = ${receiptDeliverData.Userid_Edit_ID} , Date_Edit = CAST('${receiptDeliverData.Date_Edit}' AS DATETIME2),"
@@ -272,9 +267,7 @@ Customer? customerR;
 
   bool _missingDataCheck() {
     bool check = false;
-    if (receiptDeliverData.deliverReceipts.isEmpty ||
-        receiptDeliverData.F_Arrival_Time_R == null ||
-        receiptDeliverData.F_Leaving_Time_R == null) {
+    if (receiptDeliverData.deliverReceipts.isEmpty || receiptDeliverData.F_Arrival_Time_R == null || receiptDeliverData.F_Leaving_Time_R == null) {
       check = true;
       context.snackBar(receiptDeliverDataMissing, color: Colors.red.shade900);
     }
@@ -294,9 +287,7 @@ Customer? customerR;
     bool check = false;
     if (!SqlConn.isConnected) {
       check = true;
-      internetConnectionListener = InternetConnectionCubit
-          .isConnectedToInternet.stream
-          .listen(_internetConnectionListenerFoSubmittingReceipt);
+      internetConnectionListener = InternetConnectionCubit.isConnectedToInternet.stream.listen(_internetConnectionListenerFoSubmittingReceipt);
       context.snackBar(pleaseConnectToInternet, color: Colors.red.shade900);
     }
     return check;
@@ -307,14 +298,12 @@ Customer? customerR;
       _getRecieptData();
       internetConnectionListenerForRetrevingData!.cancel();
       internetConnectionListenerForRetrevingData = null;
-
     }
   }
 
   _internetConnectionListenerFoSubmittingReceipt(bool isConnected) {
     if (isConnected && SqlConn.isConnected) {
-      context.snackBar(receiptDeliverCanBeDeliverd,
-          color: Colors.green.shade900);
+      context.snackBar(receiptDeliverCanBeDeliverd, color: Colors.green.shade900);
       internetConnectionListener!.cancel();
       internetConnectionListener = null;
     }
@@ -331,8 +320,7 @@ Customer? customerR;
         if (isCam) cameraController.start();
       });
     }
-    List<User> allUsers = User.fromJsonStringListToUserList(
-        Prefs.getString(allUsersFromLocaleDataBase)!);
+    List<User> allUsers = User.fromJsonStringListToUserList(Prefs.getString(allUsersFromLocaleDataBase)!);
     for (User user in allUsers) {
       if (user.F_EmpID == empId) {
         bool doesThisEmpAddedBefore = false;
@@ -341,11 +329,10 @@ Customer? customerR;
         }
         if (doesThisEmpAddedBefore) {
           return setState(() {
-            if (!isCam) isAddingEmployee = false;
             if (isCam) cameraController.start();
             if (!isCam) {
-              context.snackBar(thisEmpIsAddedBefore,
-                  color: Colors.red.shade900);
+              isAddingEmployee = false;
+              context.snackBar(thisEmpIsAddedBefore, color: Colors.red.shade900);
             }
           });
         }
@@ -361,16 +348,14 @@ Customer? customerR;
 
   _setCrewlist() {
     User userData = context.read<UserCubit>().state!;
-    CrewMember crewLeader =
-        CrewMember(F_EmpID: userData.F_EmpID, F_EmpName: userData.F_EmpName);
+    CrewMember crewLeader = CrewMember(F_EmpID: userData.F_EmpID, F_EmpName: userData.F_EmpName);
 
     receiptDeliverData.F_Id_R = widget.journey.F_Id;
     receiptDeliverData.Userid_Edit_ID = widget.journey.F_Emp_Id.toString();
     if (widget.journey.receiptList.isEmpty) {
       receiptDeliverData.CrewIdList.add(crewLeader);
     } else {
-      receiptDeliverData.CrewIdList = widget.journey
-          .receiptList[widget.journey.receiptList.length - 1].CrewIdList;
+      receiptDeliverData.CrewIdList = widget.journey.receiptList[widget.journey.receiptList.length - 1].CrewIdList;
     }
 
     setState(() {});
@@ -386,14 +371,12 @@ Customer? customerR;
             addingEmpAlertDialogTitle,
             textDirection: TextDirection.rtl,
           ),
-          content: Text(addingEmpAlertDialogBody(user.F_EmpName),
-              textDirection: TextDirection.rtl),
+          content: Text(addingEmpAlertDialogBody(user.F_EmpName), textDirection: TextDirection.rtl),
           actions: <Widget>[
             TextButton(
               child: const Text(confirm),
               onPressed: () {
-                CrewMember crewMember = CrewMember(
-                    F_EmpID: user.F_EmpID, F_EmpName: user.F_EmpName);
+                CrewMember crewMember = CrewMember(F_EmpID: user.F_EmpID, F_EmpName: user.F_EmpName);
                 receiptDeliverData.CrewIdList.add(crewMember);
                 if (!isCam) isAddingEmployee = false;
                 setState(() {});
@@ -428,12 +411,9 @@ Customer? customerR;
   }
 
   _onTimeSelected(Time timeParameter, isArrivingTime) {
-    String time = timeParameter.hourOfPeriod < 10
-        ? "0${timeParameter.hourOfPeriod}"
-        : timeParameter.hourOfPeriod.toString();
+    String time = timeParameter.hourOfPeriod < 10 ? "0${timeParameter.hourOfPeriod}" : timeParameter.hourOfPeriod.toString();
 
-    time +=
-        ":${timeParameter.minute < 10 ? "0${timeParameter.minute}" : timeParameter.minute == 0 ? "00" : timeParameter.minute}";
+    time += ":${timeParameter.minute < 10 ? "0${timeParameter.minute}" : timeParameter.minute == 0 ? "00" : timeParameter.minute}";
     time += timeParameter.period.name;
     if (isArrivingTime) {
       receiptDeliverData.F_Arrival_Time_R = time;
@@ -447,8 +427,7 @@ Customer? customerR;
   _setCustomerList() {
     String? customerListString = Prefs.getString(customersInfo);
     if (customerListString != null) {
-      customerList =
-          Customer.fromJsonStringListToCustomerList(customerListString);
+      customerList = Customer.fromJsonStringListToCustomerList(customerListString);
     }
   }
 
@@ -461,10 +440,8 @@ Customer? customerR;
     String query =
         "SELECT F_Recipt_No , F_Paper_No FROM dbo.T_Deliver_Recieve_M  WHERE F_Bank_Id_R =${customerR!.CustID} AND F_Branch_Id_R =${customerBranchR!.F_Branch_Id} AND F_Arrival_Time_R IS NULL";
     String customerData = await SqlConn.readData(query);
-    debugPrint("customerData");
-    debugPrint(customerData);
-    receiptDeliverList =
-        ReceiptDeliver.fromJsonStringListToReceiptDeliverList(customerData);
+    receiptDeliverList = ReceiptDeliver.fromJsonStringListToReceiptDeliverList(customerData);
+    receiptFilteredDeliverList = receiptDeliverList;
     setState(() {});
   }
 
@@ -473,11 +450,19 @@ Customer? customerR;
     pdf.addPage(pw.MultiPage(
         pageFormat: PdfPageFormat.a6,
         build: (pw.Context context) {
-          return [
-            for (var image in receiptImageList)
-              pw.Container(height: 481, child: pw.Image(pw.MemoryImage(image)))
-          ];
+          return [for (var image in receiptImageList) pw.Container(height: 481, child: pw.Image(pw.MemoryImage(image)))];
         })); // Page
     return await pdf.save();
+  }
+
+  void _receiptFilteredFunc(ReceiptDeliver receiptDeliver) {
+    List<ReceiptDeliver> filter = [];
+    for (int i = 0; i < receiptFilteredDeliverList.length; i++) {
+      if (receiptFilteredDeliverList[i].F_Recipt_No != receiptDeliver.F_Recipt_No) {
+        filter.add(receiptFilteredDeliverList[i]);
+      }
+    }
+    receiptFilteredDeliverList = filter;
+    setState(() {});
   }
 }

@@ -2,9 +2,10 @@
 
 import 'dart:convert';
 
+import 'Receipt.dart';
+
 class ReceiptDeliver {
   // ignore_for_file: non_constant_identifier_names
-
 
   int F_Recipt_No;
   String F_Paper_No; // collection of F_Paper_No numbers
@@ -42,8 +43,7 @@ class ReceiptDeliver {
         "}";
   }
 
-  static List<ReceiptDeliver> fromJsonStringListToReceiptDeliverList(
-      String ListOfJsonString) {
+  static List<ReceiptDeliver> fromJsonStringListToReceiptDeliverList(String ListOfJsonString) {
     List listOfJson = jsonDecode(ListOfJsonString);
     List<ReceiptDeliver> listOfUsers = [];
 
@@ -53,8 +53,7 @@ class ReceiptDeliver {
     return listOfUsers;
   }
 
-  static fromReceiptDeliverListToJsonList(
-      List<ReceiptDeliver> ListOfReceiptDeliver) {
+  static fromReceiptDeliverListToJsonList(List<ReceiptDeliver> ListOfReceiptDeliver) {
     List listOfUsers = [];
 
     for (var element in ListOfReceiptDeliver) {
@@ -63,8 +62,7 @@ class ReceiptDeliver {
     return listOfUsers;
   }
 
-  static fromReceiptDeliverListToJsonListString(
-      List<ReceiptDeliver> ListOfReceiptDeliver) {
+  static fromReceiptDeliverListToJsonListString(List<ReceiptDeliver> ListOfReceiptDeliver) {
     List listOfReceiptDeliver = [];
 
     for (var element in ListOfReceiptDeliver) {
@@ -73,8 +71,7 @@ class ReceiptDeliver {
     return jsonEncode(listOfReceiptDeliver);
   }
 
-  static String fromReceiptDeliverListtoPrintableString(
-      List<ReceiptDeliver> ListOfReceiptDeliver) {
+  static String fromReceiptDeliverListtoPrintableString(List<ReceiptDeliver> ListOfReceiptDeliver) {
     String listOfReceiptDeliver = "[";
     for (ReceiptDeliver element in ListOfReceiptDeliver) {
       listOfReceiptDeliver += "${element.toPrintableString()},";
@@ -83,4 +80,8 @@ class ReceiptDeliver {
     return listOfReceiptDeliver;
   }
 
+  static List<ReceiptDeliver> fromReceiptListToReceiptDeliverList(List<Receipt> ListOfReceipts) {
+    String receiptListJsonString = Receipt.fromReceiptListToJsonListString(ListOfReceipts);
+    return ReceiptDeliver.fromJsonStringListToReceiptDeliverList(receiptListJsonString);
+  }
 }

@@ -60,7 +60,7 @@ class _ExternalDeliverScreenState extends ExternalDeliverScreenController {
                     width: 300,
                     selectedElementText: " اختر الوصلات التى سيتم تسليمها",
                     onTap: () => searchButtonSheetForReceiptDeliverType(
-                        context, receiptDeliverList, onSelectReceiptFunc),
+                        context, receiptFilteredDeliverList, onSelectReceiptFunc),
                     isvisible: isCustomerRSelected,
                   ),
                   ReceiptDeliverListView(

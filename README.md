@@ -23,11 +23,10 @@ Consist of all the classes that represent custom datatypes that used through the
 ## Feature Folder
 Consist of all the Features in the application like
 
-- ### AuthScreen
-    - Controllers
-    - UI(Views widgets)
-    - Models
-     JourneyScreen contains the UI screen of creating and deleting a Auths and all it's Functionality as well
+- ### [AuthScreen](./lib/src/Feature/AuthScreen/AuthScreen.dart)
+    - [Controllers](./lib/src/Feature/AuthScreen/Controler/AuthScreenController.dart)
+    - [UI(Views widgets)](./lib/src/Feature/AuthScreen/Widgets)
+     AuthScreen contains the UI screen of creating and deleting a Auths and all it's Functionality as well
 
 - ### JourneyScreen
     - Controllers
@@ -46,6 +45,8 @@ Consist of all the Features in the application like
         - DeliverScreen
             - InternalDeliverScreen
             - ExternalDeliverScreen
+
+     ## Note:-
 
      TaskScreen contains the UI screen of creating and deleting any Tasks and all it's Functionality, also in the TaskSCreen folder there is src folder which contains RecievedScreen
      and DeliverScreen which follows the same hierarchy as well

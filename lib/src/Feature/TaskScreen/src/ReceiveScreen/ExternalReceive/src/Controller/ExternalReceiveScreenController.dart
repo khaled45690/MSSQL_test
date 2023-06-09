@@ -24,16 +24,10 @@ import '../../../../../../../Utilities/Strings.dart';
 import '../ExternalReceiveScreen.dart';
 import '../src/ReceiveDetailsScreen.dart';
 
-abstract class ExternalReceiveScreenController
-    extends State<ExternalReceiveScreen> {
-  MobileScannerController cameraController =
-      MobileScannerController(facing: CameraFacing.back);
+abstract class ExternalReceiveScreenController extends State<ExternalReceiveScreen> {
+  MobileScannerController cameraController = MobileScannerController(facing: CameraFacing.back);
   double height = 0;
-  bool isAddingEmployee = false,
-      isSearchingForEmploy = false,
-      canWeAddMoreEmp = true,
-      isCustomerSelected = false,
-      isCustomerRSelected = false;
+  bool isAddingEmployee = false, isSearchingForEmploy = false, canWeAddMoreEmp = true, isCustomerSelected = false, isCustomerRSelected = false;
   String empIdFromTextField = "";
   List<Customer> customerList = [];
   List<CustomerBranch> customerBranchList = [];
@@ -166,8 +160,7 @@ abstract class ExternalReceiveScreenController
     setState(() {});
   }
 
-  onSelectCustomerBranchFunc(
-      CustomerBranch customerBranch, bool isDeliveredTo) {
+  onSelectCustomerBranchFunc(CustomerBranch customerBranch, bool isDeliveredTo) {
     if (isDeliveredTo) {
       widget.receipt.F_Branch_Internal_R = customerBranch.F_Branch_Internal;
       widget.receipt.F_Branch_R = customerBranch;
@@ -208,10 +201,7 @@ abstract class ExternalReceiveScreenController
   }
 
   goToRecieveDetailsScreen() {
-    context.navigateTo(ReceiveDetailsScreen(
-        _addReceiptDetails,
-        widget.receipt.F_Recipt_No,
-        widget.receipt.ReceiptDetailsList.length + 1));
+    context.navigateTo(ReceiveDetailsScreen(_addReceiptDetails, widget.receipt.F_Recipt_No, widget.receipt.ReceiptDetailsList.length + 1));
     setState(() {});
   }
 
@@ -230,8 +220,7 @@ abstract class ExternalReceiveScreenController
 
   bool _receiptDateCheck() {
     bool check = false;
-    if (widget.receipt.F_Arrival_Time_D == null ||
-        widget.receipt.F_Leaving_Time_D == null) {
+    if (widget.receipt.F_Arrival_Time_D == null || widget.receipt.F_Leaving_Time_D == null) {
       check = true;
       context.snackBar(arrivalAndLeavingDateNotEntered, color: Colors.red);
     }
@@ -244,17 +233,12 @@ abstract class ExternalReceiveScreenController
       if (i != index) {
         filter.add(widget.receipt.ReceiptDetailsList[i]);
       } else if (i == index) {
-        if (widget.receipt.ReceiptDetailsList[i].F_Currency_Type ==
-            LocalCurrency) {
-          widget.receipt.F_Local_Tot -=
-              widget.receipt.ReceiptDetailsList[i].F_EGP_Amount;
-        } else if (widget.receipt.ReceiptDetailsList[i].F_Currency_Type ==
-            ForeignCurrency) {
-          widget.receipt.F_Global_Tot -=
-              widget.receipt.ReceiptDetailsList[i].F_Total_val;
+        if (widget.receipt.ReceiptDetailsList[i].F_Currency_Type == LocalCurrency) {
+          widget.receipt.F_Local_Tot -= widget.receipt.ReceiptDetailsList[i].F_EGP_Amount;
+        } else if (widget.receipt.ReceiptDetailsList[i].F_Currency_Type == ForeignCurrency) {
+          widget.receipt.F_Global_Tot -= widget.receipt.ReceiptDetailsList[i].F_Total_val;
         }
-        widget.receipt.F_totalAmount_EGP -=
-            widget.receipt.ReceiptDetailsList[i].F_EGP_Amount;
+        widget.receipt.F_totalAmount_EGP -= widget.receipt.ReceiptDetailsList[i].F_EGP_Amount;
         widget.parsedFunction(widget.receipt);
       }
     }
@@ -276,12 +260,9 @@ abstract class ExternalReceiveScreenController
   bool _customAndCustomerRAndPaperNoCheck() {
     bool check = false;
 
-    if (widget.receipt.F_Cust == null ||
-        widget.receipt.F_Paper_No == null ||
-        widget.receipt.F_Cust_R == null) {
+    if (widget.receipt.F_Cust == null || widget.receipt.F_Paper_No == null || widget.receipt.F_Cust_R == null) {
       check = true;
-      context.snackBar(customerAndPaperNoAndCustomerRNotEntered,
-          color: Colors.red);
+      context.snackBar(customerAndPaperNoAndCustomerRNotEntered, color: Colors.red);
     }
     return check;
   }
@@ -289,9 +270,7 @@ abstract class ExternalReceiveScreenController
   bool _branchAndBranchRCheck() {
     bool check = false;
     if (widget.isEdit) return check;
-    if (widget.receipt.F_Branch_D == null ||
-        widget.receipt.F_Branch_R == null ||
-        receiptImageList.isEmpty) {
+    if (widget.receipt.F_Branch_D == null || widget.receipt.F_Branch_R == null || receiptImageList.isEmpty) {
       check = true;
       context.snackBar(branchAndBranchRandImagesNotEntered, color: Colors.red);
     }
@@ -324,10 +303,7 @@ abstract class ExternalReceiveScreenController
     pdf.addPage(pw.MultiPage(
         pageFormat: PdfPageFormat.a6,
         build: (pw.Context context) {
-          return [
-            for (var image in receiptImageList)
-              pw.Container(height: 481, child: pw.Image(pw.MemoryImage(image)))
-          ];
+          return [for (var image in receiptImageList) pw.Container(height: 481, child: pw.Image(pw.MemoryImage(image)))];
         })); // Page
     return await pdf.save();
   }
@@ -343,8 +319,7 @@ abstract class ExternalReceiveScreenController
         if (isCam) cameraController.start();
       });
     }
-    List<User> allUsers = User.fromJsonStringListToUserList(
-        Prefs.getString(allUsersFromLocaleDataBase)!);
+    List<User> allUsers = User.fromJsonStringListToUserList(Prefs.getString(allUsersFromLocaleDataBase)!);
     for (User user in allUsers) {
       if (user.F_EmpID == empId) {
         bool doesThisEmpAddedBefore = false;
@@ -380,14 +355,12 @@ abstract class ExternalReceiveScreenController
             addingEmpAlertDialogTitle,
             textDirection: TextDirection.rtl,
           ),
-          content: Text(addingEmpAlertDialogBody(user.F_EmpName),
-              textDirection: TextDirection.rtl),
+          content: Text(addingEmpAlertDialogBody(user.F_EmpName), textDirection: TextDirection.rtl),
           actions: <Widget>[
             TextButton(
               child: const Text(confirm),
               onPressed: () {
-                CrewMember crewMember = CrewMember(
-                    F_EmpID: user.F_EmpID, F_EmpName: user.F_EmpName);
+                CrewMember crewMember = CrewMember(F_EmpID: user.F_EmpID, F_EmpName: user.F_EmpName);
                 widget.receipt.CrewIdList.add(crewMember);
                 widget.parsedFunction(widget.receipt);
                 if (!isCam) isAddingEmployee = false;
@@ -427,8 +400,7 @@ abstract class ExternalReceiveScreenController
   _setCustomerList() {
     String? customerListString = Prefs.getString(customersInfo);
     if (customerListString != null) {
-      customerList =
-          Customer.fromJsonStringListToCustomerList(customerListString);
+      customerList = Customer.fromJsonStringListToCustomerList(customerListString);
     }
   }
 
@@ -448,12 +420,9 @@ abstract class ExternalReceiveScreenController
   }
 
   _onTimeSelected(Time timeParameter, isArrivingTime) {
-    String time = timeParameter.hourOfPeriod < 10
-        ? "0${timeParameter.hourOfPeriod}"
-        : timeParameter.hourOfPeriod.toString();
+    String time = timeParameter.hourOfPeriod < 10 ? "0${timeParameter.hourOfPeriod}" : timeParameter.hourOfPeriod.toString();
 
-    time +=
-        ":${timeParameter.minute < 10 ? "0${timeParameter.minute}" : timeParameter.minute == 0 ? "00" : timeParameter.minute}";
+    time += ":${timeParameter.minute < 10 ? "0${timeParameter.minute}" : timeParameter.minute == 0 ? "00" : timeParameter.minute}";
     time += timeParameter.period.name;
     if (isArrivingTime) {
       widget.receipt.F_Arrival_Time_D = time;
