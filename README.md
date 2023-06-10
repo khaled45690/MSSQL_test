@@ -26,29 +26,31 @@ Consist of all the Features in the application like
 - ### [AuthScreen](./lib/src/Feature/AuthScreen/AuthScreen.dart)
     - [Controllers](./lib/src/Feature/AuthScreen/Controler/AuthScreenController.dart)
     - [UI(Views widgets)](./lib/src/Feature/AuthScreen/Widgets)
-     AuthScreen contains the UI screen of creating and deleting a Auths and all it's Functionality as well
 
-- ### JourneyScreen
-    - Controllers
-    - UI(Views widgets)
-    - Models
-     JourneyScreen contains the UI screen of creating and deleting a Journey and all it's Functionality as well
+    ##### AuthScreen contains the UI screen of creating and deleting a Auths and all it's Functionality as well
 
-- ### TaskScreen
-    - Controllers
-    - UI(Views widgets)
-    - Models
+
+- ### [JourneyScreen](./lib/src/Feature/JourneyScreen/JourneyScreen.dart)
+    - [Controllers](./lib/src/Feature/JourneyScreen/Controller/JourneyScreenController.dart)
+    - [UI(Views widgets)](./lib/src/Feature/JourneyScreen/Widgets)
+
+#####   JourneyScreen contains the UI screen of creating and deleting a Journey and all it's Functionality as well
+
+- ### [TaskScreen](./lib/src/Feature/TaskScreen/TaskScreen.dart)
+    - [Controllers](./lib/src/Feature/TaskScreen/Controller/TaskScreenController.dart)
+    - [UI(Views widgets)](./lib/src/Feature/TaskScreen/Widgets)
+    - [Models](./lib/src/Feature/TaskScreen)
     - src
-        - RecievedScreen
-            - InteralRecievedScreen
-            - ExternalRecievedScreen
-        - DeliverScreen
-            - InternalDeliverScreen
-            - ExternalDeliverScreen
+        - [RecievedScreen](./lib/src/Feature/TaskScreen/src/ReceiveScreen/ReceiveScreen.dart)
+            - [InteralRecievedScreen](./lib/src/Feature/TaskScreen/src/ReceiveScreen/InternalReceive)
+            - [ExternalRecievedScreen](./lib/src/Feature/TaskScreen/src/ReceiveScreen/ExternalReceive)
+        - [DeliverScreen](./lib/src/Feature/TaskScreen/src/DeliverTaskScreen/DeliverTaskScreen.dart)
+            - [InternalDeliverScreen](./lib/src/Feature/TaskScreen/src/DeliverTaskScreen/src/InternalDeliverScreen)
+            - [ExternalDeliverScreen](./lib/src/Feature/TaskScreensrc/DeliverTaskScreen/src/ExternalDeliverScreen)
 
      ## Note:-
 
-     TaskScreen contains the UI screen of creating and deleting any Tasks and all it's Functionality, also in the TaskSCreen folder there is src folder which contains RecievedScreen
-     and DeliverScreen which follows the same hierarchy as well
+     TaskScreen contains the UI screen of creating and deleting any Tasks and all it's Functionality, also in the TaskScreen folder there is src folder which contains RecievedScreen
+     and DeliverScreen which follows the same hierarchy as well there are links provided to folders to 
 
 

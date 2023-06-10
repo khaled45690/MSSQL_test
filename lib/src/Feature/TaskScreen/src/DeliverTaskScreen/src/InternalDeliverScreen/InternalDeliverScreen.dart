@@ -35,7 +35,7 @@ class _InternalDeliverScreenState extends InternalDeliverScreenController {
           onTap: addEmpByTextFunc,
           empTextFilledAdder: empTextFilledAdder,
         ),
-        CustomListView(receiptDeliverData.CrewIdList, removeEMp),
+        CustomListView(receiptInternalDeliverData.CrewIdList, removeEMp),
         CustomElementSelector(
           text: "",
           width: 300,
@@ -43,7 +43,7 @@ class _InternalDeliverScreenState extends InternalDeliverScreenController {
           onTap: () => searchButtonSheetForReceiptDeliverType(context, receiptFilteredDeliverList, onSelectReceiptFunc),
           isvisible: true,
         ),
-        ReceiptDeliverListView(receiptDeliverData.deliverReceipts, removeReceiptDeliver),
+        ReceiptDeliverListView(receiptInternalDeliverData.deliverReceipts, removeReceiptDeliver),
         TextFieldWithName("ملاحـظـــة", onTextChangeFunction: (String value) => onTextChange("AddNote", value)),
         CustomButton("قم بالتسليم  ", 250, deliverReceipts , isLoading: isLoading,  isEnabled: !isLoading),
       ],

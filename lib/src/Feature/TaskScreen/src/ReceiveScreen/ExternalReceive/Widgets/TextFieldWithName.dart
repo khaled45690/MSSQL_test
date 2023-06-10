@@ -19,7 +19,7 @@ class TextFieldWithName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top : 15 , left: 25),
+      margin: const EdgeInsets.only(top : 15 , left: 25 , right: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,

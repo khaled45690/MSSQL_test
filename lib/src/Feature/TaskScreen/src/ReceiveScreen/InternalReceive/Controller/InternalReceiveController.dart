@@ -3,43 +3,34 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 
-import '../../../../../../../DataTypes/CrewMember.dart';
-import '../../../../../../../DataTypes/ReceiptDeliver.dart';
-import '../../../../../../../DataTypes/User.dart';
-import '../../../../../../../MainWidgets/CustomButton.dart';
-import '../../../../../../../Utilities/Prefs.dart';
-import '../../../../../../../Utilities/Strings.dart';
-import '../InternalDeliverScreen.dart';
-import '../Model/ReceiptInternalDeliverData.dart';
+import '../../../../../../DataTypes/CrewMember.dart';
+import '../../../../../../DataTypes/ReceiptDeliver.dart';
+import '../../../../../../DataTypes/User.dart';
+import '../../../../../../MainWidgets/CustomButton.dart';
+import '../../../../../../Utilities/Prefs.dart';
+import '../../../../../../Utilities/Strings.dart';
+import '../../../../../../Utilities/VariableCodes.dart';
+import '../InternalRecieve.dart';
+import '../Model/ReceiptInternalReceiveData.dart';
 
-abstract class InternalDeliverScreenController extends State<InternalDeliverScreen> {
-  MobileScannerController cameraController = MobileScannerController(facing: CameraFacing.back);
-  List<ReceiptDeliver> receiptDeliverList = [];
-  List<ReceiptDeliver> receiptFilteredDeliverList = [];
-  ReceiptInternalDeliverData receiptInternalDeliverData = ReceiptInternalDeliverData.fromJson({});
-  bool isAddingEmployee = false, isLoading = false, isSearchingForEmploy = false, isEmpReceiveIsNotAdded = true;
-  TextEditingController empTextFilledAdder = TextEditingController();
-  String empIdFromTextField = "";
+abstract class InternalReceiveController extends State<InternalReceive> {
   double height = 0;
-
-  addEmpByTextFunc() {
-    _addEmpByCam(empIdFromTextField, false);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getRecieptData();
-  }
-
-  onSelectReceiptFunc(ReceiptDeliver receiptDeliver) {
-    receiptInternalDeliverData.deliverReceipts.add(receiptDeliver);
-    _receiptFilteredFunc(receiptDeliver);
-    setState(() {});
+  bool isAddingEmployee = false, isLoading = false ,isSearchingForEmploy = false, canWeAddMoreEmp = true, isCustomerSelected = false, isCustomerRSelected = false;
+  MobileScannerController cameraController = MobileScannerController(facing: CameraFacing.back);
+  TextEditingController empTextFilledAdder = TextEditingController();
+  ReceiptInternalReceiveData receiptInternalReceiveData = ReceiptInternalReceiveData.fromJson({});
+  List<ReceiptDeliver> receiptDeliverList = [] , receiptFilteredDeliverList = [];
+  String empIdFromTextField = "";
+  onCapture(BarcodeCapture capture) {
+    final List<Barcode> barcodes = capture.barcodes;
+    for (final barcode in barcodes) {
+      debugPrint('Barcode found! ${barcode.rawValue}');
+      if (barcode.rawValue == null) return;
+      return _addEmpByCam(barcode.rawValue!, true);
+    }
   }
 
   addingEmployeeButton() {
@@ -50,34 +41,15 @@ abstract class InternalDeliverScreenController extends State<InternalDeliverScre
       "اضف الطاقم بالكاميرا",
       200,
       startQRDetection,
-      isEnabled: isEmpReceiveIsNotAdded,
+      isEnabled: canWeAddMoreEmp,
     );
-  }
-
-  removeEMp(int empId) {
-    receiptInternalDeliverData.CrewIdList = [];
-    isEmpReceiveIsNotAdded = true;
-    setState(() {});
   }
 
   startQRDetection() {
     cameraController.start();
     height = 200;
     isAddingEmployee = true;
-    isEmpReceiveIsNotAdded = false;
-    setState(() {});
-  }
-
-  onTextChange(String variableName, String value) {
-    switch (variableName) {
-      case "AddEmpByText":
-        empIdFromTextField = value;
-        break;
-      case "AddNote":
-        empIdFromTextField = value;
-        break;
-      default:
-    }
+    canWeAddMoreEmp = false;
     setState(() {});
   }
 
@@ -86,35 +58,53 @@ abstract class InternalDeliverScreenController extends State<InternalDeliverScre
     Timer(const Duration(milliseconds: 300), () {
       cameraController.stop();
       isAddingEmployee = false;
-      isEmpReceiveIsNotAdded = true;
+      canWeAddMoreEmp = true;
       setState(() {});
     });
     setState(() {});
   }
 
-  onCapture(BarcodeCapture capture) {
-    final List<Barcode> barcodes = capture.barcodes;
-    for (final barcode in barcodes) {
-      debugPrint('Barcode found! ${barcode.rawValue}');
-      if (barcode.rawValue == null) return;
-      return _addEmpByCam(barcode.rawValue!, true);
+  addEmpByTextFunc() {
+    _addEmpByCam(empIdFromTextField, false);
+  }
+
+  removeEMp(int empId) {
+    List<CrewMember> filter = [];
+    for (CrewMember crewMember in receiptInternalReceiveData.CrewIdList) {
+      if (crewMember.F_EmpID != empId) {
+        filter.add(crewMember);
+      }
     }
   }
 
-  removeReceiptDeliver(int index) {
-    List<ReceiptDeliver> filter = [];
-    for (int i = 0; i < receiptInternalDeliverData.deliverReceipts.length; i++) {
-      if (i != index) {
-        filter.add(receiptInternalDeliverData.deliverReceipts[i]);
-      } else {
-        receiptFilteredDeliverList.add(receiptInternalDeliverData.deliverReceipts[i]);
-      }
+  onTextChange(String variableName, String value) {
+    switch (variableName) {
+      case "AddEmpByText":
+        empIdFromTextField = value;
+        break;
+      default:
     }
-    receiptInternalDeliverData.deliverReceipts = filter;
+    setState(() {});
+  }
+  onSelectReceiptFunc(ReceiptDeliver receiptDeliver) {
+    receiptInternalReceiveData.deliverReceipts.add(receiptDeliver);
+    _receiptFilteredFunc(receiptDeliver);
     setState(() {});
   }
 
-  deliverReceipts() {
+    removeReceiptDeliver(int index) {
+    List<ReceiptDeliver> filter = [];
+    for (int i = 0; i < receiptInternalReceiveData.deliverReceipts.length; i++) {
+      if (i != index) {
+        filter.add(receiptInternalReceiveData.deliverReceipts[i]);
+      } else {
+        receiptFilteredDeliverList.add(receiptInternalReceiveData.deliverReceipts[i]);
+      }
+    }
+    receiptInternalReceiveData.deliverReceipts = filter;
+    setState(() {});
+  }
+  receiveReceipts() {
     isLoading = true;
     setState(() {});
 
@@ -132,23 +122,6 @@ abstract class InternalDeliverScreenController extends State<InternalDeliverScre
   //                                                                       //
   ///////////////////////////////////////////////////////////////////////////
 
-  _getRecieptData() async {
-    receiptDeliverList = ReceiptDeliver.fromReceiptListToReceiptDeliverList(widget.journey.receiptList);
-    receiptFilteredDeliverList = receiptDeliverList;
-    setState(() {});
-  }
-
-  void _receiptFilteredFunc(ReceiptDeliver receiptDeliver) {
-    List<ReceiptDeliver> filter = [];
-    for (int i = 0; i < receiptFilteredDeliverList.length; i++) {
-      if (receiptFilteredDeliverList[i].F_Recipt_No != receiptDeliver.F_Recipt_No) {
-        filter.add(receiptFilteredDeliverList[i]);
-      }
-    }
-    receiptFilteredDeliverList = filter;
-    setState(() {});
-  }
-
   _addEmpByCam(String empIdString, bool isCam) {
     isAddingEmployee = true;
     if (isCam) cameraController.stop();
@@ -163,17 +136,26 @@ abstract class InternalDeliverScreenController extends State<InternalDeliverScre
     List<User> allUsers = User.fromJsonStringListToUserList(Prefs.getString(allUsersFromLocaleDataBase)!);
     for (User user in allUsers) {
       if (user.F_EmpID == empId) {
-        if (user.F_Prevlage != 3) {
+        bool doesThisEmpAddedBefore = false;
+        for (CrewMember crewMember in receiptInternalReceiveData.CrewIdList) {
+          if (crewMember.F_EmpID == empId) doesThisEmpAddedBefore = true;
+        }
+        if (doesThisEmpAddedBefore) {
           return setState(() {
             if (!isCam) isAddingEmployee = false;
             if (isCam) cameraController.start();
-            context.snackBar(thisEmpIsNotDriver, color: Colors.red);
+            if (!isCam) {
+              context.snackBar(thisEmpIsAddedBefore, color: Colors.red);
+            }
           });
         }
         _showMyDialog(user, isCam);
         return;
       }
     }
+    if (isCam) cameraController.start();
+    if (!isCam) isAddingEmployee = false;
+    if (!isCam) context.snackBar(cantFindEmp, color: Colors.red);
     setState(() {});
   }
 
@@ -193,17 +175,13 @@ abstract class InternalDeliverScreenController extends State<InternalDeliverScre
               child: const Text(confirm),
               onPressed: () {
                 CrewMember crewMember = CrewMember(F_EmpID: user.F_EmpID, F_EmpName: user.F_EmpName);
-                receiptInternalDeliverData.CrewIdList.add(crewMember);
+                receiptInternalReceiveData.CrewIdList.add(crewMember);
                 if (!isCam) isAddingEmployee = false;
                 if (!isCam) empTextFilledAdder.text = '';
                 setState(() {});
                 if (isCam) cameraController.start();
-                stopQRDetection();
-                Timer(const Duration(milliseconds: 400), () {
-                  isEmpReceiveIsNotAdded = false;
-                  setState(() {});
-                });
                 Navigator.of(context).pop();
+                _checkIfCrewAreSix();
               },
             ),
             TextButton(
@@ -220,5 +198,26 @@ abstract class InternalDeliverScreenController extends State<InternalDeliverScre
         );
       },
     );
+  }
+
+  _checkIfCrewAreSix() {
+    if (receiptInternalReceiveData.CrewIdList.length >= maxEmpSize) {
+      if (cameraController.isStarting) stopQRDetection();
+      Timer(const Duration(milliseconds: 700), () {
+        canWeAddMoreEmp = false;
+        setState(() {});
+      });
+    }
+  }
+
+    void _receiptFilteredFunc(ReceiptDeliver receiptDeliver) {
+    List<ReceiptDeliver> filter = [];
+    for (int i = 0; i < receiptFilteredDeliverList.length; i++) {
+      if (receiptFilteredDeliverList[i].F_Recipt_No != receiptDeliver.F_Recipt_No) {
+        filter.add(receiptFilteredDeliverList[i]);
+      }
+    }
+    receiptFilteredDeliverList = filter;
+    setState(() {});
   }
 }
