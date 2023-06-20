@@ -1,16 +1,22 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, use_build_context_synchronously
 
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:sql_conn/sql_conn.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 
 import '../../../../../../../DataTypes/CrewMember.dart';
+import '../../../../../../../DataTypes/Journey.dart';
+import '../../../../../../../DataTypes/Receipt.dart';
 import '../../../../../../../DataTypes/ReceiptDeliver.dart';
 import '../../../../../../../DataTypes/User.dart';
 import '../../../../../../../MainWidgets/CustomButton.dart';
+import '../../../../../../../StateManagement/JourneyData/JourneyData.dart';
+import '../../../../../../../StateManagement/UserData/UserData.dart';
 import '../../../../../../../Utilities/Prefs.dart';
 import '../../../../../../../Utilities/Strings.dart';
 import '../InternalDeliverScreen.dart';
@@ -64,6 +70,7 @@ abstract class InternalDeliverScreenController extends State<InternalDeliverScre
     cameraController.start();
     height = 200;
     isAddingEmployee = true;
+    if (_checkEmployerAdded()) return;
     isEmpReceiveIsNotAdded = false;
     setState(() {});
   }
@@ -74,7 +81,7 @@ abstract class InternalDeliverScreenController extends State<InternalDeliverScre
         empIdFromTextField = value;
         break;
       case "AddNote":
-        empIdFromTextField = value;
+        receiptInternalDeliverData.note = value;
         break;
       default:
     }
@@ -114,12 +121,23 @@ abstract class InternalDeliverScreenController extends State<InternalDeliverScre
     setState(() {});
   }
 
-  deliverReceipts() {
-    isLoading = true;
-    setState(() {});
+  deliverReceipts() async {
+    try {
+      isLoading = true;
+      setState(() {});
+      if (_checkInternetConnection()) return;
+      if (_checkEmployerAdded()) return;
+      if (_checkIsReceiptAdded()) return;
 
-    isLoading = false;
-    setState(() {});
+      await _submitDataToDatabase();
+      isLoading = false;
+      // Journey journey = context.read<JourneyCubit>().state[context.read<JourneyCubit>().state.length - 1];
+      await _updateLocalDataBase();
+      context.snackBar(receiptDeliverIsDeliverd, color: Colors.green.shade900);
+      setState(() {});
+    } catch (e) {
+      context.snackBar(dataHasNotBeenUpdated, color: Colors.red.shade900);
+    }
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -132,10 +150,113 @@ abstract class InternalDeliverScreenController extends State<InternalDeliverScre
   //                                                                       //
   ///////////////////////////////////////////////////////////////////////////
 
+  _updateLocalDataBase() async {
+    List<Receipt> receiptListFilter = [];
+    Journey journey = widget.journey;
+    for (Receipt receipt in journey.receiptList) {
+      bool isNeedToBeAdded = true;
+      for (ReceiptDeliver deliverReceipts in receiptInternalDeliverData.deliverReceipts) {
+        if (receipt.F_Recipt_No == deliverReceipts.F_Recipt_No) {
+          receipt.isDeliveredToAnotherDriver = true;
+          isNeedToBeAdded = false;
+          receiptListFilter.add(receipt);
+        }
+      }
+
+      if (isNeedToBeAdded) receiptListFilter.add(receipt);
+    }
+
+    journey.receiptList = receiptListFilter;
+    List<Journey> localJournies = context.read<JourneyCubit>().state;
+    localJournies[localJournies.length - 1] = journey;
+    context.read<JourneyCubit>().setjourneyDataWithSharedPrefrence(localJournies);
+    context.popupAllUntill("/JourneyScreen");
+  }
+
+  bool _checkEmployerAdded() {
+    bool isadded = false;
+    if (!SqlConn.isConnected) {
+      isLoading = false;
+      setState(() {});
+      context.snackBar(pleaseConnectToInternet, color: Colors.red);
+      isadded = true;
+    }
+
+    return isadded;
+  }
+
+  bool _checkInternetConnection() {
+    bool isadded = false;
+    if (receiptInternalDeliverData.CrewIdList.isEmpty) {
+      isLoading = false;
+      setState(() {});
+      context.snackBar(thisEmpDriverIsNotAdded, color: Colors.red);
+      isadded = true;
+    }
+
+    return isadded;
+  }
+
+  bool _checkIsReceiptAdded() {
+    bool isadded = false;
+    if (receiptInternalDeliverData.deliverReceipts.isEmpty) {
+      isLoading = false;
+      setState(() {});
+      context.snackBar(thisReceiptIsNotAdded, color: Colors.red);
+      isadded = true;
+    }
+
+    return isadded;
+  }
+
+  _submitDataToDatabase() async {
+    String query = _getQueryString();
+    debugPrint(query, wrapWidth: 200);
+    await SqlConn.writeData(query);
+  }
+
   _getRecieptData() async {
-    receiptDeliverList = ReceiptDeliver.fromReceiptListToReceiptDeliverList(widget.journey.receiptList);
+    for (Receipt receipt in widget.journey.receiptList) {
+      if (!receipt.isDeliveredToAnotherDriver) {
+        receiptDeliverList.add(ReceiptDeliver.fromReceiptToReceiptDeliver(receipt));
+      }
+    }
     receiptFilteredDeliverList = receiptDeliverList;
     setState(() {});
+  }
+
+  String _getQueryString() {
+    String queryString = '';
+    int userEmpId = context.read<UserCubit>().state!.F_EmpID;
+    Map<String, String> crewList = {};
+    crewList = _insertCrewMemberQuery(widget.journey.receiptList[widget.journey.receiptList.length - 1].CrewIdList);
+    for (ReceiptDeliver deliverReceipt in receiptInternalDeliverData.deliverReceipts) {
+      queryString += "BEGIN TRANSACTION; DECLARE @F_Trans_Id INT;"
+          "SELECT @F_Trans_Id = ISNULL(MAX(F_Trans_Id), 0) + 1 FROM dbo.T_Transfer;"
+          "INSERT INTO dbo.T_Transfer (F_Trans_Id , F_Recipt_No , F_Date , F_Time , "
+          "F_Note_Transmit , Post_Status , UserID_Trans_ID , UserID_Recived_ID, ${crewList["crewListQuery"]})"
+          " VALUES (@F_Trans_Id, ${deliverReceipt.F_Recipt_No}, CAST('${DateTime.now()} ' AS DATETIME2), CAST('${DateTime.now()} ' AS DATETIME2), "
+          "'${receiptInternalDeliverData.note}' , 0 , $userEmpId , ${receiptInternalDeliverData.CrewIdList[0].F_EmpID}, ${crewList["crewListValues"]});";
+    }
+
+    queryString += "COMMIT TRANSACTION";
+    return queryString;
+  }
+
+  _insertCrewMemberQuery(List<CrewMember> crewList) {
+    String crewListQuery = "";
+    String crewListValues = "";
+
+    for (int x = 0; x < crewList.length; x++) {
+      crewListQuery += "F_Team${x + 1}";
+      crewListValues += "${crewList[x].F_EmpID}";
+      if (x < crewList.length - 1) {
+        crewListQuery += ",";
+        crewListValues += ",";
+      }
+    }
+
+    return {"crewListQuery": crewListQuery, "crewListValues": crewListValues};
   }
 
   void _receiptFilteredFunc(ReceiptDeliver receiptDeliver) {
@@ -168,6 +289,12 @@ abstract class InternalDeliverScreenController extends State<InternalDeliverScre
             if (!isCam) isAddingEmployee = false;
             if (isCam) cameraController.start();
             context.snackBar(thisEmpIsNotDriver, color: Colors.red);
+          });
+        } else if (user.F_EmpID == context.read<UserCubit>().state!.F_EmpID) {
+          return setState(() {
+            if (!isCam) isAddingEmployee = false;
+            if (isCam) cameraController.start();
+            context.snackBar(thisIsTheAccountUser, color: Colors.red);
           });
         }
         _showMyDialog(user, isCam);

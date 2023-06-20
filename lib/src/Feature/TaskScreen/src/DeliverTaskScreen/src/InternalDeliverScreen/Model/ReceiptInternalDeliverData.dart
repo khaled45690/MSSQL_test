@@ -12,6 +12,7 @@ class ReceiptInternalDeliverData {
   String? F_Paper_No;
   String? F_Arrival_Time_R;
   String? F_Leaving_Time_R;
+  String? note;
   String? Date_Edit;
   String? Time_Edit;
   String? Userid_Edit_ID;
@@ -27,6 +28,7 @@ class ReceiptInternalDeliverData {
       this.Date_Edit,
       this.Time_Edit,
       this.Userid_Edit_ID,
+      this.note,
       required this.deliverReceipts, // collection of F_Paper_No numbers
       required this.CrewIdList});
 
@@ -38,6 +40,7 @@ class ReceiptInternalDeliverData {
       F_Arrival_Time_R: json['F_Arrival_Time_R'],
       F_Leaving_Time_R: json['F_Leaving_Time_R'],
       Date_Edit: json['Date_Edit'],
+      note: json['note']?? "",
       Time_Edit: json['Time_Edit'],
       Userid_Edit_ID: json['Userid_Edit_ID'],
       deliverReceipts: json['deliverReceipts'] ?? [],
@@ -57,6 +60,7 @@ class ReceiptInternalDeliverData {
       "Time_Edit": Time_Edit,
       "Userid_Edit_ID": Userid_Edit_ID,
       "deliverReceipts": deliverReceipts,
+      "note": note,
       "CrewIdList": CrewMember.fromCrewMemberListToJsonList(CrewIdList),
     };
   }
@@ -71,6 +75,7 @@ class ReceiptInternalDeliverData {
       "Time_Edit": Time_Edit,
       "Userid_Edit_ID": Userid_Edit_ID,
       "deliverReceipts": deliverReceipts,
+      "note": note,
       "CrewIdList": CrewMember.fromCrewMemberListToJsonList(CrewIdList),
     });
   }
@@ -86,6 +91,7 @@ class ReceiptInternalDeliverData {
         " Time_Edit: $Time_Edit,"
         " Userid_Edit_ID: $Userid_Edit_ID,"
         " deliverReceipts: $deliverReceipts,"
+        " note: $note,"
         " CrewIdList: ${CrewMember.fromCrewMemberListToJsonList(CrewIdList)},"
         "}";
   }

@@ -36,8 +36,7 @@ abstract class TaskScreenController extends State<TaskScreen> {
     setState(() {});
   }
 
-
-   int receiveradioGroupValue = InternalReceiving;
+  int receiveradioGroupValue = InternalReceiving;
   receiveOnRadioChangeCallback(int radioGroupValue) {
     this.receiveradioGroupValue = radioGroupValue;
     setState(() {});
@@ -58,11 +57,10 @@ abstract class TaskScreenController extends State<TaskScreen> {
     // if (SqlConn.isConnected) await widget.updateDataBase();
 
     // ignore: use_build_context_synchronously
-    context.popupAllAndNavigateTo('/JourneyScreen');
+    context.popupAllUntill('/JourneyScreen');
   }
 
-  editReceiptInJouerny(
-      Receipt receiptParameter, int receiptIndex, bool isfinalyEdited) async {
+  editReceiptInJouerny(Receipt receiptParameter, int receiptIndex, bool isfinalyEdited) async {
     widget.journey.receiptList[receiptIndex] = receiptParameter;
     List<Journey> journeyList = context.read<JourneyCubit>().state;
     journeyList[journeyList.length - 1] = widget.journey;
@@ -70,13 +68,12 @@ abstract class TaskScreenController extends State<TaskScreen> {
     setState(() {});
     // if (SqlConn.isConnected) await widget.updateDataBase();
     // ignore: use_build_context_synchronously
-    if (isfinalyEdited) context.popupAllAndNavigateTo('/JourneyScreen');
+    if (isfinalyEdited) context.popupAllUntill('/JourneyScreen');
   }
 
   addNewReceipt() {
     User userData = context.read<UserCubit>().state!;
-    CrewMember crewLeader =
-        CrewMember(F_EmpID: userData.F_EmpID, F_EmpName: userData.F_EmpName);
+    CrewMember crewLeader = CrewMember(F_EmpID: userData.F_EmpID, F_EmpName: userData.F_EmpName);
     isAddingNewReceipt = true;
     receipt.F_Recipt_No = widget.journey.receiptList.length + 1;
     receipt.F_Id = widget.journey.F_Id;
@@ -86,8 +83,7 @@ abstract class TaskScreenController extends State<TaskScreen> {
       receipt.CrewIdList.add(crewLeader);
       saveTempReceipt(receipt);
     } else {
-      receipt.CrewIdList = widget.journey
-          .receiptList[widget.journey.receiptList.length - 1].CrewIdList;
+      receipt.CrewIdList = widget.journey.receiptList[widget.journey.receiptList.length - 1].CrewIdList;
     }
 
     setState(() {});

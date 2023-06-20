@@ -20,6 +20,9 @@ const String refuse = "لا";
 const String cantFindEmp = "عفوا لا يمكننا العثور على هذا الموظف";
 const String thisEmpIsAddedBefore = "تمت اضافة هذا الموظف من قبل";
 const String thisEmpIsNotDriver = "هذا ليس بقائد طاقم";
+const String thisEmpDriverIsNotAdded = "من فضلك اضف قائد طاقم";
+const String thisReceiptIsNotAdded = "من فضلك اضف على الاقل وصل واحد";
+const String thisIsTheAccountUser = "هذا الشخص هو مستخدم الحساب";
 const String sealsOrCurrencyNotSelected = "من فضلك تاكد من اختيار نوع العملة او ادخال ارقام السيل";
 const String noBagsOrBankClassOrEGPNotEntered = "من فضلك تاكد من ادخال عدد الحقائب او الفئة المعدنية او اجمالى الاموال";
 const String noBagsOrnoPapersOrBankNoteClassOrPackClass = "من فضلك تاكد من ادخال عدد الحقائب او الفئة او عدد الباكوهات";
@@ -27,6 +30,7 @@ const String noBagsOrnoPapersOrBankNoteClassOrPackClassOrFactorNo = "من فضل
 const String customerAndPaperNoAndCustomerRNotEntered = "من فضلك تاكد من ادخال اسم العميل او العميل المرسل اليه او رقم الايصال";
 const String arrivalAndLeavingDateNotEntered = "من فضلك تاكد من ادخال تاريخ الوصول و تاريخ المغادرة";
 const String branchAndBranchRandImagesNotEntered = "من فضلك تاكد من ادخال الفرع للعميل و العميل المرسل اليه و صور الوصل";
+const String transferReceiptIsNotSelected = "من فضلك تاكد من اختيار الوصل";
 const String receiptDetailsNotEntered = "من فضلك تاكد من على الاقل بيانة واحدة للوصل";
 const String pleaseEnterNumber= "من فضلك ادخل  ارقام فقد";
 const String pleaseEnterDouble= "من فضلك ادخل  ارقام عشرية فقد";
@@ -34,6 +38,7 @@ const String pleaseConnectToInternet= "من فضلك قم بالتوصيل با�
 const String receiptDeliverDataMissing= "من فضلك قم بالتاكد من ادخال تاريخ الوصول او تاريخ المغادرة او الوصلات التى سيتم تسليمها";
 const String receiptDeliverImageMissing= "من فضلك قم بالتاكد صور للوصلات الممضية";
 const String receiptDeliverCanBeDeliverd= "يمكنك التسليم الان";
+const String receiptDeliverIsDeliverd = "تم التسليم بنجاح";
 
 ////////////////////////////////////////////////////////////////--------------------------
 const String driversFromLocaleDataBase = "DriversData";

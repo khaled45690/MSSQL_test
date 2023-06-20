@@ -7,31 +7,20 @@ import 'dart:convert';
 
 import 'package:sql_test/src/DataTypes/CrewMember.dart';
 
-import '../../../../../../DataTypes/ReceiptDeliver.dart';
-
-
 class ReceiptInternalReceiveData {
   int F_Id_R;
   int? F_Recipt_No;
   String? F_Paper_No;
-  String? F_Arrival_Time_R;
-  String? F_Leaving_Time_R;
-  String? Date_Edit;
-  String? Time_Edit;
+  String note;
   String? Userid_Edit_ID;
-  List<CrewMember> CrewIdList;
-  List<ReceiptDeliver> deliverReceipts; // collection of F_Paper_No numbers
+  List<CrewMember> CrewIdList; // collection of F_Paper_No numbers
 
   ReceiptInternalReceiveData(
       {required this.F_Id_R,
       required this.F_Recipt_No,
       required this.F_Paper_No,
-      this.F_Arrival_Time_R,
-      this.F_Leaving_Time_R,
-      this.Date_Edit,
-      this.Time_Edit,
-      this.Userid_Edit_ID,
-      required this.deliverReceipts, // collection of F_Paper_No numbers
+      required this.note ,
+      this.Userid_Edit_ID, // collection of F_Paper_No numbers
       required this.CrewIdList});
 
   factory ReceiptInternalReceiveData.fromJson(Map json) {
@@ -39,12 +28,8 @@ class ReceiptInternalReceiveData {
       F_Id_R: json['F_Id'] ?? 0,
       F_Recipt_No: json['F_Recipt_No'] ?? 0,
       F_Paper_No: json['F_Paper_No'],
-      F_Arrival_Time_R: json['F_Arrival_Time_R'],
-      F_Leaving_Time_R: json['F_Leaving_Time_R'],
-      Date_Edit: json['Date_Edit'],
-      Time_Edit: json['Time_Edit'],
+      note: json['note']?? "",
       Userid_Edit_ID: json['Userid_Edit_ID'],
-      deliverReceipts: json['deliverReceipts'] ?? [],
       CrewIdList: json['CrewIdList'] == null
           ? []
           : CrewMember.fromJsonListToCrewMemberList(json['CrewIdList']),
@@ -55,12 +40,8 @@ class ReceiptInternalReceiveData {
     return {
       "F_Recipt_No": F_Recipt_No,
       "F_Paper_No": F_Paper_No,
-      "F_Arrival_Time_R": F_Arrival_Time_R,
-      "F_Leaving_Time_R": F_Leaving_Time_R,
-      "Date_Edit": Date_Edit,
-      "Time_Edit": Time_Edit,
+      "note": note,
       "Userid_Edit_ID": Userid_Edit_ID,
-      "deliverReceipts": deliverReceipts,
       "CrewIdList": CrewMember.fromCrewMemberListToJsonList(CrewIdList),
     };
   }
@@ -69,12 +50,8 @@ class ReceiptInternalReceiveData {
     return jsonEncode({
       "F_Recipt_No": F_Recipt_No,
       "F_Paper_No": F_Paper_No,
-      "F_Arrival_Time_R": F_Arrival_Time_R,
-      "F_Leaving_Time_R": F_Leaving_Time_R,
-      "Date_Edit": Date_Edit,
-      "Time_Edit": Time_Edit,
+      "note": note,
       "Userid_Edit_ID": Userid_Edit_ID,
-      "deliverReceipts": deliverReceipts,
       "CrewIdList": CrewMember.fromCrewMemberListToJsonList(CrewIdList),
     });
   }
@@ -84,12 +61,8 @@ class ReceiptInternalReceiveData {
     return "{"
         "F_Recipt_No: $F_Recipt_No,"
         " F_Paper_No: $F_Paper_No,"
-        " F_Arrival_Time_R: $F_Arrival_Time_R,"
-        " F_Leaving_Time_R: $F_Leaving_Time_R,"
-        " Date_Edit: $Date_Edit,"
-        " Time_Edit: $Time_Edit,"
+        " note: $note,"
         " Userid_Edit_ID: $Userid_Edit_ID,"
-        " deliverReceipts: $deliverReceipts,"
         " CrewIdList: ${CrewMember.fromCrewMemberListToJsonList(CrewIdList)},"
         "}";
   }

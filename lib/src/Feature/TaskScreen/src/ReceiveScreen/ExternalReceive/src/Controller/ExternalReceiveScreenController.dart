@@ -15,6 +15,7 @@ import 'package:sql_test/src/Utilities/Extentions.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:sql_test/src/Utilities/VariableCodes.dart';
+import '../../../../../../../DataTypes/CompanyBranch.dart';
 import '../../../../../../../DataTypes/ReceiptDetails.dart';
 import '../../../../../../../DataTypes/ReceiptType.dart';
 import '../../../../../../../DataTypes/User.dart';
@@ -32,6 +33,7 @@ abstract class ExternalReceiveScreenController extends State<ExternalReceiveScre
   List<Customer> customerList = [];
   List<CustomerBranch> customerBranchList = [];
   List<CustomerBranch> customerBranchListR = [];
+  List<CompanyBranch> companyBranchList = [];
   final ImagePicker _picker = ImagePicker();
   List<Uint8List> receiptImageList = [];
   List<ReceiptType> receiptTypeList = [
@@ -48,6 +50,7 @@ abstract class ExternalReceiveScreenController extends State<ExternalReceiveScre
     super.initState();
     _setCustomerList();
     _setCustomerBranches();
+    _setcompanyBranches();
     _stopCameraAtStart();
     receiptNOController.text = widget.receipt.F_Paper_No ?? '';
     noteController.text = widget.receipt.F_Note;
@@ -175,6 +178,12 @@ abstract class ExternalReceiveScreenController extends State<ExternalReceiveScre
 
   onSelectreceiptTypeFunc(ReceiptType receiptType) {
     widget.receipt.F_Recipt_Type = receiptType;
+    widget.parsedFunction(widget.receipt);
+    setState(() {});
+  }
+
+  onSelectInternalBranchFunc(CompanyBranch companyBranch) {
+    widget.receipt.companyBranch = companyBranch;
     widget.parsedFunction(widget.receipt);
     setState(() {});
   }
@@ -412,6 +421,14 @@ abstract class ExternalReceiveScreenController extends State<ExternalReceiveScre
     if (widget.receipt.F_Cust_R != null) {
       isCustomerRSelected = true;
       customerBranchList = widget.receipt.F_Cust_R!.CustomerBranches;
+    }
+  }
+
+  _setcompanyBranches() {
+    String? companyInternalBranchString = Prefs.getString(companyBranchesInfo);
+    if (companyInternalBranchString != null) {
+      companyBranchList = CompanyBranch.fromJsonStringListToCompanyBrancheList(companyInternalBranchString);
+      widget.receipt.companyBranch = companyBranchList[0];
     }
   }
 

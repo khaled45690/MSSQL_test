@@ -21,7 +21,7 @@ extension customContext on BuildContext {
     );
   }
 
-  popupAllAndNavigateTo(String destinationName) {
+  popupAllUntill(String destinationName) {
     Timer(const Duration(milliseconds: 50), () {
       Navigator.popUntil(this, ModalRoute.withName(destinationName));
     });
@@ -53,8 +53,7 @@ extension customContext on BuildContext {
     );
   }
 
-  snackBar(text, {Color color = Colors.black54}) =>
-      ScaffoldMessenger.of(this).showSnackBar(
+  snackBar(text, {Color color = Colors.black54}) => ScaffoldMessenger.of(this).showSnackBar(
         SnackBar(
           duration: const Duration(milliseconds: 6000),
           backgroundColor: color,

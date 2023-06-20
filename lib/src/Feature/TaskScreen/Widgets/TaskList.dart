@@ -25,6 +25,7 @@ class TaskList extends StatelessWidget {
           return ReceiptCard(
             receipts[i],
             true,
+            isEditable:  !receipts[i].isDeliveredToAnotherDriver,
             parsedFunction: (receipt) => parsedFunction(receipt , i , false),
             saveReceiptInJouerny: (receipt) => parsedFunction(receipt , i , true),
           );

@@ -24,10 +24,7 @@ import 'package:convert/convert.dart';
 
 abstract class JourneyScreenController extends State<JourneyScreen> {
   User? user;
-  bool isfirstTime = false,
-      isDataLoading = false,
-      isStartEnabled = false,
-      isEndEnabled = false;
+  bool isfirstTime = false, isDataLoading = false, isStartEnabled = false, isEndEnabled = false;
   late StreamSubscription listener;
   late StreamSubscription<bool> internetConnectionListener;
 
@@ -42,83 +39,51 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
   }
 
   tagraba() async {
-    String customerData = await SqlConn.readData(
-        "SELECT F_Cust_Id , F_Attachment from dbo.T_Deliver_Recieve_M WHere F_Recipt_No = 3");
+    String customerData = await SqlConn.readData("SELECT F_Cust_Id , F_Attachment from dbo.T_Deliver_Recieve_M WHere F_Recipt_No = 3");
     List customersData = jsonDecode(customerData);
 
-    // List da = customersData[0]["F_Attachment"];R
-    // final List<int> codeUnits = customersData[0]["F_Attachment"].codeUnits;
-    // final Uint8List unit8List = Uint8List.fromList(codeUnits);
     debugPrint(customersData[0]["F_Attachment"].toString());
 
     var url = Uri.parse('http://192.168.1.7:3000/savePDF');
-     await http.post(url,
-        body: jsonEncode({'pdfData': customersData[0]["F_Attachment"]}),
-        headers: {"Content-Type": "application/json"});
+    await http.post(url, body: jsonEncode({'pdfData': customersData[0]["F_Attachment"]}), headers: {"Content-Type": "application/json"});
   }
 
   initialFunction() async {
     _getUserJournies();
-    internetConnectionListener = InternetConnectionCubit
-        .isConnectedToInternet.stream
-        .listen(_connectionListenerFunction);
+    internetConnectionListener = InternetConnectionCubit.isConnectedToInternet.stream.listen(_connectionListenerFunction);
   }
 
   @override
   void dispose() {
-
     super.dispose();
     internetConnectionListener.cancel();
   }
 
   outDatedLoginCheacker() {
-    bool isOutdatedLogin = DateTime.now()
-            .difference(DateTime.parse(user!.dateOfLogin!))
-            .inMinutes >
-        60;
+    bool isOutdatedLogin = DateTime.now().difference(DateTime.parse(user!.dateOfLogin!)).inMinutes > 60;
 
     if (isOutdatedLogin) {
       context.read<UserCubit>().setUserData(null);
-      context.popupAllAndNavigateTo("/LoginScreen");
+      context.popupAllUntill("/LoginScreen");
     }
   }
 
   startNewJourney() async {
-    DateTime? pickedDate = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(DateTime.now().year),
-        lastDate: DateTime(DateTime.now().year + 1));
+    DateTime? pickedDate = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(DateTime.now().year), lastDate: DateTime(DateTime.now().year + 1));
     if (pickedDate == null) return;
 
     isStartEnabled = false;
     setState(() {});
     if (context.read<JourneyCubit>().state.isEmpty) {
-      Journey newJourney = Journey(
-          F_Id: 1,
-          F_Sdate: pickedDate.toString(),
-          F_Stime: DateTime.now().toString(),
-          F_Emp_Id: user!.F_EmpID,
-          isFinished: false,
-          receiptList: []);
+      Journey newJourney = Journey(F_Id: 1, F_Sdate: pickedDate.toString(), F_Stime: DateTime.now().toString(), F_Emp_Id: user!.F_EmpID, isFinished: false, receiptList: []);
 
-      context
-          .read<JourneyCubit>()
-          .setjourneyDataWithSharedPrefrence([newJourney]);
+      context.read<JourneyCubit>().setjourneyDataWithSharedPrefrence([newJourney]);
     } else {
       List<Journey> currentJourneyList = context.read<JourneyCubit>().state;
       Journey latestJourney = currentJourneyList[currentJourneyList.length - 1];
-      Journey newJourney = Journey(
-          F_Id: latestJourney.F_Id + 1,
-          F_Sdate: pickedDate.toString(),
-          F_Stime: DateTime.now().toString(),
-          F_Emp_Id: user!.F_EmpID,
-          isFinished: false,
-          receiptList: []);
+      Journey newJourney = Journey(F_Id: latestJourney.F_Id + 1, F_Sdate: pickedDate.toString(), F_Stime: DateTime.now().toString(), F_Emp_Id: user!.F_EmpID, isFinished: false, receiptList: []);
       currentJourneyList.add(newJourney);
-      context
-          .read<JourneyCubit>()
-          .setjourneyDataWithSharedPrefrence(currentJourneyList);
+      context.read<JourneyCubit>().setjourneyDataWithSharedPrefrence(currentJourneyList);
     }
     if (SqlConn.isConnected) await updateDataBase();
     isEndEnabled = true;
@@ -126,11 +91,7 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
   }
 
   endTheJourney() async {
-    DateTime? pickedDate = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2022),
-        lastDate: DateTime(DateTime.now().year + 100));
+    DateTime? pickedDate = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2022), lastDate: DateTime(DateTime.now().year + 100));
     if (pickedDate == null) return;
 
     isEndEnabled = false;
@@ -141,9 +102,7 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
     latestJourney.F_Etime = DateTime.now().toString();
     latestJourney.isFinished = true;
     currentJourneyList[currentJourneyList.length - 1] = latestJourney;
-    context
-        .read<JourneyCubit>()
-        .setjourneyDataWithSharedPrefrence(currentJourneyList);
+    context.read<JourneyCubit>().setjourneyDataWithSharedPrefrence(currentJourneyList);
 
     if (SqlConn.isConnected) await updateDataBase();
     isStartEnabled = true;
@@ -155,8 +114,7 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
     if (userJouerniesDataString == null) return;
     isStartEnabled = false;
     setState(() {});
-    List<Journey> jouernies =
-        Journey.fromJsonStringListToJourneyList(userJouerniesDataString);
+    List<Journey> jouernies = Journey.fromJsonStringListToJourneyList(userJouerniesDataString);
     Journey latestJourney = jouernies[jouernies.length - 1];
     latestJourney.F_Edate = null;
     latestJourney.F_Etime = null;
@@ -174,13 +132,10 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
       String? journiesString = Prefs.getString(userJouernies);
       if (journiesString == null) return;
 
-      List<Journey> localJouernies =
-          Journey.fromJsonStringListToJourneyList(journiesString);
+      List<Journey> localJouernies = Journey.fromJsonStringListToJourneyList(journiesString);
       int localJouerniesLength = localJouernies.length;
-      String jouerniesDataString = await SqlConn.readData(
-          "SELECT * from dbo.T_DAY WHERE F_Emp_Id = ${user!.F_EmpID} AND F_Id >= ${localJouernies[0].F_Id} ORDER BY F_Id ASC");
-      List<Journey> onlineJouernies =
-          Journey.fromJsonStringListToJourneyList(jouerniesDataString);
+      String jouerniesDataString = await SqlConn.readData("SELECT * from dbo.T_DAY WHERE F_Emp_Id = ${user!.F_EmpID} AND F_Id >= ${localJouernies[0].F_Id} ORDER BY F_Id ASC");
+      List<Journey> onlineJouernies = Journey.fromJsonStringListToJourneyList(jouerniesDataString);
 
       // if thee cloud doesn't have any data for the current user
       // then it will upload all the data to the cloud as insert query
@@ -222,8 +177,7 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
       isDataLoading = false;
       setState(() {});
     } else {
-      List<Journey> jouernies =
-          Journey.fromJsonStringListToJourneyList(userJouerniesDataString);
+      List<Journey> jouernies = Journey.fromJsonStringListToJourneyList(userJouerniesDataString);
       if (jouernies.isEmpty) {
         _handelStartAndEndButton(null);
         context.read<JourneyCubit>().setjourneyData([]);
@@ -234,10 +188,8 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
           context.snackBar(dataHasBeenUpdated, color: Colors.green);
         } else {
           if (SqlConn.isConnected) {
-            String jouerniesDataString = await SqlConn.readData(
-                "SELECT * from dbo.T_DAY WHERE F_Emp_Id = ${user!.F_EmpID} ORDER BY F_Id ASC");
-            List<Journey> jouerniesFromDatabase =
-                Journey.fromJsonStringListToJourneyList(jouerniesDataString);
+            String jouerniesDataString = await SqlConn.readData("SELECT * from dbo.T_DAY WHERE F_Emp_Id = ${user!.F_EmpID} ORDER BY F_Id ASC");
+            List<Journey> jouerniesFromDatabase = Journey.fromJsonStringListToJourneyList(jouerniesDataString);
 
             if (jouerniesFromDatabase.isEmpty) {
               _handelStartAndEndButton(null);
@@ -259,38 +211,27 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
   }
 
   _getUserJourniesFromInternet() async {
-    String jouerniesDataString = await SqlConn.readData(
-        "SELECT * from dbo.T_DAY WHERE F_Emp_Id = ${user!.F_EmpID} ORDER BY F_Id ASC");
-              debugPrint(jouerniesDataString);
+    String jouerniesDataString = await SqlConn.readData("SELECT * from dbo.T_DAY WHERE F_Emp_Id = ${user!.F_EmpID} ORDER BY F_Id ASC");
+    debugPrint(jouerniesDataString);
     try {
-      List<Journey> jouernies =
-          Journey.fromJsonStringListToJourneyList(jouerniesDataString);
+      List<Journey> jouernies = Journey.fromJsonStringListToJourneyList(jouerniesDataString);
 
       if (jouernies.isEmpty) {
         _handelStartAndEndButton(null);
-        return context
-            .read<JourneyCubit>()
-            .setjourneyDataWithSharedPrefrence([]);
+        return context.read<JourneyCubit>().setjourneyDataWithSharedPrefrence([]);
       }
 
-      String jouerniesRecieptsDataString = await SqlConn.readData(
-          "SELECT * from dbo.T_Deliver_Recieve_M WHERE F_Emp_Id_D = ${user!.F_EmpID} AND F_Id = ${jouernies[jouernies.length - 1].F_Id} ORDER BY F_Recipt_No ASC");
-      List<Receipt> receipts = Receipt.fromJsonStringListToReceiptList(
-          jouerniesRecieptsDataString,
-          isUpdatingFromDatabase: true);
+      String jouerniesRecieptsDataString =
+          await SqlConn.readData("SELECT * from dbo.T_Deliver_Recieve_M WHERE F_Emp_Id_D = ${user!.F_EmpID} AND F_Id = ${jouernies[jouernies.length - 1].F_Id} ORDER BY F_Recipt_No ASC");
+      List<Receipt> receipts = Receipt.fromJsonStringListToReceiptList(jouerniesRecieptsDataString, isUpdatingFromDatabase: true);
       for (var i = 0; i < receipts.length; i++) {
-        String RecieptsDetailsDataString = await SqlConn.readData(
-            "SELECT * from dbo.T_Deliver_Recieve_D WHERE F_Recipt_No = ${receipts[i].F_Recipt_No}");
-        receipts[i].ReceiptDetailsList =
-            ReceiptDetails.fromJsonStringListToReceiptDetailsList(
-                RecieptsDetailsDataString);
+        String recieptsDetailsDataString = await SqlConn.readData("SELECT * from dbo.T_Deliver_Recieve_D WHERE F_Recipt_No = ${receipts[i].F_Recipt_No}");
+        receipts[i].ReceiptDetailsList = ReceiptDetails.fromJsonStringListToReceiptDetailsList(recieptsDetailsDataString);
         receipts[i].isSavedInDatabase = true;
       }
       Journey dumyJoureny = jouernies[jouernies.length - 1];
       dumyJoureny.receiptList = receipts;
-      context
-          .read<JourneyCubit>()
-          .setjourneyDataWithSharedPrefrence([dumyJoureny]);
+      context.read<JourneyCubit>().setjourneyDataWithSharedPrefrence([dumyJoureny]);
       _handelStartAndEndButton(dumyJoureny);
     } catch (e) {
       debugPrint(e.toString());
@@ -336,8 +277,7 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
   _insertQuery(List<Journey> localJouernies) async {
     String query = "";
     for (Journey journey in localJouernies) {
-      query +=
-          " INSERT INTO dbo.T_DAY (F_Id, F_Sdate, F_Stime, F_Edate , F_Etime , F_Emp_Id) "
+      query += " INSERT INTO dbo.T_DAY (F_Id, F_Sdate, F_Stime, F_Edate , F_Etime , F_Emp_Id) "
           "VALUES (${journey.F_Id} , CAST('${journey.F_Sdate}' AS DATETIME2) ,CAST('${journey.F_Stime}' AS DATETIME2) ,"
           "${journey.F_Edate == null ? null : "CAST('${journey.F_Edate}' AS DATETIME2)"} ,"
           "${journey.F_Etime == null ? null : "CAST('${journey.F_Etime}' AS DATETIME2)"} ,${journey.F_Emp_Id})";
@@ -381,20 +321,16 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
 
         updateQuery += _updateReceiptQuery(journey.receiptList[i]);
 
-        updateQuery +=
-            "DELETE FROM dbo.T_Deliver_Recieve_D WHERE F_Recipt_No = @recipt_no;";
-        updateQuery +=
-            _receiptDetailsData(journey.receiptList[i].ReceiptDetailsList);
+        updateQuery += "DELETE FROM dbo.T_Deliver_Recieve_D WHERE F_Recipt_No = @recipt_no;";
+        updateQuery += _receiptDetailsData(journey.receiptList[i].ReceiptDetailsList);
       } else {
-        String query =
-            "SELECT F_Recipt_No , F_Cust_Id , F_Paper_No FROM dbo.T_Deliver_Recieve_M "
+        String query = "SELECT F_Recipt_No , F_Cust_Id , F_Paper_No FROM dbo.T_Deliver_Recieve_M "
             "WHERE F_Bank_Id_D = ${journey.receiptList[i].F_Cust!.CustID} AND F_Paper_No = ${journey.receiptList[i].F_Paper_No} AND F_Emp_Id_D = ${journey.receiptList[i].F_Emp_Id_D} AND "
             "F_Branch_Id_D = ${journey.receiptList[i].F_Branch_D!.F_Branch_Id} AND F_Id = ${journey.receiptList[i].F_Id}";
 
         String receiptDataString = await SqlConn.readData(query);
         List receiptDataList = jsonDecode(receiptDataString);
-        journey.receiptList[i].F_Recipt_No =
-            receiptDataList[receiptDataList.length - 1]["F_Recipt_No"];
+        journey.receiptList[i].F_Recipt_No = receiptDataList[receiptDataList.length - 1]["F_Recipt_No"];
         journey.receiptList[i].isSavedInDatabase = true;
       }
     }
@@ -414,8 +350,7 @@ abstract class JourneyScreenController extends State<JourneyScreen> {
         receiptList[i].Time_Save = DateTime.now().toString();
 
         var pdfInHexFormate = hex.encode(receiptList[i].imagesAsPDF!.toList());
-        query +=
-            "SELECT @recipt_no = ISNULL(MAX(F_Recipt_No), 0) + 1 FROM dbo.T_Deliver_Recieve_M;"
+        query += "SELECT @recipt_no = ISNULL(MAX(F_Recipt_No), 0) + 1 FROM dbo.T_Deliver_Recieve_M;"
             "INSERT INTO dbo.T_Deliver_Recieve_M (F_Recipt_No , F_Cust_Id , F_Emp_Id_D, F_Note, F_Note1, F_Bank_Id_D, F_Branch_Id_D ,"
             "F_Branch_Internal_D, F_Arrival_Time_D, F_Leaving_Time_D, F_Bank_Id_R,"
             " F_Branch_Id_R, F_Branch_Internal_R, Date_Save, Time_Save,F_Date,F_count,F_Sell_Inv_No,"

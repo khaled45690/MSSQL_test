@@ -84,4 +84,9 @@ class ReceiptDeliver {
     String receiptListJsonString = Receipt.fromReceiptListToJsonListString(ListOfReceipts);
     return ReceiptDeliver.fromJsonStringListToReceiptDeliverList(receiptListJsonString);
   }
+
+   static ReceiptDeliver fromReceiptToReceiptDeliver(Receipt receipt) {
+    Map receiptString = receipt.toJson();
+    return ReceiptDeliver.fromJson(receiptString);
+  }
 }

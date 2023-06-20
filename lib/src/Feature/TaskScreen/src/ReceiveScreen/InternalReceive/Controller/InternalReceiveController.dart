@@ -1,29 +1,44 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, use_build_context_synchronously
 
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:sql_conn/sql_conn.dart';
+import 'package:sql_test/src/StateManagement/UserData/UserData.dart';
 import 'package:sql_test/src/Utilities/Extentions.dart';
 
 import '../../../../../../DataTypes/CrewMember.dart';
-import '../../../../../../DataTypes/ReceiptDeliver.dart';
+import '../../../../../../DataTypes/Journey.dart';
+import '../../../../../../DataTypes/Receipt.dart';
+import '../../../../../../DataTypes/ReceiptDetails.dart';
 import '../../../../../../DataTypes/User.dart';
 import '../../../../../../MainWidgets/CustomButton.dart';
+import '../../../../../../StateManagement/JourneyData/JourneyData.dart';
 import '../../../../../../Utilities/Prefs.dart';
 import '../../../../../../Utilities/Strings.dart';
 import '../../../../../../Utilities/VariableCodes.dart';
 import '../InternalRecieve.dart';
 import '../Model/ReceiptInternalReceiveData.dart';
+import '../Model/TransferReceipt.dart';
 
 abstract class InternalReceiveController extends State<InternalReceive> {
   double height = 0;
-  bool isAddingEmployee = false, isLoading = false ,isSearchingForEmploy = false, canWeAddMoreEmp = true, isCustomerSelected = false, isCustomerRSelected = false;
+  bool isAddingEmployee = false, isLoading = false, isSearchingForEmploy = false, canWeAddMoreEmp = true, isCustomerSelected = false, isCustomerRSelected = false;
   MobileScannerController cameraController = MobileScannerController(facing: CameraFacing.back);
   TextEditingController empTextFilledAdder = TextEditingController();
   ReceiptInternalReceiveData receiptInternalReceiveData = ReceiptInternalReceiveData.fromJson({});
-  List<ReceiptDeliver> receiptDeliverList = [] , receiptFilteredDeliverList = [];
+  List<TransferReceipt> selectedTransferReceiptList = [], transferReceiptList = [], transferReceiptFilterList = [];
   String empIdFromTextField = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _getInternalReciept();
+    _setCrewMembers();
+  }
+
   onCapture(BarcodeCapture capture) {
     final List<Barcode> barcodes = capture.barcodes;
     for (final barcode in barcodes) {
@@ -82,31 +97,38 @@ abstract class InternalReceiveController extends State<InternalReceive> {
       case "AddEmpByText":
         empIdFromTextField = value;
         break;
+      case "AddNote":
+        receiptInternalReceiveData.note = value;
+        break;
       default:
     }
     setState(() {});
   }
-  onSelectReceiptFunc(ReceiptDeliver receiptDeliver) {
-    receiptInternalReceiveData.deliverReceipts.add(receiptDeliver);
-    _receiptFilteredFunc(receiptDeliver);
+
+  onSelectReceiptFunc(TransferReceipt tansferReceipt) {
+    selectedTransferReceiptList.add(tansferReceipt);
+    _receiptFilteredFunc(tansferReceipt);
     setState(() {});
   }
 
-    removeReceiptDeliver(int index) {
-    List<ReceiptDeliver> filter = [];
-    for (int i = 0; i < receiptInternalReceiveData.deliverReceipts.length; i++) {
+  removeReceiptDeliver(int index) {
+    List<TransferReceipt> filter = [];
+    for (int i = 0; i < selectedTransferReceiptList.length; i++) {
       if (i != index) {
-        filter.add(receiptInternalReceiveData.deliverReceipts[i]);
+        filter.add(selectedTransferReceiptList[i]);
       } else {
-        receiptFilteredDeliverList.add(receiptInternalReceiveData.deliverReceipts[i]);
+        transferReceiptFilterList.add(transferReceiptList[i]);
       }
     }
-    receiptInternalReceiveData.deliverReceipts = filter;
+    selectedTransferReceiptList = filter;
     setState(() {});
   }
+
   receiveReceipts() {
     isLoading = true;
     setState(() {});
+    if (_checkSelectedTransferReceipt()) return;
+    _getRecieptDetailsAndSaveThemLocaly();
 
     isLoading = false;
     setState(() {});
@@ -121,6 +143,58 @@ abstract class InternalReceiveController extends State<InternalReceive> {
   //                                                                       //
   //                                                                       //
   ///////////////////////////////////////////////////////////////////////////
+
+  _getInternalReciept() async {
+    String query = _getInternalRecieptQuery(context.read<UserCubit>().state!.F_EmpID);
+    String recieptDetailsString = await SqlConn.readData(query);
+    transferReceiptList = TransferReceipt.fromJsonStringListToTransferReceiptList(recieptDetailsString);
+    transferReceiptFilterList = transferReceiptList;
+  }
+
+  _setCrewMembers() {
+    receiptInternalReceiveData.CrewIdList = widget.receipts[widget.receipts.length - 1].CrewIdList;
+  }
+
+  bool _checkSelectedTransferReceipt() {
+    bool isTrue = false;
+
+    if (selectedTransferReceiptList.isEmpty) {
+      isTrue = false;
+      context.snackBar(transferReceiptIsNotSelected, color: Colors.red);
+      isLoading = false;
+      setState(() {});
+    }
+    return isTrue;
+  }
+
+  _getRecieptDetailsAndSaveThemLocaly() async {
+
+    String query = _getQueryToUpdateTransferTable(selectedTransferReceiptList, context.read<UserCubit>().state!.F_EmpID);
+
+    try {
+      List<Receipt> receipts = [];
+      for (TransferReceipt transferReceipt in selectedTransferReceiptList) {
+        await SqlConn.writeData(query);
+        String recieptDetailsListString = await SqlConn.readData("SELECT * from dbo.T_Deliver_Recieve_M WHERE F_Recipt_No = ${transferReceipt.F_Recipt_No} ");
+        receipts = Receipt.fromJsonStringListToReceiptList(recieptDetailsListString, isUpdatingFromDatabase: true);
+        for (var i = 0; i < receipts.length; i++) {
+          String recieptsDetailsDataString = await SqlConn.readData("SELECT * from dbo.T_Deliver_Recieve_D WHERE F_Recipt_No = ${receipts[i].F_Recipt_No}");
+          receipts[i].ReceiptDetailsList = ReceiptDetails.fromJsonStringListToReceiptDetailsList(recieptsDetailsDataString);
+          receipts[i].isSavedInDatabase = true;
+        }
+      }
+
+      Journey dumyJoureny = context.read<JourneyCubit>().state[context.read<JourneyCubit>().state.length - 1];
+      dumyJoureny.receiptList.addAll(receipts);
+      context.read<JourneyCubit>().setjourneyDataWithSharedPrefrence([dumyJoureny]);
+
+      context.snackBar(dataHasBeenUpdated, color: Colors.green.shade900);
+
+      Timer(const Duration(milliseconds: 600), context.popupAllUntill("/JourneyScreen"));
+    } catch (e) {
+      context.snackBar(dataHasNotBeenUpdated, color: Colors.red.shade900);
+    }
+  }
 
   _addEmpByCam(String empIdString, bool isCam) {
     isAddingEmployee = true;
@@ -210,14 +284,51 @@ abstract class InternalReceiveController extends State<InternalReceive> {
     }
   }
 
-    void _receiptFilteredFunc(ReceiptDeliver receiptDeliver) {
-    List<ReceiptDeliver> filter = [];
-    for (int i = 0; i < receiptFilteredDeliverList.length; i++) {
-      if (receiptFilteredDeliverList[i].F_Recipt_No != receiptDeliver.F_Recipt_No) {
-        filter.add(receiptFilteredDeliverList[i]);
+  void _receiptFilteredFunc(TransferReceipt receiptDeliver) {
+    List<TransferReceipt> filter = [];
+    for (int i = 0; i < transferReceiptFilterList.length; i++) {
+      if (transferReceiptFilterList[i].F_Recipt_No != receiptDeliver.F_Recipt_No) {
+        filter.add(transferReceiptFilterList[i]);
       }
     }
-    receiptFilteredDeliverList = filter;
+    transferReceiptFilterList = filter;
     setState(() {});
+  }
+
+  String _getInternalRecieptQuery(int empId) {
+    return ' SELECT dbo.T_Transfer.F_Trans_Id, dbo.T_Transfer.Post_Status, dbo.T_Transfer.F_Recipt_No, dbo.T_Deliver_Recieve_M.F_Paper_No'
+        ' FROM dbo.T_Deliver_Recieve_M INNER JOIN '
+        'dbo.T_Transfer ON dbo.T_Deliver_Recieve_M.F_Recipt_No = dbo.T_Transfer.F_Recipt_No WHERE dbo.T_Transfer.Post_Status = 0 AND (dbo.T_Transfer.UserID_Recived_ID = $empId OR dbo.T_Transfer.UserID_Trans_ID = $empId )';
+
+    // Select * From dbo.Transfer_View WHERE F_Emp_Id = ${user!.F_EmpID} ORDER BY F_Id ASC
+  }
+
+  String _getQueryToUpdateTransferTable(List<TransferReceipt> selectedTransferReceiptList, int empID) {
+    String updateQuery = "";
+    String crewList = _updateCrewMemberQuery(receiptInternalReceiveData.CrewIdList);
+    for (TransferReceipt selectedTransferReceipt in selectedTransferReceiptList) {
+      updateQuery += " UPDATE dbo.T_Transfer "
+          " SET Post_Status = 1,"
+          "UserID_Recived_ID = $empID,"
+          "F_Note_Recived = '${receiptInternalReceiveData.note}' ,"
+          "Date_Recived =  CAST( '${DateTime.now()}' AS DATETIME2),"
+          "Time_Recived = CAST( '${DateTime.now()}' AS DATETIME2),"
+          "$crewList "
+          " WHERE F_Trans_Id = ${selectedTransferReceipt.F_Trans_Id};";
+    }
+    return updateQuery;
+  }
+
+  _updateCrewMemberQuery(List<CrewMember> crewList) {
+    String crewListQuery = "";
+
+    for (int x = 0; x < crewList.length; x++) {
+      crewListQuery += "F_Team${x + 1}_R = ${crewList[x].F_EmpID}";
+      if (x < crewList.length - 1) {
+        crewListQuery += ",";
+      }
+    }
+
+    return crewListQuery;
   }
 }
