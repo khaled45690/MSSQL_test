@@ -433,7 +433,7 @@ abstract class ExternalReceiveScreenController extends State<ExternalReceiveScre
   }
 
   _stopCameraAtStart() {
-    Timer(const Duration(milliseconds: 500), () => {cameraController.stop()});
+    Timer(const Duration(milliseconds: 500), () => cameraController.stop());
   }
 
   _onTimeSelected(Time timeParameter, isArrivingTime) {

@@ -43,7 +43,7 @@ class DropDownWithSearch extends StatelessWidget {
                         children: [
                           Center(
                             child: SearchTextField((da, value) {
-                              setState(() => {searchString = value});
+                              setState(() => searchString = value);
                             }),
                           ),
                           Container(
