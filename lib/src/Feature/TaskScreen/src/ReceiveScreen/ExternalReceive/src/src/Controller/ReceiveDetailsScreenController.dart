@@ -10,10 +10,7 @@ import '../../../../../../../../Utilities/Prefs.dart';
 import '../../../../../../../../Utilities/Strings.dart';
 import '../ReceiveDetailsScreen.dart';
 
-
-
-abstract class ReceiveDetailsScreenController
-    extends State<ReceiveDetailsScreen> {
+abstract class ReceiveDetailsScreenController extends State<ReceiveDetailsScreen> {
   late GlobalKey key;
   ReceiptDetails receiptDetails = ReceiptDetails.fromJson({});
   late List<Currency> currencyList;
@@ -24,8 +21,8 @@ abstract class ReceiveDetailsScreenController
   void initState() {
     super.initState();
     key = GlobalKey();
-    String currencyData = Prefs.getString(currencyInfo)!;
-    currencyList = Currency.fromJsonStringListToCurrencyList(currencyData);
+    String? currencyData = Prefs.getString(currencyInfo);
+    currencyList = currencyData == null ? [Currency(F_CURRANCY_ID: 1, F_CURRANCY_NAM: updateData)] : Currency.fromJsonStringListToCurrencyList(currencyData);
     receiptDetails.F_Recipt_No = widget.receiptNo;
     receiptDetails.F_RowNo = widget.receiptRowNo;
   }
@@ -37,17 +34,12 @@ abstract class ReceiveDetailsScreenController
   }
 
   onRadioChangeCallbackForCurrencyTypes(int radioGroupValue) {
-    if ((receiptDetails.F_Currency_Type == LocalCurrency &&
-            radioGroupValue != CoinsCurrency) ||
-        (receiptDetails.F_Currency_Type == ForeignCurrency &&
-            radioGroupValue != CoinsCurrency)) return;
+    if ((receiptDetails.F_Currency_Type == LocalCurrency && radioGroupValue != CoinsCurrency) || (receiptDetails.F_Currency_Type == ForeignCurrency && radioGroupValue != CoinsCurrency)) return;
 
     if (radioGroupValue == LocalCurrency || radioGroupValue == CoinsCurrency) {
-      receiptDetails.F_Currency_Id =
-          Currency(F_CURRANCY_ID: EGP, F_CURRANCY_NAM: "جنيه مصرى");
+      receiptDetails.F_Currency_Id = Currency(F_CURRANCY_ID: EGP, F_CURRANCY_NAM: "جنيه مصرى");
     } else if (radioGroupValue == ForeignCurrency) {
-      receiptDetails.F_Currency_Id =
-          Currency(F_CURRANCY_ID: USD, F_CURRANCY_NAM: "دولار امريكى");
+      receiptDetails.F_Currency_Id = Currency(F_CURRANCY_ID: USD, F_CURRANCY_NAM: "دولار امريكى");
     }
     receiptDetails.F_Currency_Type = radioGroupValue;
     receiptDetails.F_Uinte_Id = radioGroupValue;
@@ -133,8 +125,7 @@ abstract class ReceiveDetailsScreenController
 
   bool _nullCheck() {
     bool check = false;
-    if (receiptDetails.F_Seal_No_From == null ||
-        receiptDetails.F_Seal_No_To == null) {
+    if (receiptDetails.F_Seal_No_From == null || receiptDetails.F_Seal_No_To == null) {
       context.snackBar(sealsOrCurrencyNotSelected, color: Colors.red);
       check = true;
     }
@@ -161,8 +152,7 @@ abstract class ReceiveDetailsScreenController
 
   bool _handleCoinInfoBeforeSave() {
     bool check = false;
-    if (receiptDetails.F_Bags_No == 0 ||
-        receiptDetails.F_BankNote_Class == null) {
+    if (receiptDetails.F_Bags_No == 0 || receiptDetails.F_BankNote_Class == null) {
       check = true;
       context.snackBar(noBagsOrBankClassOrEGPNotEntered, color: Colors.red);
     }
@@ -171,21 +161,13 @@ abstract class ReceiveDetailsScreenController
 
   bool _handleLocalCurrencyInfoBeforeSave() {
     bool check = false;
-    if (receiptDetails.F_Pack_No == 0 ||
-        receiptDetails.F_Pack_Class == 0 ||
-        receiptDetails.F_Bags_No == 0) {
+    if (receiptDetails.F_Pack_No == 0 || receiptDetails.F_Pack_Class == 0 || receiptDetails.F_Bags_No == 0) {
       check = true;
-      context.snackBar(noBagsOrnoPapersOrBankNoteClassOrPackClass,
-          color: Colors.red);
+      context.snackBar(noBagsOrnoPapersOrBankNoteClassOrPackClass, color: Colors.red);
     }
     // to calculate the total number we multiply by the number of packs with the currency number with number of bags and
     //// add to the number of lone papers multiplied by the currency number
-    receiptDetails.F_Total_val = ((receiptDetails.F_Pack_No *
-                receiptDetails.F_Pack_Class *
-                receiptDetails.F_Bags_No *
-                100) +
-            (receiptDetails.F_BankNote_No * receiptDetails.F_Pack_Class))
-        .toDouble();
+    receiptDetails.F_Total_val = ((receiptDetails.F_Pack_No * receiptDetails.F_Pack_Class * receiptDetails.F_Bags_No * 100) + (receiptDetails.F_BankNote_No * receiptDetails.F_Pack_Class)).toDouble();
     receiptDetails.F_EGP_Amount = receiptDetails.F_Total_val.toDouble();
     return check;
   }
@@ -193,23 +175,13 @@ abstract class ReceiveDetailsScreenController
   bool _handleForeignCurrencyInfoBeforeSave() {
     bool check = false;
 
-    if (receiptDetails.F_Pack_No == 0 ||
-        receiptDetails.F_Pack_Class == 0 ||
-        receiptDetails.F_Bags_No == 0 ||
-        receiptDetails.F_Convert_Factor == 0) {
+    if (receiptDetails.F_Pack_No == 0 || receiptDetails.F_Pack_Class == 0 || receiptDetails.F_Bags_No == 0 || receiptDetails.F_Convert_Factor == 0) {
       check = true;
-      context.snackBar(noBagsOrnoPapersOrBankNoteClassOrPackClassOrFactorNo,
-          color: Colors.red);
+      context.snackBar(noBagsOrnoPapersOrBankNoteClassOrPackClassOrFactorNo, color: Colors.red);
     }
-    receiptDetails.F_Total_val = ((receiptDetails.F_Pack_No *
-                receiptDetails.F_Pack_Class *
-                receiptDetails.F_Bags_No *
-                100) +
-            (receiptDetails.F_BankNote_No * receiptDetails.F_Pack_Class))
-        .toDouble();
+    receiptDetails.F_Total_val = ((receiptDetails.F_Pack_No * receiptDetails.F_Pack_Class * receiptDetails.F_Bags_No * 100) + (receiptDetails.F_BankNote_No * receiptDetails.F_Pack_Class)).toDouble();
 
-    receiptDetails.F_EGP_Amount =
-        (receiptDetails.F_Total_val * receiptDetails.F_Convert_Factor);
+    receiptDetails.F_EGP_Amount = (receiptDetails.F_Total_val * receiptDetails.F_Convert_Factor);
     return check;
   }
 }

@@ -14,7 +14,7 @@ import '../../../ReceiveScreen/ExternalReceive/Widgets/AddEmployeeByWriting.dart
 import '../../../ReceiveScreen/ExternalReceive/Widgets/AddImageToReceipt.dart';
 import '../../../ReceiveScreen/ExternalReceive/Widgets/CustomListView.dart';
 import '../../../ReceiveScreen/ExternalReceive/Widgets/DatePickerWidget.dart';
-import '../../widgets/ReceiptDeliverListView.dart';
+import '../../widgets/ReceiptDeliverViewer.dart';
 import 'Controller/ExternalDeliverScreenController.dart';
 
 class ExternalDeliverScreen extends StatefulWidget {
@@ -63,7 +63,7 @@ class _ExternalDeliverScreenState extends ExternalDeliverScreenController {
                         context, receiptFilteredDeliverList, onSelectReceiptFunc),
                     isvisible: isCustomerRSelected,
                   ),
-                  ReceiptDeliverListView(
+                  ReceiptDeliverViewer(
                       receiptDeliverData.deliverReceipts, removeReceiptDeliver),
                   DatePickerWidget(
                       arrivalDate: receiptDeliverData.F_Arrival_Time_R,

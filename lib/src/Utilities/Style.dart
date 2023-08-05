@@ -105,6 +105,7 @@ const TextStyle size19BlackTextStyle = TextStyle(
     fontWeight: FontWeight.w600,
     letterSpacing: 0.4);
 
+
 TextStyle size19RedTextStyle = TextStyle(
     color: Colors.red.shade900,
     fontSize: 19,

@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
         context.read<UserCubit>().setUserData(null);
       }
     }
-    if (DateTime.parse("2023-08-01 13:05:03.037527")
+    if (DateTime.parse("2023-09-01 13:05:03.037527")
             .difference(DateTime.now())
             .inMinutes <=
         0) {

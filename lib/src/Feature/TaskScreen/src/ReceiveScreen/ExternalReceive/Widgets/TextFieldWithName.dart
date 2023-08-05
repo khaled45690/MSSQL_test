@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:sql_test/src/Utilities/Extentions.dart';
 
 import '../../../../../../MainWidgets/CustomTextField.dart';
 import '../../../../../../Utilities/Style.dart';
@@ -29,7 +30,7 @@ class TextFieldWithName extends StatelessWidget {
             text,
             style: size19BlackTextStyle,
           ),
-          CustomTextField(onTextChangeFunction, 200 , isNumber: isNumber , textEditingController: textEditingController),
+          CustomTextField(onTextChangeFunction, context.width() / 1.3 , isNumber: isNumber , textEditingController: textEditingController),
         ],
       ),
     );

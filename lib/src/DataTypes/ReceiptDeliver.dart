@@ -1,24 +1,49 @@
 // ignore_for_file: file_names
 
 import 'dart:convert';
+import 'package:sql_test/src/DataTypes/Customer.dart';
+import 'package:sql_test/src/DataTypes/CustomerBranch.dart';
 
+import '../Utilities/Prefs.dart';
+import '../Utilities/Strings.dart';
 import 'Receipt.dart';
+import 'ReceiptDeliverDetails.dart';
 
 class ReceiptDeliver {
   // ignore_for_file: non_constant_identifier_names
 
   int F_Recipt_No;
   String F_Paper_No; // collection of F_Paper_No numbers
+  Customer F_Bank_Id_D;
+  CustomerBranch F_Branch_Id_D;
+  Customer F_Bank_Id_R;
+  CustomerBranch F_Branch_Id_R;
+  List<ReceiptDeliverDetails> receiptDeliverDetails;
 
   ReceiptDeliver({
     required this.F_Recipt_No,
     required this.F_Paper_No,
+    required this.F_Bank_Id_D,
+    required this.F_Branch_Id_D,
+    required this.F_Bank_Id_R,
+    required this.F_Branch_Id_R,
+    required this.receiptDeliverDetails,
   });
 
-  factory ReceiptDeliver.fromJson(Map json) {
+  factory ReceiptDeliver.fromJson(Map json, {Map isDuplicate = const {}}) {
+    Customer F_Bank_Id_D = _setCustomer(json['F_Bank_Id_D']);
+    Customer F_Bank_Id_R = _setCustomer(json['F_Bank_Id_R']);
+    CustomerBranch F_Branch_Id_D = _setBranch(F_Bank_Id_D.CustomerBranches, json['F_Branch_Id_D']);
+    CustomerBranch F_Branch_Id_R = _setBranch(F_Bank_Id_R.CustomerBranches, json['F_Branch_Id_R']);
+    List<ReceiptDeliverDetails> receiptDeliverDetails = _setReceiptDeliverDetails(json, isDuplicate);
     return ReceiptDeliver(
       F_Recipt_No: json['F_Recipt_No'],
       F_Paper_No: json['F_Paper_No'].toString(),
+      F_Bank_Id_D: F_Bank_Id_D,
+      F_Branch_Id_D: F_Branch_Id_D,
+      F_Bank_Id_R: F_Bank_Id_R,
+      F_Branch_Id_R: F_Branch_Id_R,
+      receiptDeliverDetails: receiptDeliverDetails,
     );
   }
 
@@ -26,6 +51,11 @@ class ReceiptDeliver {
     return {
       "F_Recipt_No": F_Recipt_No,
       "F_Paper_No": F_Paper_No,
+      "F_Bank_Id_D": F_Bank_Id_D.toJson(),
+      "F_Branch_Id_D": F_Branch_Id_D.toJson(),
+      "F_Bank_Id_R": F_Bank_Id_R.toJson(),
+      "F_Branch_Id_R": F_Branch_Id_R.toJson(),
+      "receiptDeliverDetails": ReceiptDeliverDetails.fromReceiptDeliverDetailsListToJsonList(receiptDeliverDetails),
     };
   }
 
@@ -33,22 +63,39 @@ class ReceiptDeliver {
     return jsonEncode({
       "F_Recipt_No": F_Recipt_No,
       "F_Paper_No": F_Paper_No,
+      "F_Bank_Id_D": F_Bank_Id_D.toJson(),
+      "F_Branch_Id_D": F_Branch_Id_D.toJson(),
+      "F_Bank_Id_R": F_Bank_Id_R.toJson(),
+      "F_Branch_Id_R": F_Branch_Id_R.toJson(),
+      "receiptDeliverDetails": ReceiptDeliverDetails.fromReceiptDeliverDetailsListToJsonList(receiptDeliverDetails),
     });
   }
 
   String toPrintableString() {
     return "{"
-        "F_Recipt_No: $F_Recipt_No,"
-        " F_Paper_No: $F_Paper_No,"
+              "F_Recipt_No: $F_Recipt_No,"
+      "F_Paper_No: $F_Paper_No,"
+      "F_Bank_Id_D: ${F_Bank_Id_D.toPrintableString()},"
+      "F_Branch_Id_D: ${F_Branch_Id_D.toPrintableString()},"
+      "F_Bank_Id_R: ${F_Bank_Id_R.toPrintableString()},"
+      "F_Branch_Id_R: ${F_Branch_Id_R.toPrintableString()},"
+      "receiptDeliverDetails: ${ReceiptDeliverDetails.fromReceiptDeliverDetailsListToJsonListString(receiptDeliverDetails)},"
         "}";
   }
 
   static List<ReceiptDeliver> fromJsonStringListToReceiptDeliverList(String ListOfJsonString) {
     List listOfJson = jsonDecode(ListOfJsonString);
     List<ReceiptDeliver> listOfUsers = [];
-
+    Map isDuplicate = {};
+    int i = 0;
     for (var element in listOfJson) {
-      listOfUsers.add(ReceiptDeliver.fromJson(element));
+      if (isDuplicate[element["F_Recipt_No"]] != null) {
+        listOfUsers[isDuplicate[element["F_Recipt_No"]]].receiptDeliverDetails.add(ReceiptDeliverDetails.fromJson(element));
+      } else {
+        isDuplicate[element["F_Recipt_No"]] = i;
+        listOfUsers.add(ReceiptDeliver.fromJson(element));
+        i++;
+      }
     }
     return listOfUsers;
   }
@@ -85,8 +132,33 @@ class ReceiptDeliver {
     return ReceiptDeliver.fromJsonStringListToReceiptDeliverList(receiptListJsonString);
   }
 
-   static ReceiptDeliver fromReceiptToReceiptDeliver(Receipt receipt) {
+  static ReceiptDeliver fromReceiptToReceiptDeliver(Receipt receipt) {
     Map receiptString = receipt.toJson();
     return ReceiptDeliver.fromJson(receiptString);
   }
+
+  static Customer _setCustomer(int customerID) {
+    String? customers = Prefs.getString(customersInfo);
+    if (customers == null) return Customer(CustID: 0, CustName: updateData, CustomerBranches: []);
+    List<Customer> customerList = Customer.fromJsonStringListToCustomerList(customers);
+    Customer? selectedCustomer;
+    for (Customer customer in customerList) {
+      if (customer.CustID == customerID) selectedCustomer = customer;
+    }
+    return selectedCustomer ?? Customer(CustID: 0, CustName: updateData, CustomerBranches: []);
+  }
+
+  static CustomerBranch _setBranch(List<CustomerBranch> customerBranches, int branchId) {
+    CustomerBranch? selectedBranch;
+    for (CustomerBranch customerBranche in customerBranches) {
+      if (customerBranche.F_Branch_Id == branchId) selectedBranch = customerBranche;
+    }
+    return selectedBranch ?? CustomerBranch(F_Branch_Id: 1, F_Cust_Id: 1, F_Branch_Internal: 1, F_Branch_Name: updateData);
+  }
+
+  static List<ReceiptDeliverDetails> _setReceiptDeliverDetails(Map json, Map isDuplicate) {
+    if (json["receiptDeliverDetails"] != null) return ReceiptDeliverDetails.fromJsonStringListToReceiptDeliverDetailsList(jsonEncode(json["receiptDeliverDetails"]));
+    return [ReceiptDeliverDetails.fromJson(json)];
+  }
+
 }

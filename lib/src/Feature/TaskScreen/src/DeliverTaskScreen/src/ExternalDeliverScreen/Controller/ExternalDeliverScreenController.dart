@@ -46,6 +46,7 @@ abstract class ExternalDeliverScreenController extends State<ExternalDeliverScre
     super.initState();
     _setCustomerList();
     _setCrewlist();
+        _stopCameraAtStart();
   }
 
   @override
@@ -436,9 +437,12 @@ abstract class ExternalDeliverScreenController extends State<ExternalDeliverScre
   }
 
   _getRecieptData() async {
-    debugPrint("customerData");
     String query =
-        "SELECT F_Recipt_No , F_Paper_No FROM dbo.T_Deliver_Recieve_M  WHERE F_Bank_Id_R =${customerR!.CustID} AND F_Branch_Id_R =${customerBranchR!.F_Branch_Id} AND F_Arrival_Time_R IS NULL";
+        "SELECT dbo.T_Deliver_Recieve_M.F_Recipt_No, dbo.T_Deliver_Recieve_M.F_Paper_No ,dbo.T_Deliver_Recieve_M.F_Cust_Id, dbo.T_Deliver_Recieve_M.F_Bank_Id_D, dbo.T_Deliver_Recieve_M.F_Branch_Id_D, "
+        "dbo.T_Deliver_Recieve_M.F_Branch_Id_R, dbo.T_Deliver_Recieve_M.F_Bank_Id_R, dbo.T_Deliver_Recieve_D.F_Currency_Id, dbo.T_Deliver_Recieve_D.F_Total_val, "
+        " dbo.T_Deliver_Recieve_D.F_Bags_No , dbo.T_Deliver_Recieve_D.F_Banknote_Class "
+        " FROM dbo.T_Deliver_Recieve_D INNER JOIN"
+        " dbo.T_Deliver_Recieve_M ON dbo.T_Deliver_Recieve_D.F_Recipt_No = dbo.T_Deliver_Recieve_M.F_Recipt_No  WHERE dbo.T_Deliver_Recieve_M.F_Bank_Id_R =${customerR!.CustID} AND dbo.T_Deliver_Recieve_M.F_Branch_Id_R =${customerBranchR!.F_Branch_Id} AND F_Arrival_Time_R IS NULL";
     String customerData = await SqlConn.readData(query);
     receiptDeliverList = ReceiptDeliver.fromJsonStringListToReceiptDeliverList(customerData);
     receiptFilteredDeliverList = receiptDeliverList;
@@ -465,4 +469,8 @@ abstract class ExternalDeliverScreenController extends State<ExternalDeliverScre
     receiptFilteredDeliverList = filter;
     setState(() {});
   }
+   _stopCameraAtStart() {
+    Timer(const Duration(milliseconds: 500), () => cameraController.stop());
+  }
+
 }

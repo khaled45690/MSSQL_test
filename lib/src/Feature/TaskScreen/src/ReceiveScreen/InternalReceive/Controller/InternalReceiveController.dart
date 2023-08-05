@@ -37,6 +37,7 @@ abstract class InternalReceiveController extends State<InternalReceive> {
     super.initState();
     _getInternalReciept();
     _setCrewMembers();
+    _stopCameraAtStart();
   }
 
   onCapture(BarcodeCapture capture) {
@@ -152,6 +153,7 @@ abstract class InternalReceiveController extends State<InternalReceive> {
   }
 
   _setCrewMembers() {
+    if (widget.receipts.isEmpty) return receiptInternalReceiveData.CrewIdList = [CrewMember(F_EmpID: context.read<UserCubit>().state!.F_EmpID, F_EmpName: context.read<UserCubit>().state!.F_EmpName)];
     receiptInternalReceiveData.CrewIdList = widget.receipts[widget.receipts.length - 1].CrewIdList;
   }
 
@@ -168,7 +170,6 @@ abstract class InternalReceiveController extends State<InternalReceive> {
   }
 
   _getRecieptDetailsAndSaveThemLocaly() async {
-
     String query = _getQueryToUpdateTransferTable(selectedTransferReceiptList, context.read<UserCubit>().state!.F_EmpID);
 
     try {
@@ -331,4 +332,8 @@ abstract class InternalReceiveController extends State<InternalReceive> {
 
     return crewListQuery;
   }
+   _stopCameraAtStart() {
+    Timer(const Duration(milliseconds: 500), () => cameraController.stop());
+  }
+
 }

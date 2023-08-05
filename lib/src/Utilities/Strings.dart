@@ -39,6 +39,7 @@ const String receiptDeliverDataMissing= "من فضلك قم بالتاكد من 
 const String receiptDeliverImageMissing= "من فضلك قم بالتاكد صور للوصلات الممضية";
 const String receiptDeliverCanBeDeliverd= "يمكنك التسليم الان";
 const String receiptDeliverIsDeliverd = "تم التسليم بنجاح";
+const String updateData = "تاكد من تحديث البيانات";
 
 ////////////////////////////////////////////////////////////////--------------------------
 const String driversFromLocaleDataBase = "DriversData";

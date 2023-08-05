@@ -47,7 +47,7 @@ class Customer {
     return "{"
         "CustID: $CustID,"
         " CustName: $CustName,"
-        " CustomerBranches: ${CustomerBranch.fromCustomerBranchListToJsonList(CustomerBranches)},"
+        " CustomerBranches: there are to many branches to print,"
         "}";
   }
 
