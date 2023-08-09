@@ -277,7 +277,7 @@ class Receipt {
         "F_Recipt_Type: ${F_Recipt_Type.toPrintableString()},"
         "CrewIdList: ${CrewMember.fromCrewMemberListtoPrintableString(CrewIdList)},"
         "ReceiptDetailsList: ${ReceiptDetails.fromReceiptDetailsListtoPrintableString(ReceiptDetailsList)},"
-        "imagesAsPDF: $imagesAsPDF,"
+        "imagesAsPDF: ${imagesAsPDF == null? "there is no image" : "there is an image"},"
         "isSavedInDatabase: $isSavedInDatabase"
         "companyBranch: ${companyBranch?.toJson()}"
         "isDeliveredToAnotherDriver: $isDeliveredToAnotherDriver"

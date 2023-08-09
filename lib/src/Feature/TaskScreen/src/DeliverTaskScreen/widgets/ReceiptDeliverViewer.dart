@@ -75,8 +75,9 @@ class ReceiptDeliverViewer extends StatelessWidget {
                             children: [
                               Text(
                                 "عدد ${receiptDeliverDetail.F_Bags_No} ${receiptDeliverDetail.F_Bags_No < 2 || receiptDeliverDetail.F_Bags_No > 10 ? "حقيبة" : "حقائب"},"
-                                " الفئة ${receiptDeliverDetail.F_Banknote_Class == null ? "ورقية" : "عملات"},"
-                                " المبلغ ${receiptDeliverDetail.F_Total_val} ${receiptDeliverDetail.currency.F_CURRANCY_NAM}",
+                                " الفئة ${receiptDeliverDetail.F_Banknote_Class == "null" ? "ورقية" : "عملات"}"
+                                "${ receiptDeliverDetail.F_Banknote_Class == "null" ? ", المبلغ ${receiptDeliverDetail.F_Total_val} ${receiptDeliverDetail.currency.F_CURRANCY_NAM}" : ""}"
+                                "",
                                 style: size22BlackTextStyle,
                               ),
                             ],

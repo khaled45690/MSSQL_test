@@ -420,7 +420,7 @@ abstract class ExternalReceiveScreenController extends State<ExternalReceiveScre
     }
     if (widget.receipt.F_Cust_R != null) {
       isCustomerRSelected = true;
-      customerBranchList = widget.receipt.F_Cust_R!.CustomerBranches;
+      customerBranchListR = widget.receipt.F_Cust_R!.CustomerBranches;
     }
   }
 

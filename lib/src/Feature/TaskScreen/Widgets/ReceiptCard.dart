@@ -26,6 +26,7 @@ class ReceiptCard extends StatelessWidget {
         width: context.width() - 50,
         decoration: taskContentDecoration,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               margin: const EdgeInsets.only(right: 5, left: 5),
@@ -76,6 +77,14 @@ class ReceiptCard extends StatelessWidget {
                   ],
                 ),
               ],
+            ),
+            Text(
+              "اجمالى الاموال :- ${receipt.F_totalAmount_EGP} جنية مصرى",
+              style: size19BlackTextStyle,
+            ),
+            Text(
+              "اجمالى العملات المعدنية :- ${receipt.F_Coin_Tot} جنية مصرى",
+              style: size19BlackTextStyle,
             ),
           ],
         ),

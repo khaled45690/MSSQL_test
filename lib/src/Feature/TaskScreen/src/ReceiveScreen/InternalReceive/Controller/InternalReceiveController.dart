@@ -333,7 +333,7 @@ abstract class InternalReceiveController extends State<InternalReceive> {
     return crewListQuery;
   }
    _stopCameraAtStart() {
-    Timer(const Duration(milliseconds: 500), () => cameraController.stop());
+    Timer(const Duration(milliseconds: 800), () => cameraController.stop());
   }
 
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:sql_test/src/DataTypes/Customer.dart';
 import 'package:sql_test/src/DataTypes/CustomerBranch.dart';
 
@@ -31,10 +32,10 @@ class ReceiptDeliver {
   });
 
   factory ReceiptDeliver.fromJson(Map json, {Map isDuplicate = const {}}) {
-    Customer F_Bank_Id_D = _setCustomer(json['F_Bank_Id_D']);
-    Customer F_Bank_Id_R = _setCustomer(json['F_Bank_Id_R']);
-    CustomerBranch F_Branch_Id_D = _setBranch(F_Bank_Id_D.CustomerBranches, json['F_Branch_Id_D']);
-    CustomerBranch F_Branch_Id_R = _setBranch(F_Bank_Id_R.CustomerBranches, json['F_Branch_Id_R']);
+    Customer F_Bank_Id_D = json['F_Bank_Id_D']  == null ? Customer.fromJson(json['F_Cust']) : _setCustomer(json['F_Bank_Id_D']) ;
+    Customer F_Bank_Id_R = json['F_Bank_Id_R']  == null ? Customer.fromJson(json['F_Cust_R']) : _setCustomer(json['F_Bank_Id_R']);
+    CustomerBranch F_Branch_Id_D =  json['F_Branch_Id_D']  == null ? CustomerBranch.fromJson(json['F_Branch_D']) : _setBranch(F_Bank_Id_D.CustomerBranches, json['F_Branch_Id_D']);
+    CustomerBranch F_Branch_Id_R = json['F_Branch_Id_R']  == null ? CustomerBranch.fromJson(json['F_Branch_R']) : _setBranch(F_Bank_Id_R.CustomerBranches, json['F_Branch_Id_R']);
     List<ReceiptDeliverDetails> receiptDeliverDetails = _setReceiptDeliverDetails(json, isDuplicate);
     return ReceiptDeliver(
       F_Recipt_No: json['F_Recipt_No'],
@@ -73,13 +74,13 @@ class ReceiptDeliver {
 
   String toPrintableString() {
     return "{"
-              "F_Recipt_No: $F_Recipt_No,"
-      "F_Paper_No: $F_Paper_No,"
-      "F_Bank_Id_D: ${F_Bank_Id_D.toPrintableString()},"
-      "F_Branch_Id_D: ${F_Branch_Id_D.toPrintableString()},"
-      "F_Bank_Id_R: ${F_Bank_Id_R.toPrintableString()},"
-      "F_Branch_Id_R: ${F_Branch_Id_R.toPrintableString()},"
-      "receiptDeliverDetails: ${ReceiptDeliverDetails.fromReceiptDeliverDetailsListToJsonListString(receiptDeliverDetails)},"
+        "F_Recipt_No: $F_Recipt_No,"
+        "F_Paper_No: $F_Paper_No,"
+        "F_Bank_Id_D: ${F_Bank_Id_D.toPrintableString()},"
+        "F_Branch_Id_D: ${F_Branch_Id_D.toPrintableString()},"
+        "F_Bank_Id_R: ${F_Bank_Id_R.toPrintableString()},"
+        "F_Branch_Id_R: ${F_Branch_Id_R.toPrintableString()},"
+        "receiptDeliverDetails: ${ReceiptDeliverDetails.fromReceiptDeliverDetailsListToJsonListString(receiptDeliverDetails)},"
         "}";
   }
 
@@ -133,6 +134,8 @@ class ReceiptDeliver {
   }
 
   static ReceiptDeliver fromReceiptToReceiptDeliver(Receipt receipt) {
+    print("receipt.toJson()");
+    debugPrint(receipt.toPrintableString() , wrapWidth: 300);
     Map receiptString = receipt.toJson();
     return ReceiptDeliver.fromJson(receiptString);
   }
@@ -157,8 +160,7 @@ class ReceiptDeliver {
   }
 
   static List<ReceiptDeliverDetails> _setReceiptDeliverDetails(Map json, Map isDuplicate) {
-    if (json["receiptDeliverDetails"] != null) return ReceiptDeliverDetails.fromJsonStringListToReceiptDeliverDetailsList(jsonEncode(json["receiptDeliverDetails"]));
+    if (json["ReceiptDetailsList"] != null) return ReceiptDeliverDetails.fromJsonStringListToReceiptDeliverDetailsList(jsonEncode(json["ReceiptDetailsList"]));
     return [ReceiptDeliverDetails.fromJson(json)];
   }
-
 }

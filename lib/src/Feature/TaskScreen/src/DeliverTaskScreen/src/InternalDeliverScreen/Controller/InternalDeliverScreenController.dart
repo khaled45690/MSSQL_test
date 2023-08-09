@@ -40,8 +40,7 @@ abstract class InternalDeliverScreenController extends State<InternalDeliverScre
   void initState() {
     super.initState();
     _getRecieptData();
-    _setCrewlist();
-        _stopCameraAtStart();
+    _stopCameraAtStart();
   }
 
   onSelectReceiptFunc(ReceiptDeliver receiptDeliver) {
@@ -219,6 +218,7 @@ abstract class InternalDeliverScreenController extends State<InternalDeliverScre
 
   _getRecieptData() async {
     for (Receipt receipt in widget.journey.receiptList) {
+      debugPrint("isDeliveredToAnotherDriver");
       if (!receipt.isDeliveredToAnotherDriver) {
         receiptDeliverList.add(ReceiptDeliver.fromReceiptToReceiptDeliver(receipt));
       }
@@ -351,20 +351,8 @@ abstract class InternalDeliverScreenController extends State<InternalDeliverScre
     );
   }
 
-  _setCrewlist() {
-    User userData = context.read<UserCubit>().state!;
-    CrewMember crewLeader = CrewMember(F_EmpID: userData.F_EmpID, F_EmpName: userData.F_EmpName);
 
-    if (widget.journey.receiptList.isEmpty) {
-      receiptInternalDeliverData.CrewIdList.add(crewLeader);
-    } else {
-      receiptInternalDeliverData.CrewIdList = widget.journey.receiptList[widget.journey.receiptList.length - 1].CrewIdList;
-    }
-
-    setState(() {});
-  }
-   _stopCameraAtStart() {
+  _stopCameraAtStart() {
     Timer(const Duration(milliseconds: 500), () => cameraController.stop());
   }
-
 }

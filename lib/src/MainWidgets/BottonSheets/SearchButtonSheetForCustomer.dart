@@ -55,7 +55,7 @@ class _CustomSearchWithFilterWidgetState
   Widget build(BuildContext context) {
     return Container(
       decoration: mainColor50RadiusWithShadowDecoration,
-      height: 500,
+      
       width: context.width(),
       child: SingleChildScrollView(
         child: Column(

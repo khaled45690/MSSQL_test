@@ -1,5 +1,3 @@
-
-
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
@@ -8,14 +6,10 @@ import 'package:sql_test/src/Utilities/Extentions.dart';
 
 import '../../../../../../Utilities/Style.dart';
 
-
-
-
 class CustomViewListForReceipts extends StatelessWidget {
   final List<ReceiptDetails> receiptList;
   final Function(int index) deleteReceipt;
-  const CustomViewListForReceipts(this.receiptList, this.deleteReceipt,
-      {super.key});
+  const CustomViewListForReceipts(this.receiptList, this.deleteReceipt, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,25 +25,25 @@ class CustomViewListForReceipts extends StatelessWidget {
               shrinkWrap: true,
               itemCount: receiptList.length,
               itemBuilder: (context, index) {
-                String textString =
-                    "${index + 1}) ${receiptList[index].F_Total_val} ${receiptList[index].F_Currency_Id.F_CURRANCY_NAM}";
+                String textString = "${index + 1}) ${receiptList[index].F_Total_val} ${receiptList[index].F_Currency_Id.F_CURRANCY_NAM}";
+                if (receiptList[index].F_BankNote_Class.toString() != "null") {
+                  textString = "${index + 1}) عدد الحقائب ${receiptList[index].F_Bags_No} العملة ${receiptList[index].F_BankNote_Class.toString()} جنية";
+                }
                 return Container(
                   margin: const EdgeInsets.all(5),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          textString,
-                          style: size19BlackTextStyle,
-                        ),
-                        IconButton(
-                            onPressed: () => deleteReceipt(index),
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                              size: 25,
-                            ))
-                      ]),
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                    Text(
+                      textString,
+                      style: size19BlackTextStyle,
+                    ),
+                    IconButton(
+                        onPressed: () => deleteReceipt(index),
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                          size: 25,
+                        ))
+                  ]),
                 );
               },
             ),

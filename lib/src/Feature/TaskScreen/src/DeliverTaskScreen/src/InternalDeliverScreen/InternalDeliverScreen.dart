@@ -11,6 +11,7 @@ import '../../../ReceiveScreen/ExternalReceive/Widgets/AddEmployeeByWriting.dart
 import '../../../ReceiveScreen/ExternalReceive/Widgets/CustomListView.dart';
 import '../../../ReceiveScreen/ExternalReceive/Widgets/TextFieldWithName.dart';
 import '../../widgets/ReceiptDeliverListView.dart';
+import '../../widgets/ReceiptDeliverViewer.dart';
 import 'Controller/InternalDeliverScreenController.dart';
 
 class InternalDeliverScreen extends StatefulWidget {
@@ -43,7 +44,7 @@ class _InternalDeliverScreenState extends InternalDeliverScreenController {
           onTap: () => searchButtonSheetForReceiptDeliverType(context, receiptFilteredDeliverList, onSelectReceiptFunc),
           isvisible: true,
         ),
-        ReceiptDeliverListView(receiptInternalDeliverData.deliverReceipts, removeReceiptDeliver),
+        ReceiptDeliverViewer(receiptInternalDeliverData.deliverReceipts, removeReceiptDeliver),
         TextFieldWithName("ملاحـظـــة", onTextChangeFunction: (String value) => onTextChange("AddNote", value)),
         CustomButton("قم بالتسليم  ", 250, deliverReceipts , isLoading: isLoading,  isEnabled: !isLoading),
       ],

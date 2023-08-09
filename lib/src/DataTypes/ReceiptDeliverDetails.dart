@@ -23,10 +23,10 @@ class ReceiptDeliverDetails {
 
   factory ReceiptDeliverDetails.fromJson(Map json) {
     return ReceiptDeliverDetails(
-      currency: _setCurrency(json['F_Currency_Id']),
+      currency: json['F_Currency_Id'].runtimeType == int ? _setCurrency(json['F_Currency_Id']) : Currency.fromJson(json['F_Currency_Id']) ,
       F_Total_val: json['F_Total_val'],
       F_Bags_No: json['F_Bags_No'],
-      F_Banknote_Class: json['F_Banknote_Class'],
+      F_Banknote_Class: json['F_Banknote_Class'].toString(),
     );
   }
 

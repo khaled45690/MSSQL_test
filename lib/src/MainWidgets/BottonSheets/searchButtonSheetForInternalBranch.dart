@@ -47,7 +47,7 @@ class _CustomSearchWithFilterWidgetState extends State<CustomSearchWithFilterWid
   Widget build(BuildContext context) {
     return Container(
       decoration: mainColor50RadiusWithShadowDecoration,
-      height: 500,
+      
       width: context.width(),
       child: SingleChildScrollView(
         child: Column(
