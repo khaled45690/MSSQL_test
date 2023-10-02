@@ -134,7 +134,7 @@ class ReceiptDeliver {
   }
 
   static ReceiptDeliver fromReceiptToReceiptDeliver(Receipt receipt) {
-    print("receipt.toJson()");
+    debugPrint("receipt.toJson()");
     debugPrint(receipt.toPrintableString() , wrapWidth: 300);
     Map receiptString = receipt.toJson();
     return ReceiptDeliver.fromJson(receiptString);

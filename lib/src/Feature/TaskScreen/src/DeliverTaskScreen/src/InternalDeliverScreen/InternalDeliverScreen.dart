@@ -10,7 +10,6 @@ import '../../../../../../MainWidgets/QRCodeDetection.dart';
 import '../../../ReceiveScreen/ExternalReceive/Widgets/AddEmployeeByWriting.dart';
 import '../../../ReceiveScreen/ExternalReceive/Widgets/CustomListView.dart';
 import '../../../ReceiveScreen/ExternalReceive/Widgets/TextFieldWithName.dart';
-import '../../widgets/ReceiptDeliverListView.dart';
 import '../../widgets/ReceiptDeliverViewer.dart';
 import 'Controller/InternalDeliverScreenController.dart';
 
